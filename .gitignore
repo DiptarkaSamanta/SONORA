@@ -9,4 +9,13 @@
 .cxx
 local.properties
 app/build/
+*.m4a
+*.opus
+*.mp3
+*.wav
+*.flac
+*.mp4
+*.mkv
+!tools/**/sonora_catalog.json
+
 

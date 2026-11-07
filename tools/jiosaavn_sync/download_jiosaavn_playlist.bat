@@ -6,43 +6,61 @@ echo   SONORA - JioSaavn Ultra-Compact Playlist Downloader
 echo ================================================================
 echo.
 echo Paste any public JioSaavn playlist, album, or track link.
-echo It will automatically download all songs and compress them into
-echo ultra-small Opus audio (~1.2 MB each) with album art and tags.
+echo It will automatically download all songs and save them in
+echo ultra-compact audio (~2 MB each) with full tags and cover art!
 echo.
 
-where ffmpeg >nul 2>nul
-if %ERRORLEVEL% NEQ 0 (
-    echo [!] FFmpeg is required to compress audio.
-    echo     Install it on Windows via PowerShell:
-    echo     winget install Gyan.FFmpeg
-    echo     or download from https://ffmpeg.org
-    echo.
-    pause
-    exit /b
+set "URL_INPUT=%~1"
+if "%URL_INPUT%"=="" (
+    set /p URL_INPUT="Enter JioSaavn Playlist or Track URL: "
 )
+set "URL_INPUT=%URL_INPUT:"=%"
 
-set /p PLAYLIST_URL="Enter JioSaavn Playlist/Album URL: "
-set "PLAYLIST_URL=%PLAYLIST_URL:"=%"
-
-if "%PLAYLIST_URL%"=="" (
+if "%URL_INPUT%"=="" (
     echo Error: No URL entered!
     pause
     exit /b
 )
 
+:: Extract token if full URL was provided
+set "TOKEN=%URL_INPUT%"
+for %%A in ("%URL_INPUT%") do set "LAST_PART=%%~nxA"
+if not "%LAST_PART%"=="" (
+    set "TOKEN=%LAST_PART%"
+)
+
 echo.
-echo Processing playlist and compressing into ultra-small Opus 64k...
+echo [1] 48 kbps  (Space Saver  - ~1.5 MB per song, saves maximum storage)
+echo [2] 96 kbps  (Balanced     - ~2.5 MB per song, great clarity) [DEFAULT]
+echo [3] 160 kbps (High Quality - ~4.5 MB per song)
+echo [4] 320 kbps (Extreme      - ~9.0 MB per song)
+echo.
+set /p QUALITY_CHOICE="Select Quality (1-4, default is 2): "
+
+set "BITRATE=96"
+if "%QUALITY_CHOICE%"=="1" set "BITRATE=48"
+if "%QUALITY_CHOICE%"=="2" set "BITRATE=96"
+if "%QUALITY_CHOICE%"=="3" set "BITRATE=160"
+if "%QUALITY_CHOICE%"=="4" set "BITRATE=320"
+
+echo.
+echo Downloading playlist using SONORA Engine...
 echo.
 
-python "%~dp0jiosaavn_to_sonora.py" "%PLAYLIST_URL%" --output "%~dp0jiosaavn_downloaded_songs" --format opus --bitrate 64k
+node --openssl-legacy-provider "%~dp0download_jiosaavn.js" "%TOKEN%" "%BITRATE%"
+
+if %ERRORLEVEL% NEQ 0 (
+    echo Node.js download failed, attempting Python fallback...
+    python "%~dp0jiosaavn_to_sonora.py" "%URL_INPUT%" --output "%~dp0jiosaavn_downloaded_songs" --bitrate "%BITRATE%k"
+)
 
 echo.
 echo ================================================================
-echo Done! All songs are stored in:
+echo Done! All songs are ready in:
 echo %~dp0jiosaavn_downloaded_songs
 echo.
 echo You can:
-echo 1. Copy them to your Redmi 12 5G (takes only ~1.2 MB per song).
-echo 2. Or upload them to Firebase / Google Drive to stream with 0 MB!
+echo 1. Connect Redmi 12 5G and copy the folder to your phone!
+echo 2. Or upload to Google Drive / Firebase for 0 MB cloud streaming!
 echo ================================================================
 pause

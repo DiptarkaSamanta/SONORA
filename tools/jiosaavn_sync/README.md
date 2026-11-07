@@ -28,3 +28,4 @@ You can download and import any public **JioSaavn playlist, album, or song** dir
 
 - **Option B (Stream with 0 MB storage from Firebase/GDrive)**:
   Upload the folder and `sonora_catalog.json` to your Firebase Storage or Google Drive. In Sonora, go to **Storage Dashboard** ➔ **Sync Cloud Songs**. Now you can stream all of them without taking up phone storage!
+

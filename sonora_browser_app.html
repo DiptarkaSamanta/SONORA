@@ -601,12 +601,18 @@
     let isPlaying = false;
     let audioContext, analyser, sourceNode;
 
-    // Real Streamable Legal Tracks
+    // Live Playlist Loaded from User's JioSaavn URL
     const tracks = [
-      { id: '1', title: 'Lo-Fi Midnight Study', artist: 'Sonnox Collective', album: 'Chill Cloud Beats', duration: '2:55', format: 'OPUS 64k', size: '1.2 MB', art: 'https://picsum.photos/seed/starboy/200/200', src: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3' },
-      { id: '2', title: 'Cyber Ambient Groove', artist: 'Neon Horizon', album: 'Space Waves', duration: '3:12', format: 'OPUS 64k', size: '1.3 MB', art: 'https://picsum.photos/seed/lights/200/200', src: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3' },
-      { id: '3', title: 'Acoustic Nature Breeze', artist: 'Sierra Strings', album: 'Acoustic Sound', duration: '2:38', format: 'OPUS 64k', size: '1.0 MB', art: 'https://picsum.photos/seed/shape/200/200', src: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3' },
-      { id: '4', title: 'Deep Focus Synthwave', artist: 'Pulse Vector', album: 'Retrowave 84', duration: '3:30', format: 'OPUS 64k', size: '1.4 MB', art: 'https://picsum.photos/seed/m83/200/200', src: 'https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f77cf6.mp3' }
+      { id: 'jio_1', title: 'Dandelions (slowed + reverb)', artist: 'Ruth B., sped up + slowed', album: 'Dandelions (slowed + reverb)', duration: '4:28', format: 'OPUS/M4A 96k', size: '3.1 MB', art: 'https://c.saavncdn.com/023/Dandelions-slowed-reverb-English-2021-20231119175842-500x500.jpg', src: 'https://aac.saavncdn.com/023/f607a11a36dd7d49174c5d76907798d0_96.mp4' },
+      { id: 'jio_2', title: 'Past Lives', artist: 'sapientdream, Slushii', album: 'Past Lives', duration: '2:34', format: 'OPUS/M4A 96k', size: '1.8 MB', art: 'https://c.saavncdn.com/401/Past-Lives-English-2023-20230929174911-500x500.jpg', src: 'https://aac.saavncdn.com/401/26b827264291174e861f0821bf6d4140_96.mp4' },
+      { id: 'jio_3', title: 'lovely', artist: 'Billie Eilish, Khalid', album: 'lovely', duration: '3:19', format: 'OPUS/M4A 96k', size: '2.3 MB', art: 'https://c.saavncdn.com/947/lovely-English-2018-20180418150240-500x500.jpg', src: 'https://aac.saavncdn.com/947/580fe2c0cb03ba147b00a4b2261764d4_96.mp4' },
+      { id: 'jio_4', title: 'Royalty', artist: 'Neoni, Egzod, Maestro Chives', album: 'Royalty (Sped Up/Slowed)', duration: '3:43', format: 'OPUS/M4A 96k', size: '2.6 MB', art: 'https://c.saavncdn.com/205/Royalty-Sped-Up-Slowed-Unknown-2021-20260528143542-500x500.jpg', src: 'https://aac.saavncdn.com/205/386cdf2975fd049305654e8ebc7b9e0a_96.mp4' },
+      { id: 'jio_5', title: 'Darkside', artist: 'Alan Walker, Au/Ra, Tomine Harket', album: 'Darkside', duration: '3:31', format: 'OPUS/M4A 96k', size: '2.5 MB', art: 'https://c.saavncdn.com/355/Darkside-English-2018-20180719130414-500x500.jpg', src: 'https://aac.saavncdn.com/355/5eed3326fb2aa459d06b5ce97f51f368_96.mp4' },
+      { id: 'jio_6', title: 'Safari', artist: 'Serena', album: 'Safari', duration: '3:07', format: 'OPUS/M4A 96k', size: '2.2 MB', art: 'https://c.saavncdn.com/292/Safari-English-2017-20240919033905-500x500.jpg', src: 'https://aac.saavncdn.com/292/52e74ce38764515602c41319ec0ebad3_96.mp4' },
+      { id: 'jio_7', title: 'Sugar & Brownies', artist: 'DHARIA', album: 'Sugar & Brownies', duration: '3:17', format: 'OPUS/M4A 96k', size: '2.3 MB', art: 'https://c.saavncdn.com/059/Sugar-Brownies-English-2019-20190326005637-500x500.jpg', src: 'https://aac.saavncdn.com/059/eb681d882472ed0f8a5996b379f27379_96.mp4' },
+      { id: 'jio_8', title: 'Runaway', artist: 'Aurora', album: 'FOR THE HUMANS', duration: '4:10', format: 'OPUS/M4A 96k', size: '2.9 MB', art: 'https://c.saavncdn.com/868/FOR-THE-HUMANS-WHO-TAKE-LONG-WALKS-IN-THE-FOREST-English-2021-20260806015008-500x500.jpg', src: 'https://aac.saavncdn.com/868/ec2b670c8738367b74f6a994263d8a13_96.mp4' },
+      { id: 'jio_9', title: 'MIDDLE OF THE NIGHT', artist: 'Elley Duhe', album: 'MIDDLE OF THE NIGHT', duration: '3:01', format: 'OPUS/M4A 96k', size: '2.2 MB', art: 'https://c.saavncdn.com/087/MIDDLE-OF-THE-NIGHT-English-2020-20200210192336-500x500.jpg', src: 'https://aac.saavncdn.com/087/9bd48e744c7f9ffb2e14f610b3e78600_96.mp4' },
+      { id: 'jio_10', title: 'Mary On A Cross', artist: 'Ghost', album: 'Seven Inches of Satanic Panic', duration: '4:08', format: 'OPUS/M4A 96k', size: '2.9 MB', art: 'https://c.saavncdn.com/458/Seven-Inches-of-Satanic-Panic-English-2024-20240913063703-500x500.jpg', src: 'https://aac.saavncdn.com/458/f6cf0d9974c416ef7b4a322bd9d3fea6_96.mp4' }
     ];
 
     let currentTrackIndex = 0;
