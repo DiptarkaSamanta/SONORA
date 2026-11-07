@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="96dp"
+    android:height="96dp"
+    android:viewportWidth="96"
+    android:viewportHeight="96">
+    <!-- Gradient background rounded square -->
+    <path
+        android:pathData="M20,8 L76,8 A12,12 0 0,1 88,20 L88,76 A12,12 0 0,1 76,88 L20,88 A12,12 0 0,1 8,76 L8,20 A12,12 0 0,1 20,8 Z"
+        android:fillColor="#16181F" />
+    <!-- Outer wave ring -->
+    <path
+        android:pathData="M48,16 A32,32 0 1,0 80,48"
+        android:strokeColor="#7C4DFF"
+        android:strokeWidth="4"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M48,24 A24,24 0 1,1 24,48"
+        android:strokeColor="#00D2FF"
+        android:strokeWidth="4"
+        android:strokeLineCap="round" />
+    <!-- Music note -->
+    <path
+        android:pathData="M44,32 L60,26 L60,54 A8,8 0 1,1 52,48 L52,38 L44,41 L44,60 A8,8 0 1,1 36,54 L36,32 Z"
+        android:fillColor="#FF2E93" />
+</vector>
+

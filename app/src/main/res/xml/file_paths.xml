@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-files-path name="sonora_music" path="Music/" />
+    <external-files-path name="sonora_downloads" path="Downloads/" />
+    <external-cache-path name="sonora_cache" path="audio_cache/" />
+    <cache-path name="internal_cache" path="." />
+</paths>
+

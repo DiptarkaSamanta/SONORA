@@ -1,0 +1,22 @@
+{
+  "catalog_name": "My Sonora Cloud Music",
+  "version": 1,
+  "description": "Ultra-small Opus/AAC songs for low-storage Android devices (Redmi 12 5G)",
+  "songs": [
+    {
+      "id": "my_song_01",
+      "title": "Your Favorite Song Title",
+      "artist": "Artist Name",
+      "album": "Album Name",
+      "duration_seconds": 210,
+      "stream_url": "https://your-storage-host.com/songs/song1.opus",
+      "download_url": "https://your-storage-host.com/songs/song1.opus",
+      "size_kb": 1200,
+      "codec": "opus",
+      "bitrate_kbps": 64,
+      "artwork_url": "https://your-storage-host.com/art/album1.jpg",
+      "lyrics": "[00:10.00] First lyric line\n[00:25.00] Second lyric line"
+    }
+  ]
+}
+

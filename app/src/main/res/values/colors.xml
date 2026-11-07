@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="sonora_black">#0B0C10</color>
+    <color name="sonora_charcoal">#16181F</color>
+    <color name="sonora_surface">#1F222E</color>
+    <color name="sonora_purple">#7C4DFF</color>
+    <color name="sonora_purple_dark">#5E35B1</color>
+    <color name="sonora_electric_blue">#00D2FF</color>
+    <color name="sonora_magenta">#FF2E93</color>
+    <color name="sonora_text_primary">#F5F6FA</color>
+    <color name="sonora_text_secondary">#9DA3B4</color>
+    <color name="sonora_text_muted">#636878</color>
+    <color name="sonora_divider">#2A2E3D</color>
+    <color name="sonora_success">#00E676</color>
+    <color name="sonora_warning">#FFB300</color>
+    <color name="sonora_error">#FF5252</color>
+</resources>
+

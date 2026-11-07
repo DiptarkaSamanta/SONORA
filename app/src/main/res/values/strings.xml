@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SONORA</string>
+    <string name="tagline">Smart Offline &amp; Online Music</string>
+    
+    <!-- Navigation -->
+    <string name="nav_home">Home</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_library">Library</string>
+    <string name="nav_downloads">Downloads</string>
+    <string name="nav_storage">Storage</string>
+    
+    <!-- Player -->
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="shuffle">Shuffle</string>
+    <string name="repeat">Repeat</string>
+    <string name="equalizer">Equalizer</string>
+    <string name="lyrics">Lyrics</string>
+    <string name="sleep_timer">Sleep Timer</string>
+    
+    <!-- Storage & Optimization -->
+    <string name="storage_optimizer">Smart Storage Optimizer</string>
+    <string name="mode_high_quality">High Quality</string>
+    <string name="mode_balanced">Balanced</string>
+    <string name="mode_space_saver">Space Saver</string>
+    <string name="duplicate_detector">Duplicate Detection</string>
+    <string name="clean_cache">Clean Cache</string>
+    
+    <!-- Media Service -->
+    <string name="media_notification_channel">Sonora Music Playback</string>
+    <string name="media_notification_channel_desc">Active playback controls and track information</string>
+    <string name="download_notification_channel">Music Downloads</string>
+    <string name="download_notification_channel_desc">Track download progress and status</string>
+</resources>
+

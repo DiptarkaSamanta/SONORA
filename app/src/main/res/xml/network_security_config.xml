@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- Allow legal audio streaming endpoints if needed -->
+        <domain includeSubdomains="true">jamendo.com</domain>
+        <domain includeSubdomains="true">jamendo.net</domain>
+        <domain includeSubdomains="true">freemusicarchive.org</domain>
+        <domain includeSubdomains="true">lrclib.net</domain>
+        <domain includeSubdomains="true">apple.com</domain>
+    </domain-config>
+</network-security-config>
+
