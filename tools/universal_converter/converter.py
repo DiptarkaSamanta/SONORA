@@ -131,3 +131,4 @@ if __name__ == "__main__":
         convert_file(p, args.output, args.format, args.bitrate)
     else:
         print(f"[!] Path does not exist: {args.input}")
+
