@@ -3,3 +3,4 @@ spotipy>=2.23.0
 requests>=2.31.0
 yt-dlp>=2024.08.06
 mutagen>=1.47.0
+
