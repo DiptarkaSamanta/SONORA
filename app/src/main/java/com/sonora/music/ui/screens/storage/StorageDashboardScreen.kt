@@ -20,7 +20,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CleaningServices
+import androidx.compose.material.icons.rounded.CloudSync
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material.icons.rounded.DeleteSweep
 import androidx.compose.material.icons.rounded.FolderCopy
 import androidx.compose.material.icons.rounded.PieChart
@@ -75,8 +77,18 @@ fun StorageDashboardScreen(
     val stats by viewModel.storageStats.collectAsState()
     val duplicateGroups by viewModel.duplicateGroups.collectAsState()
     val isCleaning by viewModel.isCleaning.collectAsState()
+    val isSyncingCloud by viewModel.isSyncingCloud.collectAsState()
+    val savedCloudUrl by viewModel.cloudCatalogUrl.collectAsState()
     val currentMode by viewModel.currentMode.collectAsState()
     val statusMessage by viewModel.statusMessage.collectAsState()
+
+    var cloudUrlInput by remember { mutableStateOf("") }
+
+    LaunchedEffect(savedCloudUrl) {
+        if (!savedCloudUrl.isNullOrEmpty() && cloudUrlInput.isEmpty()) {
+            cloudUrlInput = savedCloudUrl ?: ""
+        }
+    }
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -157,6 +169,77 @@ fun StorageDashboardScreen(
                             StorageMetricItem(label = "Music Files", value = stats.musicStorageFormatted, color = SonoraElectricBlue)
                             StorageMetricItem(label = "Image/HTTP Cache", value = stats.cacheStorageFormatted, color = SonoraPurple)
                             StorageMetricItem(label = "Duplicate Waste", value = stats.duplicateSavingsFormatted, color = SonoraWarning)
+                        }
+                    }
+                }
+            }
+
+            // Cloud Music Database Sync Card
+            item {
+                Spacer(modifier = Modifier.height(16.dp))
+                GlassmorphicCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+                    shape = RoundedCornerShape(18.dp),
+                    backgroundColor = SonoraPurple.copy(alpha = 0.15f),
+                    borderColor = SonoraElectricBlue.copy(alpha = 0.5f)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Rounded.CloudSync,
+                                contentDescription = null,
+                                tint = SonoraElectricBlue,
+                                modifier = Modifier.size(24.dp)
+                            )
+                            Spacer(modifier = Modifier.width(10.dp))
+                            Text(
+                                text = "Cloud Music Database (Firebase / GDrive)",
+                                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                                color = SonoraElectricBlue
+                            )
+                        }
+
+                        Text(
+                            text = "Keep all 1,000 Spotify songs stored in the cloud (~1.2 MB each). Streams with 0 MB phone storage. Songs never get lost or deleted on app updates!",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = SonoraTextSecondary,
+                            modifier = Modifier.padding(vertical = 8.dp)
+                        )
+
+                        OutlinedTextField(
+                            value = cloudUrlInput,
+                            onValueChange = { cloudUrlInput = it },
+                            placeholder = { Text("https://.../sonora_catalog.json", color = SonoraTextMuted, fontSize = 12.sp) },
+                            singleLine = true,
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = OutlinedTextFieldDefaults.colors(
+                                focusedContainerColor = SonoraCardBg,
+                                unfocusedContainerColor = SonoraCardBg,
+                                focusedBorderColor = SonoraElectricBlue,
+                                unfocusedBorderColor = SonoraPurple.copy(alpha = 0.3f),
+                                focusedTextColor = SonoraTextPrimary,
+                                unfocusedTextColor = SonoraTextPrimary
+                            )
+                        )
+
+                        Spacer(modifier = Modifier.height(10.dp))
+
+                        Button(
+                            onClick = { viewModel.syncCloudCatalog(cloudUrlInput) },
+                            colors = ButtonDefaults.buttonColors(containerColor = SonoraElectricBlue),
+                            modifier = Modifier.fillMaxWidth(),
+                            enabled = !isSyncingCloud,
+                            shape = RoundedCornerShape(10.dp)
+                        ) {
+                            if (isSyncingCloud) {
+                                CircularProgressIndicator(modifier = Modifier.size(18.dp), color = Color.Black, strokeWidth = 2.dp)
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text("Syncing Songs...", color = Color.Black, fontWeight = FontWeight.Bold)
+                            } else {
+                                Text("Sync Cloud Songs Now", color = Color.Black, fontWeight = FontWeight.Bold)
+                            }
                         }
                     }
                 }

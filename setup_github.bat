@@ -1,36 +1,39 @@
 @echo off
 echo ========================================================
-echo   SONORA - Quick GitHub Setup for Automatic Cloud Build
+echo   SONORA - Automated GitHub Push for Cloud Build
 echo ========================================================
 echo.
-echo This script will initialize Git and help you push Sonora
-echo to GitHub so GitHub can build the APK for you in 2 minutes!
+echo Target Repository: https://github.com/DiptarkaSamanta/SONORA.git
 echo.
-set /p REPO_URL="Enter your GitHub Repository URL (e.g., https://github.com/username/sonora.git): "
-
-if "%REPO_URL%"=="" (
-    echo Error: No URL entered. Please create a repository on https://github.com/new and try again.
-    pause
-    exit /b
-)
-
-echo.
-echo Initializing Git repository...
-git init
+echo 1. Adding all files and committing...
 git add .
-git commit -m "Sonora initial release for Redmi 12 5G"
+git commit -m "Sonora release - Spotify Importer, Firebase/GDrive Cloud Database & Ultra-Compact Storage"
+
+echo.
+echo 2. Setting remote origin...
+git remote remove origin 2>nul
+git remote add origin https://github.com/DiptarkaSamanta/SONORA.git
 git branch -M main
-git remote add origin %REPO_URL%
+
+echo.
+echo 3. Pushing to GitHub...
 git push -u origin main --force
 
-echo.
-echo ========================================================
-echo   SUCCESS! Pushed to GitHub!
-echo ========================================================
-echo Now open your repository on your browser:
-echo 1. Go to the "Actions" tab or "Releases" tab.
-echo 2. Wait 2 minutes for GitHub Cloud to finish building.
-echo 3. Click and download "Sonora-v1.0.0-Redmi12-5G.apk" directly to your phone!
-echo.
+if %ERRORLEVEL% EQU 0 (
+    echo.
+    echo ========================================================
+    echo   SUCCESS! Pushed to https://github.com/DiptarkaSamanta/SONORA
+    echo ========================================================
+    echo GitHub Actions is now building your APK in the cloud!
+    echo.
+    echo In 2-3 minutes:
+    echo 1. Open: https://github.com/DiptarkaSamanta/SONORA/releases
+    echo 2. Download: Sonora-v1.0.0-Redmi12-5G.apk directly onto your phone!
+    echo.
+) else (
+    echo.
+    echo [!] If push failed due to authentication, make sure you are signed into GitHub
+    echo     or use GitHub CLI / Personal Access Token.
+    echo.
+)
 pause
-

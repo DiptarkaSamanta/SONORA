@@ -33,6 +33,13 @@ class UserPreferences(private val context: Context) {
         val KEY_LAST_POSITION = longPreferencesKey("last_playback_position")
         val KEY_OFFLINE_MODE = booleanPreferencesKey("offline_only_mode")
         val KEY_USE_EXTERNAL_STORAGE = booleanPreferencesKey("use_external_storage")
+        val KEY_CLOUD_CATALOG_URL = stringPreferencesKey("cloud_catalog_url")
+    }
+
+    val cloudCatalogUrlFlow: Flow<String?> = dataStore.data.map { it[KEY_CLOUD_CATALOG_URL] }
+
+    suspend fun setCloudCatalogUrl(url: String) {
+        dataStore.edit { it[KEY_CLOUD_CATALOG_URL] = url }
     }
 
     val storageModeFlow: Flow<StorageMode> = dataStore.data.map { prefs ->

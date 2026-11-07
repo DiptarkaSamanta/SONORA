@@ -17,6 +17,8 @@ import kotlinx.coroutines.launch
 class StorageViewModel(application: Application) : AndroidViewModel(application) {
 
     private val storageRepository = ServiceLocator.provideStorageRepository(application)
+    private val musicRepository = ServiceLocator.provideMusicRepository(application)
+    private val userPreferences = ServiceLocator.provideUserPreferences(application)
 
     private val _storageStats = MutableStateFlow(StorageStats())
     val storageStats: StateFlow<StorageStats> = _storageStats.asStateFlow()
@@ -26,6 +28,12 @@ class StorageViewModel(application: Application) : AndroidViewModel(application)
 
     private val _isCleaning = MutableStateFlow(false)
     val isCleaning: StateFlow<Boolean> = _isCleaning.asStateFlow()
+
+    private val _isSyncingCloud = MutableStateFlow(false)
+    val isSyncingCloud: StateFlow<Boolean> = _isSyncingCloud.asStateFlow()
+
+    val cloudCatalogUrl: StateFlow<String?> = userPreferences.cloudCatalogUrlFlow
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
     private val _statusMessage = MutableStateFlow<String?>(null)
     val statusMessage: StateFlow<String?> = _statusMessage.asStateFlow()
@@ -72,6 +80,23 @@ class StorageViewModel(application: Application) : AndroidViewModel(application)
             _statusMessage.value = "Cleared $freedMb MB of temporary image & network cache!"
             refreshStats()
             _isCleaning.value = false
+        }
+    }
+
+    fun syncCloudCatalog(customUrl: String) {
+        viewModelScope.launch {
+            _isSyncingCloud.value = true
+            if (customUrl.isNotBlank()) {
+                userPreferences.setCloudCatalogUrl(customUrl.trim())
+            }
+            val result = musicRepository.syncCloudMusicCatalog(customUrl.trim().ifEmpty { null })
+            result.onSuccess { count ->
+                _statusMessage.value = "Successfully synced $count songs from cloud database!"
+                refreshStats()
+            }.onFailure {
+                _statusMessage.value = "Failed to sync cloud catalog: ${it.localizedMessage}"
+            }
+            _isSyncingCloud.value = false
         }
     }
 
