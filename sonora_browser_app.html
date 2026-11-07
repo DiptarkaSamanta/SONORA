@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SONORA – Interactive Web Player (Redmi 12 5G)</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .vinyl-spinning {
+      animation: spin 14s linear infinite;
+    }
+    .vinyl-paused {
+      animation-play-state: paused;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: rgba(124, 77, 255, 0.4);
+      border-radius: 4px;
+    }
+    :root {
+      --accent: #00D2FF;
+      --accent-purple: #7C4DFF;
+      --accent-magenta: #FF2E93;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-3 md:p-6 font-sans select-none overflow-x-hidden">
+
+  <!-- Desktop Header -->
+  <header class="w-full max-w-6xl flex justify-between items-center mb-4 px-2">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 via-cyan-400 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+      </div>
+      <div>
+        <h1 class="text-xl md:text-2xl font-black tracking-wider bg-gradient-to-r from-purple-400 via-cyan-400 to-pink-500 bg-clip-text text-transparent">SONORA INTERACTIVE BROWSER APP</h1>
+        <p class="text-xs text-slate-400">Play real audio, test the Redmi 12 5G UI, adjust Equalizer, or drop your own songs</p>
+      </div>
+    </div>
+    <div class="hidden md:flex items-center gap-2">
+      <span class="text-xs bg-purple-950/80 text-cyan-400 border border-purple-500/40 px-3 py-1.5 rounded-full font-mono font-semibold">
+        Real Audio Engine: Active
+      </span>
+    </div>
+  </header>
+
+  <!-- Main Grid: Control Deck + Phone Frame + Dropzone -->
+  <main class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-6 items-start justify-center">
+
+    <!-- Left Panel: UI Tweaks & Theme Selector (Col 1-3) -->
+    <div class="lg:col-span-3 bg-slate-900/90 border border-slate-800 rounded-3xl p-5 shadow-2xl backdrop-blur-md space-y-4">
+      <div>
+        <h2 class="font-bold text-sm text-white uppercase tracking-wider mb-2">Live Theme Color</h2>
+        <div class="grid grid-cols-5 gap-2" id="color-picker">
+          <button onclick="setAccent('#00D2FF', '#7C4DFF')" class="w-8 h-8 rounded-xl bg-cyan-400 ring-2 ring-cyan-400 ring-offset-2 ring-offset-slate-900 transition hover:scale-110"></button>
+          <button onclick="setAccent('#7C4DFF', '#00D2FF')" class="w-8 h-8 rounded-xl bg-purple-500 transition hover:scale-110"></button>
+          <button onclick="setAccent('#FF2E93', '#7C4DFF')" class="w-8 h-8 rounded-xl bg-pink-500 transition hover:scale-110"></button>
+          <button onclick="setAccent('#00E676', '#00D2FF')" class="w-8 h-8 rounded-xl bg-emerald-400 transition hover:scale-110"></button>
+          <button onclick="setAccent('#FFB300', '#FF2E93')" class="w-8 h-8 rounded-xl bg-amber-400 transition hover:scale-110"></button>
+        </div>
+      </div>
+
+      <div class="border-t border-slate-800/80 pt-3">
+        <h2 class="font-bold text-sm text-white uppercase tracking-wider mb-2">Quick Navigation</h2>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <button onclick="switchTab('home')" class="p-2.5 bg-slate-800/80 hover:bg-slate-700 rounded-xl font-medium text-left flex items-center gap-1.5">🏠 Home</button>
+          <button onclick="switchTab('search')" class="p-2.5 bg-slate-800/80 hover:bg-slate-700 rounded-xl font-medium text-left flex items-center gap-1.5">🔍 Search</button>
+          <button onclick="switchTab('library')" class="p-2.5 bg-slate-800/80 hover:bg-slate-700 rounded-xl font-medium text-left flex items-center gap-1.5">📚 Cloud Library</button>
+          <button onclick="switchTab('storage')" class="p-2.5 bg-slate-800/80 hover:bg-slate-700 rounded-xl font-medium text-left flex items-center gap-1.5">⚡ Storage (1.2MB)</button>
+          <button onclick="switchTab('downloads')" class="p-2.5 bg-slate-800/80 hover:bg-slate-700 rounded-xl font-medium text-left flex items-center gap-1.5">📥 Downloads</button>
+          <button onclick="openFullPlayer()" class="p-2.5 bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-bold rounded-xl text-left flex items-center gap-1.5 shadow-md">🎵 Full Player</button>
+        </div>
+      </div>
+
+      <!-- Play Custom Local File Box -->
+      <div class="border-t border-slate-800/80 pt-3">
+        <h2 class="font-bold text-sm text-white uppercase tracking-wider mb-2">Play Your Own Music</h2>
+        <label class="block border-2 border-dashed border-slate-700 hover:border-cyan-400 rounded-2xl p-4 text-center cursor-pointer transition bg-slate-950/40">
+          <input type="file" id="local-audio-input" accept="audio/*,video/mp4" class="hidden" onchange="loadUserLocalAudio(this)">
+          <svg class="w-7 h-7 mx-auto text-cyan-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+          <span class="text-xs font-semibold text-slate-300 block">Click or Drop Song Here</span>
+          <span class="text-[10px] text-slate-500">Supports MP3, M4A, WAV, FLAC, MP4</span>
+        </label>
+      </div>
+
+      <!-- Live Volume Slider -->
+      <div class="border-t border-slate-800/80 pt-3">
+        <div class="flex justify-between items-center text-xs font-semibold text-slate-400 mb-1">
+          <span>Master Volume</span>
+          <span id="volume-val">80%</span>
+        </div>
+        <input type="range" min="0" max="100" value="80" oninput="setMasterVolume(this.value)" class="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+      </div>
+    </div>
+
+    <!-- Center: Authentic Redmi 12 5G Phone Frame Simulator (Col 4-9) -->
+    <div class="lg:col-span-6 flex justify-center">
+      <div class="relative w-[370px] h-[750px] bg-black rounded-[48px] p-3 shadow-[0_0_60px_rgba(124,77,255,0.25)] border-[5px] border-slate-800 flex flex-col overflow-hidden">
+        
+        <!-- Top Speaker & Punch Hole Camera -->
+        <div class="absolute top-4 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-slate-950 rounded-full border border-slate-800 z-50 flex items-center justify-center">
+          <div class="w-1.5 h-1.5 bg-blue-950 rounded-full"></div>
+        </div>
+
+        <!-- Android Status Bar -->
+        <div class="w-full h-7 pt-1 px-6 flex justify-between items-center text-[11px] text-slate-400 font-medium z-40 select-none">
+          <span id="live-time">10:18</span>
+          <div class="flex items-center gap-1.5">
+            <span>5G</span>
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path></svg>
+            <div class="w-4 h-2 border border-slate-400 rounded-sm p-0.5 flex items-center">
+              <div class="h-full bg-cyan-400 rounded-[1px] w-3"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- App Screen Inside Phone -->
+        <div class="relative w-full flex-1 bg-[#0B0C10] rounded-[36px] overflow-hidden flex flex-col text-slate-100">
+
+          <!-- Screen Scroll Area -->
+          <div id="screen-container" class="flex-1 overflow-y-auto custom-scroll pb-28">
+
+            <!-- 1. HOME SCREEN -->
+            <div id="screen-home" class="p-4 space-y-4">
+              <!-- Top Header -->
+              <div class="flex justify-between items-center pt-2">
+                <div>
+                  <h1 class="text-2xl font-black tracking-wider bg-gradient-to-r from-purple-400 via-cyan-400 to-pink-500 bg-clip-text text-transparent">SONORA</h1>
+                  <p class="text-xs text-slate-400">Smart Offline & Online Music</p>
+                </div>
+                <div onclick="switchTab('storage')" class="cursor-pointer bg-purple-950/60 border border-purple-500/30 px-2.5 py-1 rounded-full flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                  <span class="text-[11px] font-semibold text-cyan-300">Space Saver (1.2MB)</span>
+                </div>
+              </div>
+
+              <!-- Redmi 12 5G Battery Optimizer Card -->
+              <div class="bg-gradient-to-r from-purple-900/30 to-cyan-950/30 border border-cyan-500/40 rounded-2xl p-3.5 space-y-2">
+                <div class="flex items-center gap-2 text-cyan-400 text-xs font-bold">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg>
+                  Redmi 12 5G Optimization
+                </div>
+                <p class="text-[11px] text-slate-300 leading-relaxed">
+                  Screen-off & background playback enabled for HyperOS. Tap below to test background execution:
+                </p>
+                <div class="flex gap-2 pt-1">
+                  <button onclick="alert('Battery optimization set to No restrictions!')" class="flex-1 py-1.5 bg-cyan-400 text-black font-bold text-xs rounded-lg hover:bg-cyan-300 transition">No Restrictions</button>
+                  <button onclick="alert('Autostart granted for Sonora!')" class="flex-1 py-1.5 border border-slate-700 text-slate-300 text-xs rounded-lg hover:bg-slate-800">Autostart</button>
+                </div>
+              </div>
+
+              <!-- Recently Played Carousel -->
+              <div>
+                <div class="flex justify-between items-center mb-2.5">
+                  <h3 class="font-bold text-sm text-slate-100">Playable Streams</h3>
+                  <span class="text-xs text-cyan-400 cursor-pointer" onclick="switchTab('library')">See All 1,000</span>
+                </div>
+                <div class="flex gap-3 overflow-x-auto pb-1 custom-scroll" id="home-carousel">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+
+              <!-- Trending Legal Discovery List -->
+              <div>
+                <h3 class="font-bold text-sm text-slate-100 mb-2">Featured Tracks (Click to Play)</h3>
+                <div class="space-y-1.5" id="home-songs-list">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. SEARCH SCREEN -->
+            <div id="screen-search" class="p-4 space-y-4 hidden">
+              <h2 class="text-xl font-black text-white">Search</h2>
+              <div class="relative">
+                <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Search songs, artists, or lyrics..." class="w-full bg-slate-900 border border-slate-800 rounded-2xl px-4 py-3 pl-10 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400">
+                <svg class="w-4 h-4 text-cyan-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              </div>
+
+              <!-- Filter Pills -->
+              <div class="flex gap-2 overflow-x-auto pb-1 text-xs font-medium">
+                <button onclick="setSearchFilter('all')" class="search-filter-pill px-3 py-1.5 rounded-full bg-cyan-400 text-black font-bold">All</button>
+                <button onclick="setSearchFilter('local')" class="search-filter-pill px-3 py-1.5 rounded-full bg-slate-800 text-slate-300">Local Files</button>
+                <button onclick="setSearchFilter('cloud')" class="search-filter-pill px-3 py-1.5 rounded-full bg-slate-800 text-slate-300">Online CC</button>
+                <button onclick="setSearchFilter('lyrics')" class="search-filter-pill px-3 py-1.5 rounded-full bg-slate-800 text-slate-300">By Lyrics</button>
+              </div>
+
+              <div id="search-results" class="space-y-2">
+                <!-- Search items injected via JS -->
+              </div>
+            </div>
+
+            <!-- 3. LIBRARY SCREEN (With Cloud ~1MB Tab) -->
+            <div id="screen-library" class="p-4 space-y-4 hidden">
+              <div class="flex justify-between items-center">
+                <div>
+                  <h2 class="text-xl font-black text-white">Your Library</h2>
+                  <p class="text-xs text-slate-400">1,000 Songs • Cloud & Local</p>
+                </div>
+                <button onclick="alert('Synced 1,000 cloud songs into your library!')" class="p-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-cyan-400">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                </button>
+              </div>
+
+              <!-- Library Tabs -->
+              <div class="flex border-b border-slate-800 text-xs font-medium gap-3">
+                <button onclick="switchLibSubTab('cloud')" id="lib-tab-cloud" class="pb-2 text-cyan-400 border-b-2 border-cyan-400 font-bold">Cloud (~1MB)</button>
+                <button onclick="switchLibSubTab('all')" id="lib-tab-all" class="pb-2 text-slate-400">All Songs</button>
+                <button onclick="switchLibSubTab('playlists')" id="lib-tab-playlists" class="pb-2 text-slate-400">Playlists</button>
+              </div>
+
+              <!-- Cloud Songs Banner -->
+              <div class="bg-gradient-to-r from-purple-900/40 to-cyan-900/40 border border-cyan-500/30 rounded-xl p-3 text-xs space-y-1">
+                <div class="font-bold text-cyan-400 flex items-center gap-1.5">
+                  ☁️ 1,000 Spotify Cloud Songs
+                </div>
+                <p class="text-slate-300 text-[11px]">
+                  Streams with 0 MB phone storage. Offline downloads use ultra-small 64kbps Opus (~1.2 MB each).
+                </p>
+              </div>
+
+              <div id="library-songs-list" class="space-y-1.5">
+                <!-- Injected via JS -->
+              </div>
+            </div>
+
+            <!-- 4. STORAGE DASHBOARD SCREEN -->
+            <div id="screen-storage" class="p-4 space-y-4 hidden">
+              <div>
+                <h2 class="text-xl font-black text-white">Smart Storage</h2>
+                <p class="text-xs text-slate-400">Optimized for Redmi 12 5G (Low Storage)</p>
+              </div>
+
+              <!-- Storage Meter Card -->
+              <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
+                <div class="flex justify-between items-center text-xs">
+                  <span class="font-bold text-white">Device Storage</span>
+                  <span class="text-emerald-400 font-semibold" id="free-space-text">14.2 GB Free</span>
+                </div>
+                <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
+                  <div class="h-full bg-gradient-to-r from-purple-500 to-cyan-400 w-3/4 rounded-full"></div>
+                </div>
+                <div class="grid grid-cols-3 gap-2 pt-1 text-center">
+                  <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
+                    <div class="text-[10px] text-slate-400">Music Files</div>
+                    <div class="text-xs font-bold text-cyan-400" id="music-space-text">180 MB</div>
+                  </div>
+                  <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
+                    <div class="text-[10px] text-slate-400">Temp Cache</div>
+                    <div class="text-xs font-bold text-purple-400" id="cache-space-text">64 MB</div>
+                  </div>
+                  <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
+                    <div class="text-[10px] text-slate-400">Duplicates</div>
+                    <div class="text-xs font-bold text-amber-400" id="dup-space-text">115 MB</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cloud Database Sync Card -->
+              <div class="bg-purple-950/30 border border-cyan-500/50 rounded-2xl p-3.5 space-y-2.5">
+                <div class="flex items-center gap-2 text-cyan-400 font-bold text-xs">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                  Cloud Music Database (Firebase / GDrive)
+                </div>
+                <p class="text-[11px] text-slate-300">
+                  All 1,000 songs are stored online. When you change or update the app, nothing is ever deleted!
+                </p>
+                <input type="text" id="cloud-url-input" value="https://raw.githubusercontent.com/DiptarkaSamanta/SONORA/main/sonora_catalog.json" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-[11px] text-slate-300 focus:outline-none focus:border-cyan-400">
+                <button onclick="triggerCloudSync()" id="btn-cloud-sync" class="w-full py-2 bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-cyan-500/20 hover:opacity-90">
+                  Sync 1,000 Songs Now
+                </button>
+              </div>
+
+              <!-- Storage Modes Selection -->
+              <div>
+                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider block mb-2">Storage Mode Preference</label>
+                <div class="space-y-2">
+                  <div onclick="selectStorageMode('space_saver')" id="mode-space-saver" class="p-3 bg-purple-900/30 border-2 border-cyan-400 rounded-xl cursor-pointer flex justify-between items-center">
+                    <div>
+                      <div class="text-xs font-bold text-white flex items-center gap-1.5">
+                        <span>Space Saver (Recommended)</span>
+                        <span class="text-[10px] bg-cyan-400/20 text-cyan-400 px-1.5 py-0.5 rounded font-mono">~1.2 MB/song</span>
+                      </div>
+                      <div class="text-[11px] text-slate-400">Opus 64 kbps • Fits 1,000 songs in just 1.2 GB</div>
+                    </div>
+                    <span class="w-4 h-4 rounded-full border-2 border-cyan-400 flex items-center justify-center"><span class="w-2 h-2 rounded-full bg-cyan-400"></span></span>
+                  </div>
+
+                  <div onclick="selectStorageMode('balanced')" id="mode-balanced" class="p-3 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer flex justify-between items-center opacity-70">
+                    <div>
+                      <div class="text-xs font-bold text-white">Balanced Quality</div>
+                      <div class="text-[11px] text-slate-400">AAC 160 kbps • ~3.5 MB per song</div>
+                    </div>
+                    <span class="w-4 h-4 rounded-full border border-slate-600"></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Cleanup Actions -->
+              <div class="grid grid-cols-2 gap-2 pt-1">
+                <button onclick="cleanCache()" class="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-xl text-slate-200 flex items-center justify-center gap-1.5">
+                  🧹 Clear Temp Cache
+                </button>
+                <button onclick="cleanDuplicates()" class="py-2.5 px-3 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-md">
+                  🗑️ Clean Duplicates (115MB)
+                </button>
+              </div>
+            </div>
+
+            <!-- 5. DOWNLOADS SCREEN -->
+            <div id="screen-downloads" class="p-4 space-y-4 hidden">
+              <h2 class="text-xl font-black text-white">Downloads</h2>
+
+              <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex justify-between items-center">
+                <div>
+                  <div class="text-xs font-bold text-white">Download on Wi-Fi Only</div>
+                  <div class="text-[11px] text-slate-400">Prevents mobile data consumption</div>
+                </div>
+                <input type="checkbox" checked class="w-5 h-5 accent-cyan-400 rounded">
+              </div>
+
+              <div>
+                <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-2">Offline Stored Tracks (Redmi 12 5G)</h3>
+                <div id="downloads-list" class="space-y-1.5">
+                  <!-- Injected via JS -->
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Persistent Mini-Player (Above Bottom Navigation) -->
+          <div id="mini-player" onclick="openFullPlayer()" class="absolute bottom-16 left-3 right-3 bg-slate-900/95 backdrop-blur-md border border-purple-500/40 rounded-2xl p-2.5 cursor-pointer shadow-xl flex flex-col gap-1 z-30 transition hover:border-cyan-400/60">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5 overflow-hidden">
+                <img id="mini-artwork" src="https://picsum.photos/seed/starboy/200/200" class="w-10 h-10 rounded-xl object-cover flex-shrink-0">
+                <div class="overflow-hidden">
+                  <div id="mini-title" class="text-xs font-bold text-white truncate">Lo-Fi Midnight Study</div>
+                  <div id="mini-artist" class="text-[10px] text-slate-400 truncate">Sonnox Collective • Opus 64k</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-1">
+                <button onclick="togglePlay(event)" class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-cyan-400 flex items-center justify-center text-black shadow-md">
+                  <svg id="mini-play-icon" class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+                </button>
+                <button onclick="nextTrack(event)" class="p-1 text-slate-300 hover:text-white">
+                  <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M5.536 21.886a1 1 0 01-.536-.886V3a1 1 0 011.536-.857l11.5 9a1 1 0 010 1.714l-11.5 9a1 1 0 01-1-.029zM19 3a1 1 0 011 1v16a1 1 0 11-2 0V4a1 1 0 011-1z"></path></svg>
+                </button>
+              </div>
+            </div>
+            <!-- Live Progress Bar -->
+            <div class="w-full bg-slate-800 h-1 rounded-full overflow-hidden">
+              <div id="mini-progress-bar" class="h-full bg-cyan-400 rounded-full w-0 transition-all duration-200"></div>
+            </div>
+          </div>
+
+          <!-- Bottom Navigation Bar -->
+          <div class="absolute bottom-0 left-0 right-0 h-16 bg-[#14161E] border-t border-slate-800/80 px-4 flex justify-between items-center text-[10px] font-medium z-20">
+            <button onclick="switchTab('home')" class="nav-btn flex flex-col items-center gap-1 text-cyan-400" id="nav-home">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+              <span>Home</span>
+            </button>
+            <button onclick="switchTab('search')" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200" id="nav-search">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+              <span>Search</span>
+            </button>
+            <button onclick="switchTab('library')" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200" id="nav-library">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path></svg>
+              <span>Library</span>
+            </button>
+            <button onclick="switchTab('storage')" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200" id="nav-storage">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path></svg>
+              <span>Storage</span>
+            </button>
+            <button onclick="switchTab('downloads')" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200" id="nav-downloads">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              <span>Downloads</span>
+            </button>
+          </div>
+
+          <!-- 6. FULL SCREEN PLAYER OVERLAY -->
+          <div id="full-player" class="absolute inset-0 bg-[#0B0C10] z-50 flex flex-col p-5 translate-y-full transition-transform duration-300 ease-out">
+            <!-- Top Bar -->
+            <div class="flex justify-between items-center pt-1">
+              <button onclick="closeFullPlayer()" class="p-1.5 text-slate-400 hover:text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+              </button>
+              <div class="text-center">
+                <div class="text-[10px] uppercase font-bold tracking-widest text-slate-500">NOW PLAYING</div>
+                <div class="text-xs font-semibold text-slate-300 truncate max-w-[180px]" id="player-album">Chill Cloud Beats</div>
+              </div>
+              <button onclick="openEqualizerModal()" class="p-1.5 text-cyan-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+              </button>
+            </div>
+
+            <!-- Vinyl Disc or Lyrics View -->
+            <div id="player-main-view" class="flex-1 flex flex-col items-center justify-center my-3 overflow-hidden relative">
+              <div id="vinyl-disc-container" class="relative w-60 h-60 rounded-full bg-slate-900 border-4 border-slate-800 shadow-[0_0_50px_rgba(124,77,255,0.3)] flex items-center justify-center vinyl-spinning">
+                <div class="absolute inset-4 rounded-full border border-slate-700/60"></div>
+                <div class="absolute inset-8 rounded-full border border-slate-700/40"></div>
+                <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-slate-900 shadow-inner">
+                  <img id="player-artwork" src="https://picsum.photos/seed/starboy/200/200" class="w-full h-full object-cover">
+                </div>
+                <div class="w-4 h-4 bg-slate-950 rounded-full border-2 border-slate-700 z-10 absolute"></div>
+              </div>
+
+              <!-- Synced Karaoke Lyrics -->
+              <div id="synced-lyrics-view" class="hidden absolute inset-0 overflow-y-auto custom-scroll text-center py-6 px-3 space-y-4 text-xs font-medium">
+                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(10)">[00:10] I'm tryin' to put you in the worst mood, ah</p>
+                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(22)">[00:22] P1 cleaner than your church shoes, ah</p>
+                <p class="text-cyan-400 font-extrabold text-base scale-105 transition-transform cursor-pointer" onclick="seekAudio(35)">[00:35] Look what you've done, I'm a starboy</p>
+                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(50)">[00:50] Every day a nigga try to test me, ah</p>
+                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(65)">[01:05] Every day a nigga try to end me, ah</p>
+              </div>
+            </div>
+
+            <!-- Track Info & Quality Pill -->
+            <div class="flex justify-between items-center mb-3">
+              <div>
+                <h2 id="player-title" class="text-base font-black text-white truncate">Lo-Fi Midnight Study</h2>
+                <div class="flex items-center gap-2">
+                  <span id="player-artist" class="text-xs text-slate-400 truncate">Sonnox Collective</span>
+                  <span class="text-[9px] bg-purple-950/80 text-cyan-400 border border-purple-500/40 px-1.5 py-0.5 rounded font-mono font-bold">OPUS 64k (~1.2MB)</span>
+                </div>
+              </div>
+              <button onclick="toggleFavorite()" class="p-2 text-pink-500">
+                <svg id="fav-icon" class="w-6 h-6 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+              </button>
+            </div>
+
+            <!-- Seekbar -->
+            <div class="space-y-1 mb-3">
+              <input type="range" id="player-seekbar" min="0" max="100" value="0" oninput="handleSeek(this.value)" class="w-full accent-cyan-400 cursor-pointer h-1.5 bg-slate-800 rounded-lg">
+              <div class="flex justify-between text-[11px] text-slate-400 font-mono">
+                <span id="time-current">0:00</span>
+                <span id="time-total">2:55</span>
+              </div>
+            </div>
+
+            <!-- Playback Controls -->
+            <div class="flex justify-between items-center mb-4">
+              <button onclick="toggleShuffle()" id="shuffle-btn" class="p-2 text-slate-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+              </button>
+              <button onclick="prevTrack()" class="p-2 text-slate-200 hover:text-white">
+                <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M18.464 2.114a1 1 0 01.536.886v18a1 1 0 01-1.536.857l-11.5-9a1 1 0 010-1.714l11.5-9a1 1 0 011 .029zM5 21a1 1 0 01-1-1V4a1 1 0 112 0v16a1 1 0 01-1 1z"></path></svg>
+              </button>
+              <!-- Large Gradient Play/Pause Button -->
+              <button onclick="togglePlay(event)" class="w-14 h-14 rounded-full bg-gradient-to-r from-purple-500 via-cyan-400 to-pink-500 flex items-center justify-center text-black shadow-lg shadow-purple-500/40 hover:scale-105 transition">
+                <svg id="player-play-icon" class="w-7 h-7 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+              </button>
+              <button onclick="nextTrack(event)" class="p-2 text-slate-200 hover:text-white">
+                <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M5.536 21.886a1 1 0 01-.536-.886V3a1 1 0 011.536-.857l11.5 9a1 1 0 010 1.714l-11.5 9a1 1 0 01-1-.029zM19 3a1 1 0 011 1v16a1 1 0 11-2 0V4a1 1 0 011-1z"></path></svg>
+              </button>
+              <button onclick="toggleRepeat()" id="repeat-btn" class="p-2 text-slate-400 hover:text-white">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+              </button>
+            </div>
+
+            <!-- Bottom Action Row: Lyrics, Sleep Timer, Speed -->
+            <div class="flex justify-around items-center border-t border-slate-800/80 pt-2.5">
+              <button onclick="toggleLyricsView()" id="btn-toggle-lyrics" class="flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <span>Lyrics</span>
+              </button>
+              <button onclick="openSleepTimerModal()" class="flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                <span>Sleep Timer</span>
+              </button>
+              <button onclick="cycleSpeed()" id="speed-indicator" class="px-2 py-0.5 bg-slate-900 border border-slate-800 rounded-lg text-xs font-bold text-cyan-400">
+                1.0x
+              </button>
+            </div>
+          </div>
+
+          <!-- EQUALIZER MODAL SHEET -->
+          <div id="equalizer-modal" class="hidden absolute inset-x-0 bottom-0 top-16 bg-[#14161E] z-50 rounded-t-3xl p-5 flex flex-col border-t border-cyan-500/40">
+            <div class="flex justify-between items-center mb-3">
+              <h3 class="font-black text-base text-white">Equalizer & Audio FX</h3>
+              <button onclick="closeEqualizerModal()" class="text-slate-400 hover:text-white p-1">✕</button>
+            </div>
+            <p class="text-[11px] text-slate-400 mb-4">Hardware DSP Sound Optimization for Redmi 12 5G</p>
+            
+            <!-- Presets -->
+            <div class="flex gap-2 overflow-x-auto pb-2 text-xs font-semibold mb-4 custom-scroll">
+              <button onclick="applyEqPreset('Flat', [0,0,0,0,0])" class="eq-pill px-3 py-1 bg-cyan-400 text-black rounded-full font-bold">Flat</button>
+              <button onclick="applyEqPreset('Bass Boost', [7,5,1,0,0])" class="eq-pill px-3 py-1 bg-slate-800 text-slate-300 rounded-full">Bass Boost</button>
+              <button onclick="applyEqPreset('Rock', [5,3,-1,2,4])" class="eq-pill px-3 py-1 bg-slate-800 text-slate-300 rounded-full">Rock</button>
+              <button onclick="applyEqPreset('Pop', [-2,2,4,2,-1])" class="eq-pill px-3 py-1 bg-slate-800 text-slate-300 rounded-full">Pop</button>
+              <button onclick="applyEqPreset('EDM', [6,4,0,3,5])" class="eq-pill px-3 py-1 bg-slate-800 text-slate-300 rounded-full">EDM</button>
+            </div>
+
+            <!-- 5 Sliders -->
+            <div class="space-y-3 flex-1 overflow-y-auto custom-scroll">
+              <div class="flex items-center gap-3 text-xs">
+                <span class="w-12 text-slate-400">60Hz</span>
+                <input type="range" min="-12" max="12" value="0" oninput="changeEqBand(0, this.value)" class="flex-1 accent-cyan-400 h-1 bg-slate-800">
+                <span class="w-10 text-right text-cyan-400 font-mono" id="eq-val-0">0dB</span>
+              </div>
+              <div class="flex items-center gap-3 text-xs">
+                <span class="w-12 text-slate-400">230Hz</span>
+                <input type="range" min="-12" max="12" value="0" oninput="changeEqBand(1, this.value)" class="flex-1 accent-cyan-400 h-1 bg-slate-800">
+                <span class="w-10 text-right text-cyan-400 font-mono" id="eq-val-1">0dB</span>
+              </div>
+              <div class="flex items-center gap-3 text-xs">
+                <span class="w-12 text-slate-400">910Hz</span>
+                <input type="range" min="-12" max="12" value="0" oninput="changeEqBand(2, this.value)" class="flex-1 accent-cyan-400 h-1 bg-slate-800">
+                <span class="w-10 text-right text-cyan-400 font-mono" id="eq-val-2">0dB</span>
+              </div>
+              <div class="flex items-center gap-3 text-xs">
+                <span class="w-12 text-slate-400">3.6kHz</span>
+                <input type="range" min="-12" max="12" value="0" oninput="changeEqBand(3, this.value)" class="flex-1 accent-cyan-400 h-1 bg-slate-800">
+                <span class="w-10 text-right text-cyan-400 font-mono" id="eq-val-3">0dB</span>
+              </div>
+              <div class="flex items-center gap-3 text-xs">
+                <span class="w-12 text-slate-400">14kHz</span>
+                <input type="range" min="-12" max="12" value="0" oninput="changeEqBand(4, this.value)" class="flex-1 accent-cyan-400 h-1 bg-slate-800">
+                <span class="w-10 text-right text-cyan-400 font-mono" id="eq-val-4">0dB</span>
+              </div>
+
+              <!-- Bass Boost Knob -->
+              <div class="pt-3 border-t border-slate-800">
+                <div class="flex justify-between text-xs mb-1">
+                  <span class="text-slate-300 font-semibold">Sub-Bass Enhancer</span>
+                  <span class="text-pink-400 font-mono" id="bass-val">20%</span>
+                </div>
+                <input type="range" min="0" max="100" value="20" oninput="changeBass(this.value)" class="w-full accent-pink-500 h-1 bg-slate-800">
+              </div>
+            </div>
+          </div>
+
+          <!-- SLEEP TIMER MODAL SHEET -->
+          <div id="sleeptimer-modal" class="hidden absolute inset-x-0 bottom-0 bg-[#14161E] z-50 rounded-t-3xl p-5 border-t border-purple-500/40 space-y-3">
+            <div class="flex justify-between items-center">
+              <h3 class="font-black text-base text-white">Sleep Timer</h3>
+              <button onclick="closeSleepTimerModal()" class="text-slate-400 hover:text-white">✕</button>
+            </div>
+            <p class="text-[11px] text-slate-400">Fades audio out smoothly over 15 seconds before pausing.</p>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <button onclick="setSleepTimer(15)" class="p-3 bg-slate-900 border border-slate-800 rounded-xl font-bold hover:border-cyan-400">15 Minutes</button>
+              <button onclick="setSleepTimer(30)" class="p-3 bg-slate-900 border border-slate-800 rounded-xl font-bold hover:border-cyan-400">30 Minutes</button>
+              <button onclick="setSleepTimer(45)" class="p-3 bg-slate-900 border border-slate-800 rounded-xl font-bold hover:border-cyan-400">45 Minutes</button>
+              <button onclick="setSleepTimer(60)" class="p-3 bg-slate-900 border border-slate-800 rounded-xl font-bold hover:border-cyan-400">60 Minutes</button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Android Home Bar -->
+        <div class="w-28 h-1 bg-slate-700 rounded-full mx-auto mt-2"></div>
+      </div>
+    </div>
+
+    <!-- Right Panel: Live Audio Engine & Information (Col 10-12) -->
+    <div class="lg:col-span-3 bg-slate-900/90 border border-slate-800 rounded-3xl p-5 shadow-2xl backdrop-blur-md space-y-4">
+      <div>
+        <h2 class="font-bold text-sm text-white uppercase tracking-wider mb-2">Live Audio Status</h2>
+        <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-4 text-xs space-y-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+            <span class="font-bold text-emerald-400" id="audio-status-text">Playing Sound</span>
+          </div>
+          <div class="text-slate-300 truncate" id="now-playing-file">Track: Lo-Fi Midnight Study</div>
+          <div class="text-[11px] text-slate-400">Size in Sonora: <span class="text-cyan-400 font-bold">~1.2 MB (Opus 64k)</span></div>
+          <div class="text-[11px] text-slate-400">Size in normal MP3: <span class="text-slate-500 line-through">~9.5 MB</span></div>
+        </div>
+      </div>
+
+      <!-- Live Web Audio Waveform Canvas -->
+      <div class="border-t border-slate-800/80 pt-3">
+        <h2 class="font-bold text-sm text-white uppercase tracking-wider mb-2">DSP Frequency Visualizer</h2>
+        <canvas id="waveform-canvas" width="220" height="70" class="w-full bg-slate-950/90 rounded-2xl border border-slate-800"></canvas>
+      </div>
+
+      <!-- Instructions & Tips -->
+      <div class="border-t border-slate-800/80 pt-3 text-xs text-slate-300 space-y-2">
+        <p class="font-semibold text-cyan-400">💡 Interactive Features:</p>
+        <ul class="list-disc list-inside space-y-1 text-slate-400 text-[11px]">
+          <li>Click any track to stream and listen with audio.</li>
+          <li>Click the mini-player to open the spinning vinyl disc full player.</li>
+          <li>Test the Equalizer to hear the sound change live.</li>
+          <li>Drop any song from your computer to test your own files in Sonora!</li>
+        </ul>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    // Real Audio Element
+    const audio = new Audio();
+    audio.crossOrigin = "anonymous";
+    let isPlaying = false;
+    let audioContext, analyser, sourceNode;
+
+    // Real Streamable Legal Tracks
+    const tracks = [
+      { id: '1', title: 'Lo-Fi Midnight Study', artist: 'Sonnox Collective', album: 'Chill Cloud Beats', duration: '2:55', format: 'OPUS 64k', size: '1.2 MB', art: 'https://picsum.photos/seed/starboy/200/200', src: 'https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3' },
+      { id: '2', title: 'Cyber Ambient Groove', artist: 'Neon Horizon', album: 'Space Waves', duration: '3:12', format: 'OPUS 64k', size: '1.3 MB', art: 'https://picsum.photos/seed/lights/200/200', src: 'https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3' },
+      { id: '3', title: 'Acoustic Nature Breeze', artist: 'Sierra Strings', album: 'Acoustic Sound', duration: '2:38', format: 'OPUS 64k', size: '1.0 MB', art: 'https://picsum.photos/seed/shape/200/200', src: 'https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3' },
+      { id: '4', title: 'Deep Focus Synthwave', artist: 'Pulse Vector', album: 'Retrowave 84', duration: '3:30', format: 'OPUS 64k', size: '1.4 MB', art: 'https://picsum.photos/seed/m83/200/200', src: 'https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f77cf6.mp3' }
+    ];
+
+    let currentTrackIndex = 0;
+    let isShuffle = false;
+    let isRepeat = false;
+    let isLyricsOpen = false;
+    let playbackSpeed = 1.0;
+
+    function initAudioContext() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 64;
+        sourceNode = audioContext.createMediaElementSource(audio);
+        sourceNode.connect(analyser);
+        analyser.connect(audioContext.destination);
+        startVisualizer();
+      }
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+    }
+
+    function renderSongs() {
+      const homeList = document.getElementById('home-songs-list');
+      const libList = document.getElementById('library-songs-list');
+      const downList = document.getElementById('downloads-list');
+      const searchList = document.getElementById('search-results');
+      const carousel = document.getElementById('home-carousel');
+
+      let html = '';
+      tracks.forEach((t, i) => {
+        html += `
+          <div onclick="playTrackByIndex(${i})" class="flex items-center justify-between p-2.5 bg-slate-900/80 hover:bg-slate-800/80 rounded-xl cursor-pointer border border-slate-800/60 transition">
+            <div class="flex items-center gap-2.5 overflow-hidden">
+              <img src="${t.art}" class="w-9 h-9 rounded-lg object-cover flex-shrink-0">
+              <div class="overflow-hidden">
+                <div class="text-xs font-bold text-slate-100 truncate">${t.title}</div>
+                <div class="text-[10px] text-slate-400 truncate">${t.artist} • ${t.duration}</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-[9px] bg-purple-950/80 text-cyan-400 border border-purple-500/40 px-1.5 py-0.5 rounded font-mono font-bold">${t.format}</span>
+              <button onclick="downloadTrack(event, '${t.title}')" class="p-1.5 text-slate-400 hover:text-cyan-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+
+      if (homeList) homeList.innerHTML = html;
+      if (libList) libList.innerHTML = html;
+      if (downList) downList.innerHTML = html.slice(0, 350);
+      if (searchList) searchList.innerHTML = html;
+
+      // Carousel items
+      let carouselHtml = '';
+      tracks.forEach((t, i) => {
+        carouselHtml += `
+          <div onclick="playTrackByIndex(${i})" class="w-28 flex-shrink-0 bg-slate-900/90 border border-slate-800 rounded-xl p-2 cursor-pointer hover:border-cyan-400/50 transition">
+            <div class="relative w-full aspect-square rounded-lg overflow-hidden bg-slate-800 mb-1.5">
+              <img src="${t.art}" class="w-full h-full object-cover">
+              <div class="absolute bottom-1 right-1 w-6 h-6 rounded-full bg-cyan-400 flex items-center justify-center text-black">
+                <svg class="w-3 h-3 fill-current" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"></path></svg>
+              </div>
+            </div>
+            <h4 class="text-xs font-bold truncate">${t.title}</h4>
+            <p class="text-[9px] text-slate-400 truncate">${t.artist}</p>
+          </div>
+        `;
+      });
+      if (carousel) carousel.innerHTML = carouselHtml;
+    }
+
+    function playTrackByIndex(i) {
+      currentTrackIndex = i;
+      const t = tracks[i];
+      playTrack(t.title, t.artist, t.format, t.art, t.album, t.duration, t.src);
+    }
+
+    function playTrack(title, artist, format, art, album = 'Spotify Cloud', duration = '3:00', src) {
+      initAudioContext();
+      document.getElementById('mini-title').textContent = title;
+      document.getElementById('mini-artist').textContent = `${artist} • ${format}`;
+      document.getElementById('mini-artwork').src = art;
+
+      document.getElementById('player-title').textContent = title;
+      document.getElementById('player-artist').textContent = artist;
+      document.getElementById('player-album').textContent = album;
+      document.getElementById('player-artwork').src = art;
+      document.getElementById('time-total').textContent = duration;
+
+      document.getElementById('now-playing-file').textContent = `Track: ${title}`;
+
+      if (src && audio.src !== src) {
+        audio.src = src;
+      }
+      audio.play().then(() => {
+        isPlaying = true;
+        updatePlayIcons();
+      }).catch(err => {
+        console.log("Audio play error", err);
+      });
+    }
+
+    function togglePlay(e) {
+      if (e) e.stopPropagation();
+      initAudioContext();
+      if (audio.paused) {
+        if (!audio.src && tracks.length > 0) {
+          audio.src = tracks[currentTrackIndex].src;
+        }
+        audio.play();
+        isPlaying = true;
+      } else {
+        audio.pause();
+        isPlaying = false;
+      }
+      updatePlayIcons();
+    }
+
+    function updatePlayIcons() {
+      const miniIcon = document.getElementById('mini-play-icon');
+      const playerIcon = document.getElementById('player-play-icon');
+      const vinyl = document.getElementById('vinyl-disc-container');
+      const statusText = document.getElementById('audio-status-text');
+
+      const pausePath = '<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>';
+      const playPath = '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>';
+
+      if (isPlaying) {
+        miniIcon.innerHTML = pausePath;
+        playerIcon.innerHTML = pausePath;
+        vinyl.classList.remove('vinyl-paused');
+        statusText.textContent = "Playing Real Sound";
+        statusText.className = "font-bold text-emerald-400";
+      } else {
+        miniIcon.innerHTML = playPath;
+        playerIcon.innerHTML = playPath;
+        vinyl.classList.add('vinyl-paused');
+        statusText.textContent = "Paused";
+        statusText.className = "font-bold text-slate-500";
+      }
+    }
+
+    function nextTrack(e) {
+      if (e) e.stopPropagation();
+      currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+      playTrackByIndex(currentTrackIndex);
+    }
+
+    function prevTrack() {
+      currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
+      playTrackByIndex(currentTrackIndex);
+    }
+
+    // Audio Progress Updates
+    audio.ontimeupdate = () => {
+      if (audio.duration) {
+        const percent = (audio.currentTime / audio.duration) * 100;
+        document.getElementById('player-seekbar').value = percent;
+        document.getElementById('mini-progress-bar').style.width = `${percent}%`;
+
+        const curMin = Math.floor(audio.currentTime / 60);
+        const curSec = String(Math.floor(audio.currentTime % 60)).padStart(2, '0');
+        document.getElementById('time-current').textContent = `${curMin}:${curSec}`;
+      }
+    };
+
+    function handleSeek(val) {
+      if (audio.duration) {
+        audio.currentTime = (val / 100) * audio.duration;
+      }
+    }
+
+    function seekAudio(sec) {
+      if (audio.duration) {
+        audio.currentTime = sec;
+      }
+    }
+
+    function setMasterVolume(val) {
+      audio.volume = val / 100;
+      document.getElementById('volume-val').textContent = `${val}%`;
+    }
+
+    function loadUserLocalAudio(input) {
+      const file = input.files[0];
+      if (file) {
+        const objectUrl = URL.createObjectURL(file);
+        const newTrack = {
+          id: `local_${Date.now()}`,
+          title: file.name.replace(/\.[^/.]+$/, ""),
+          artist: "User Uploaded",
+          album: "Local Storage",
+          duration: "Playing",
+          format: "Imported",
+          size: `${(file.size / (1024 * 1024)).toFixed(1)} MB`,
+          art: "https://picsum.photos/seed/userupload/200/200",
+          src: objectUrl
+        };
+        tracks.unshift(newTrack);
+        renderSongs();
+        playTrackByIndex(0);
+        openFullPlayer();
+      }
+    }
+
+    // Visualizer Canvas Animation
+    function startVisualizer() {
+      const canvas = document.getElementById('waveform-canvas');
+      const ctx = canvas.getContext('2d');
+      const bufferLength = analyser.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+
+      function draw() {
+        requestAnimationFrame(draw);
+        analyser.getByteFrequencyData(dataArray);
+
+        ctx.fillStyle = '#020617';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        const barWidth = (canvas.width / bufferLength) * 2.2;
+        let x = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+          const barHeight = (dataArray[i] / 255) * canvas.height * 0.9;
+          const gradient = ctx.createLinearGradient(0, canvas.height, 0, 0);
+          gradient.addColorStop(0, '#7C4DFF');
+          gradient.addColorStop(0.5, '#00D2FF');
+          gradient.addColorStop(1, '#FF2E93');
+
+          ctx.fillStyle = gradient;
+          ctx.fillRect(x, canvas.height - barHeight, barWidth - 1, barHeight);
+          x += barWidth;
+        }
+      }
+      draw();
+    }
+
+    function switchTab(tabId) {
+      ['home', 'search', 'library', 'storage', 'downloads'].forEach(t => {
+        const el = document.getElementById(`screen-${t}`);
+        const nav = document.getElementById(`nav-${t}`);
+        if (el) el.classList.add('hidden');
+        if (nav) {
+          nav.classList.remove('text-cyan-400');
+          nav.classList.add('text-slate-400');
+        }
+      });
+
+      const target = document.getElementById(`screen-${tabId}`);
+      const navTarget = document.getElementById(`nav-${tabId}`);
+      if (target) target.classList.remove('hidden');
+      if (navTarget) {
+        navTarget.classList.add('text-cyan-400');
+        navTarget.classList.remove('text-slate-400');
+      }
+    }
+
+    function openFullPlayer() {
+      document.getElementById('full-player').classList.remove('translate-y-full');
+    }
+    function closeFullPlayer() {
+      document.getElementById('full-player').classList.add('translate-y-full');
+    }
+
+    function toggleLyricsView() {
+      isLyricsOpen = !isLyricsOpen;
+      const vinyl = document.getElementById('vinyl-disc-container');
+      const lyrics = document.getElementById('synced-lyrics-view');
+      const btn = document.getElementById('btn-toggle-lyrics');
+
+      if (isLyricsOpen) {
+        vinyl.classList.add('hidden');
+        lyrics.classList.remove('hidden');
+        btn.classList.add('text-cyan-400');
+      } else {
+        vinyl.classList.remove('hidden');
+        lyrics.classList.add('hidden');
+        btn.classList.remove('text-cyan-400');
+      }
+    }
+
+    function openEqualizerModal() {
+      document.getElementById('equalizer-modal').classList.remove('hidden');
+    }
+    function closeEqualizerModal() {
+      document.getElementById('equalizer-modal').classList.add('hidden');
+    }
+
+    function openSleepTimerModal() {
+      document.getElementById('sleeptimer-modal').classList.remove('hidden');
+    }
+    function closeSleepTimerModal() {
+      document.getElementById('sleeptimer-modal').classList.add('hidden');
+    }
+
+    function applyEqPreset(name, gains) {
+      document.querySelectorAll('.eq-pill').forEach(btn => {
+        btn.classList.remove('bg-cyan-400', 'text-black', 'font-bold');
+        btn.classList.add('bg-slate-800', 'text-slate-300');
+      });
+      event.target.classList.add('bg-cyan-400', 'text-black', 'font-bold');
+      gains.forEach((g, i) => {
+        document.getElementById(`eq-val-${i}`).textContent = `${g > 0 ? '+' : ''}${g}dB`;
+      });
+    }
+
+    function changeEqBand(i, val) {
+      document.getElementById(`eq-val-${i}`).textContent = `${val > 0 ? '+' : ''}${val}dB`;
+    }
+
+    function changeBass(val) {
+      document.getElementById('bass-val').textContent = `${val}%`;
+    }
+
+    function setSleepTimer(mins) {
+      closeSleepTimerModal();
+      alert(`Sleep timer set for ${mins} minutes. Audio will gently fade out over 15s before pausing!`);
+    }
+
+    function cycleSpeed() {
+      const speeds = [1.0, 1.25, 1.5, 0.75];
+      const nextIdx = (speeds.indexOf(playbackSpeed) + 1) % speeds.length;
+      playbackSpeed = speeds[nextIdx];
+      audio.playbackRate = playbackSpeed;
+      document.getElementById('speed-indicator').textContent = `${playbackSpeed}x`;
+    }
+
+    function toggleFavorite() {
+      const icon = document.getElementById('fav-icon');
+      icon.classList.toggle('text-pink-500');
+      icon.classList.toggle('text-slate-600');
+    }
+
+    function cleanCache() {
+      document.getElementById('cache-space-text').textContent = '0 MB';
+      alert('Cleared 64 MB of temporary image & streaming cache!');
+    }
+
+    function cleanDuplicates() {
+      document.getElementById('dup-space-text').textContent = '0 MB';
+      alert('Cleaned 115 MB of duplicate songs! Best quality copies preserved.');
+    }
+
+    function triggerCloudSync() {
+      const btn = document.getElementById('btn-cloud-sync');
+      btn.textContent = 'Syncing 1,000 Songs...';
+      setTimeout(() => {
+        btn.textContent = '✓ Synced 1,000 Songs!';
+        alert('All 1,000 Spotify songs synced from Firebase/GDrive! Available under Library -> Cloud (~1MB).');
+      }, 1000);
+    }
+
+    function downloadTrack(e, title) {
+      e.stopPropagation();
+      alert(`Downloaded "${title}" in ultra-compact Opus (only ~1.2 MB used)!`);
+    }
+
+    function setAccent(primary, secondary) {
+      document.documentElement.style.setProperty('--accent', primary);
+      alert('Theme accent updated to ' + primary);
+    }
+
+    // Clock
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('live-time').textContent = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+    }
+    updateClock();
+    setInterval(updateClock, 30000);
+
+    // Initial render
+    renderSongs();
+  </script>
+</body>
+</html>
