@@ -231,86 +231,31 @@
               </div>
             </div>
 
-            <!-- 4. STORAGE DASHBOARD SCREEN -->
+            <!-- 4. STORAGE / CLEANER SCREEN (Clean & Minimal) -->
             <div id="screen-storage" class="p-4 space-y-4 hidden">
               <div>
-                <h2 class="text-xl font-black text-white">Smart Storage</h2>
-                <p class="text-xs text-slate-400">Optimized for Redmi 12 5G (Low Storage)</p>
+                <h2 class="text-xl font-black text-white">Cleaner & Maintenance</h2>
+                <p class="text-xs text-slate-400">Google Drive streaming uses 0 MB phone storage</p>
               </div>
 
-              <!-- Storage Meter Card -->
-              <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-3">
-                <div class="flex justify-between items-center text-xs">
-                  <span class="font-bold text-white">Device Storage</span>
-                  <span class="text-emerald-400 font-semibold" id="free-space-text">14.2 GB Free</span>
-                </div>
-                <div class="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden">
-                  <div class="h-full bg-gradient-to-r from-purple-500 to-cyan-400 w-3/4 rounded-full"></div>
-                </div>
-                <div class="grid grid-cols-3 gap-2 pt-1 text-center">
-                  <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
-                    <div class="text-[10px] text-slate-400">Music Files</div>
-                    <div class="text-xs font-bold text-cyan-400" id="music-space-text">180 MB</div>
-                  </div>
-                  <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
-                    <div class="text-[10px] text-slate-400">Temp Cache</div>
-                    <div class="text-xs font-bold text-purple-400" id="cache-space-text">64 MB</div>
-                  </div>
-                  <div class="bg-slate-950/60 p-2 rounded-xl border border-slate-800/80">
-                    <div class="text-[10px] text-slate-400">Duplicates</div>
-                    <div class="text-xs font-bold text-amber-400" id="dup-space-text">115 MB</div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Cloud Database Sync Card -->
-              <div class="bg-purple-950/30 border border-cyan-500/50 rounded-2xl p-3.5 space-y-2.5">
+              <!-- Quick Maintenance Card -->
+              <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-4">
                 <div class="flex items-center gap-2 text-cyan-400 font-bold text-xs">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                  Cloud Music Database (Firebase / GDrive)
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                  <span>Memory & Playback Maintenance</span>
                 </div>
-                <p class="text-[11px] text-slate-300">
-                  All 1,000 songs are stored online. When you change or update the app, nothing is ever deleted!
+                <p class="text-xs text-slate-300">
+                  Frees temporary audio buffers to keep playback smooth and RAM low on your phone.
                 </p>
-                <input type="text" id="cloud-url-input" value="https://raw.githubusercontent.com/DiptarkaSamanta/SONORA/main/sonora_catalog.json" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-[11px] text-slate-300 focus:outline-none focus:border-cyan-400">
-                <button onclick="triggerCloudSync()" id="btn-cloud-sync" class="w-full py-2 bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-bold text-xs rounded-xl shadow-lg shadow-cyan-500/20 hover:opacity-90">
-                  Sync 1,000 Songs Now
-                </button>
-              </div>
 
-              <!-- Storage Modes Selection -->
-              <div>
-                <label class="text-xs font-bold text-slate-300 uppercase tracking-wider block mb-2">Storage Mode Preference</label>
-                <div class="space-y-2">
-                  <div onclick="selectStorageMode('space_saver')" id="mode-space-saver" class="p-3 bg-purple-900/30 border-2 border-cyan-400 rounded-xl cursor-pointer flex justify-between items-center">
-                    <div>
-                      <div class="text-xs font-bold text-white flex items-center gap-1.5">
-                        <span>Space Saver (Recommended)</span>
-                        <span class="text-[10px] bg-cyan-400/20 text-cyan-400 px-1.5 py-0.5 rounded font-mono">~1.2 MB/song</span>
-                      </div>
-                      <div class="text-[11px] text-slate-400">Opus 64 kbps • Fits 1,000 songs in just 1.2 GB</div>
-                    </div>
-                    <span class="w-4 h-4 rounded-full border-2 border-cyan-400 flex items-center justify-center"><span class="w-2 h-2 rounded-full bg-cyan-400"></span></span>
-                  </div>
-
-                  <div onclick="selectStorageMode('balanced')" id="mode-balanced" class="p-3 bg-slate-900 border border-slate-800 rounded-xl cursor-pointer flex justify-between items-center opacity-70">
-                    <div>
-                      <div class="text-xs font-bold text-white">Balanced Quality</div>
-                      <div class="text-[11px] text-slate-400">AAC 160 kbps • ~3.5 MB per song</div>
-                    </div>
-                    <span class="w-4 h-4 rounded-full border border-slate-600"></span>
-                  </div>
+                <div class="grid grid-cols-2 gap-2 pt-1">
+                  <button onclick="cleanCache()" class="py-3 px-3 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-xl text-slate-200 flex items-center justify-center gap-1.5 border border-slate-700">
+                    🧹 Clear Temp Cache
+                  </button>
+                  <button onclick="cleanDuplicates()" class="py-3 px-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-black text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-md">
+                    🗑️ Clean Duplicates
+                  </button>
                 </div>
-              </div>
-
-              <!-- Quick Cleanup Actions -->
-              <div class="grid grid-cols-2 gap-2 pt-1">
-                <button onclick="cleanCache()" class="py-2.5 px-3 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-xl text-slate-200 flex items-center justify-center gap-1.5">
-                  🧹 Clear Temp Cache
-                </button>
-                <button onclick="cleanDuplicates()" class="py-2.5 px-3 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-md">
-                  🗑️ Clean Duplicates (115MB)
-                </button>
               </div>
             </div>
 
@@ -337,21 +282,24 @@
           </div>
 
           <!-- Persistent Mini-Player (Above Bottom Navigation) -->
-          <div id="mini-player" onclick="openFullPlayer()" class="absolute bottom-16 left-3 right-3 bg-slate-900/95 backdrop-blur-md border border-purple-500/40 rounded-2xl p-2.5 cursor-pointer shadow-xl flex flex-col gap-1 z-30 transition hover:border-cyan-400/60">
+          <div id="mini-player" onclick="openFullPlayer()" class="absolute bottom-16 left-3 right-3 bg-slate-900/95 backdrop-blur-md border border-purple-500/40 rounded-2xl p-2.5 cursor-pointer shadow-xl flex flex-col gap-1 z-30 transition hover:border-cyan-400/60 hidden">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2.5 overflow-hidden">
-                <img id="mini-artwork" src="https://picsum.photos/seed/starboy/200/200" class="w-10 h-10 rounded-xl object-cover flex-shrink-0">
+                <img id="mini-artwork" src="https://c.saavncdn.com/023/Dandelions-slowed-reverb-English-2021-20231119175842-500x500.jpg" class="w-10 h-10 rounded-xl object-cover flex-shrink-0">
                 <div class="overflow-hidden">
-                  <div id="mini-title" class="text-xs font-bold text-white truncate">Lo-Fi Midnight Study</div>
-                  <div id="mini-artist" class="text-[10px] text-slate-400 truncate">Sonnox Collective • Opus 64k</div>
+                  <div id="mini-title" class="text-xs font-bold text-white truncate">dandelions (slowed reverb + lyrics)</div>
+                  <div id="mini-artist" class="text-[10px] text-slate-400 truncate">Ruth B. / vebruary • OPUS 64k</div>
                 </div>
               </div>
-              <div class="flex items-center gap-1">
-                <button onclick="togglePlay(event)" class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-cyan-400 flex items-center justify-center text-black shadow-md">
-                  <svg id="mini-play-icon" class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+              <div class="flex items-center gap-1.5">
+                <button onclick="togglePlay(event)" title="Play / Pause" class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-cyan-400 flex items-center justify-center text-black shadow-md">
+                  <svg id="mini-play-icon" class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
                 </button>
-                <button onclick="nextTrack(event)" class="p-1 text-slate-300 hover:text-white">
+                <button onclick="nextTrack(event)" title="Next Song" class="p-1 text-slate-300 hover:text-white">
                   <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M5.536 21.886a1 1 0 01-.536-.886V3a1 1 0 011.536-.857l11.5 9a1 1 0 010 1.714l-11.5 9a1 1 0 01-1-.029zM19 3a1 1 0 011 1v16a1 1 0 11-2 0V4a1 1 0 011-1z"></path></svg>
+                </button>
+                <button onclick="stopPlayback(event)" title="Instant Stop & Close" class="w-7 h-7 rounded-full bg-slate-800 hover:bg-red-500/30 text-slate-400 hover:text-red-400 flex items-center justify-center transition border border-slate-700/60 ml-0.5">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
               </div>
             </div>
@@ -394,11 +342,16 @@
               </button>
               <div class="text-center">
                 <div class="text-[10px] uppercase font-bold tracking-widest text-slate-500">NOW PLAYING</div>
-                <div class="text-xs font-semibold text-slate-300 truncate max-w-[180px]" id="player-album">Chill Cloud Beats</div>
+                <div class="text-xs font-semibold text-slate-300 truncate max-w-[180px]" id="player-album">Sonora Google Drive</div>
               </div>
-              <button onclick="openEqualizerModal()" class="p-1.5 text-cyan-400">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-              </button>
+              <div class="flex items-center gap-1">
+                <button onclick="openEqualizerModal()" title="Sound Equalizer" class="p-1.5 text-cyan-400">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                </button>
+                <button onclick="stopPlayback(event)" title="Stop Song" class="p-1.5 text-slate-400 hover:text-red-400">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+              </div>
             </div>
 
             <!-- Vinyl Disc or Lyrics View -->
@@ -407,27 +360,27 @@
                 <div class="absolute inset-4 rounded-full border border-slate-700/60"></div>
                 <div class="absolute inset-8 rounded-full border border-slate-700/40"></div>
                 <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-slate-900 shadow-inner">
-                  <img id="player-artwork" src="https://picsum.photos/seed/starboy/200/200" class="w-full h-full object-cover">
+                  <img id="player-artwork" src="https://c.saavncdn.com/023/Dandelions-slowed-reverb-English-2021-20231119175842-500x500.jpg" class="w-full h-full object-cover">
                 </div>
                 <div class="w-4 h-4 bg-slate-950 rounded-full border-2 border-slate-700 z-10 absolute"></div>
               </div>
 
               <!-- Synced Karaoke Lyrics -->
               <div id="synced-lyrics-view" class="hidden absolute inset-0 overflow-y-auto custom-scroll text-center py-6 px-3 space-y-4 text-xs font-medium">
-                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(10)">[00:10] I'm tryin' to put you in the worst mood, ah</p>
-                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(22)">[00:22] P1 cleaner than your church shoes, ah</p>
-                <p class="text-cyan-400 font-extrabold text-base scale-105 transition-transform cursor-pointer" onclick="seekAudio(35)">[00:35] Look what you've done, I'm a starboy</p>
-                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(50)">[00:50] Every day a nigga try to test me, ah</p>
-                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(65)">[01:05] Every day a nigga try to end me, ah</p>
+                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(10)">[00:10] Maybe it's the way you say my name</p>
+                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(25)">[00:25] Maybe it's the way you play your game</p>
+                <p class="text-cyan-400 font-extrabold text-base scale-105 transition-transform cursor-pointer" onclick="seekAudio(45)">[00:45] 'Cause I'm in a field of dandelions</p>
+                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(70)">[01:10] Wishing on every one that you'll be mine</p>
+                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(100)">[01:40] And I see forever in your eyes</p>
               </div>
             </div>
 
             <!-- Track Info & Quality Pill -->
             <div class="flex justify-between items-center mb-3">
               <div>
-                <h2 id="player-title" class="text-base font-black text-white truncate">Lo-Fi Midnight Study</h2>
+                <h2 id="player-title" class="text-base font-black text-white truncate">dandelions (slowed reverb + lyrics)</h2>
                 <div class="flex items-center gap-2">
-                  <span id="player-artist" class="text-xs text-slate-400 truncate">Sonnox Collective</span>
+                  <span id="player-artist" class="text-xs text-slate-400 truncate">Ruth B. / vebruary</span>
                   <span class="text-[9px] bg-purple-950/80 text-cyan-400 border border-purple-500/40 px-1.5 py-0.5 rounded font-mono font-bold">OPUS 64k (~1.2MB)</span>
                 </div>
               </div>
@@ -568,7 +521,7 @@
             <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
             <span class="font-bold text-emerald-400" id="audio-status-text">Playing Sound</span>
           </div>
-          <div class="text-slate-300 truncate" id="now-playing-file">Track: Lo-Fi Midnight Study</div>
+          <div class="text-slate-300 truncate" id="now-playing-file">Track: Ready to stream from Google Drive</div>
           <div class="text-[11px] text-slate-400">Size in Sonora: <span class="text-cyan-400 font-bold">~1.2 MB (Opus 64k)</span></div>
           <div class="text-[11px] text-slate-400">Size in normal MP3: <span class="text-slate-500 line-through">~9.5 MB</span></div>
         </div>
@@ -687,8 +640,11 @@
       playTrack(t.title, t.artist, t.format, t.art, t.album, t.duration, t.src);
     }
 
-    function playTrack(title, artist, format, art, album = 'Spotify Cloud', duration = '3:00', src) {
+    function playTrack(title, artist, format, art, album = 'Sonora Google Drive', duration = '3:00', src) {
       initAudioContext();
+      const mini = document.getElementById('mini-player');
+      if (mini) mini.classList.remove('hidden');
+
       document.getElementById('mini-title').textContent = title;
       document.getElementById('mini-artist').textContent = `${artist} • ${format}`;
       document.getElementById('mini-artwork').src = art;
@@ -715,17 +671,64 @@
     function togglePlay(e) {
       if (e) e.stopPropagation();
       initAudioContext();
+      const mini = document.getElementById('mini-player');
+      if (mini) mini.classList.remove('hidden');
+
       if (audio.paused) {
         if (!audio.src && tracks.length > 0) {
           audio.src = tracks[currentTrackIndex].src;
         }
-        audio.play();
-        isPlaying = true;
+        audio.play().then(() => {
+          isPlaying = true;
+          updatePlayIcons();
+        }).catch(err => {
+          console.log("Audio play error", err);
+        });
       } else {
         audio.pause();
         isPlaying = false;
+        updatePlayIcons();
       }
+    }
+
+    function stopPlayback(e) {
+      if (e) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      audio.pause();
+      audio.currentTime = 0;
+      isPlaying = false;
       updatePlayIcons();
+
+      const mini = document.getElementById('mini-player');
+      if (mini) mini.classList.add('hidden');
+
+      closeFullPlayer();
+
+      const statusText = document.getElementById('audio-status-text');
+      if (statusText) {
+        statusText.textContent = "Playback Stopped";
+        statusText.className = "font-bold text-slate-500";
+      }
+
+      const nowPlaying = document.getElementById('now-playing-file');
+      if (nowPlaying) nowPlaying.textContent = "Track: (Stopped)";
+
+      const vinyl = document.getElementById('vinyl-disc-container');
+      if (vinyl) {
+        vinyl.classList.remove('vinyl-spinning');
+        vinyl.classList.add('vinyl-paused');
+      }
+
+      const miniProgress = document.getElementById('mini-progress-bar');
+      if (miniProgress) miniProgress.style.width = '0%';
+
+      const seekbar = document.getElementById('player-seekbar');
+      if (seekbar) seekbar.value = 0;
+
+      const timeCur = document.getElementById('time-current');
+      if (timeCur) timeCur.textContent = "0:00";
     }
 
     function updatePlayIcons() {

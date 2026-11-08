@@ -85,6 +85,7 @@ fun SonoraNavGraph(
                         progress = progress,
                         onPlayPause = { playbackManager.playPause() },
                         onNext = { playbackManager.skipToNext() },
+                        onClose = { playbackManager.stopPlayback() },
                         onExpand = { isPlayerExpanded = true }
                     )
                 }

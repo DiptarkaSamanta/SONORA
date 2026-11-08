@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.MusicNote
 import androidx.compose.material.icons.rounded.Pause
 import androidx.compose.material.icons.rounded.PlayArrow
@@ -49,6 +50,7 @@ fun MiniPlayer(
     progress: Float,
     onPlayPause: () -> Unit,
     onNext: () -> Unit,
+    onClose: () -> Unit,
     onExpand: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -142,6 +144,20 @@ fun MiniPlayer(
                         contentDescription = "Skip Next",
                         tint = SonoraTextPrimary,
                         modifier = Modifier.size(24.dp)
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(2.dp))
+
+                IconButton(
+                    onClick = onClose,
+                    modifier = Modifier.size(34.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Close,
+                        contentDescription = "Stop & Dismiss",
+                        tint = SonoraTextMuted,
+                        modifier = Modifier.size(20.dp)
                     )
                 }
             }

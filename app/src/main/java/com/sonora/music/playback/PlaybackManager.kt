@@ -177,6 +177,15 @@ class PlaybackManager(
         exoPlayer.play()
     }
 
+    fun stopPlayback() {
+        exoPlayer.stop()
+        exoPlayer.clearMediaItems()
+        _currentSong.value = null
+        _isPlaying.value = false
+        _currentPositionMs.value = 0L
+        _durationMs.value = 0L
+    }
+
     fun skipToNext() {
         if (exoPlayer.hasNextMediaItem()) {
             exoPlayer.seekToNextMediaItem()
