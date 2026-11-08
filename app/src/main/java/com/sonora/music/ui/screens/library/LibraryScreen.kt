@@ -166,7 +166,7 @@ fun LibraryScreen(
         // Tabs
         val tabs = listOf(
             LibraryTab.SONGS to "Songs",
-            LibraryTab.CLOUD to "Cloud (~1MB)",
+            LibraryTab.CLOUD to "Cloud",
             LibraryTab.PLAYLISTS to "Playlists",
             LibraryTab.ALBUMS to "Albums",
             LibraryTab.ARTISTS to "Artists"
