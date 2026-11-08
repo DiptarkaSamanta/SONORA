@@ -45,13 +45,16 @@ data class Song(
         }
 
     val qualityBadge: String
-        get() = when {
-            mimeType.contains("flac", ignoreCase = true) -> "FLAC"
-            mimeType.contains("opus", ignoreCase = true) -> "OPUS ${bitrateKbps}k"
-            mimeType.contains("aac", ignoreCase = true) || mimeType.contains("m4a", ignoreCase = true) -> "AAC ${bitrateKbps}k"
-            bitrateKbps >= 320 -> "320k MP3"
-            bitrateKbps >= 192 -> "HQ MP3"
-            else -> "${bitrateKbps}k"
+        get() {
+            val codec = when {
+                mimeType.contains("flac", ignoreCase = true) -> "FLAC"
+                mimeType.contains("opus", ignoreCase = true) -> "OPUS ${bitrateKbps}k"
+                mimeType.contains("aac", ignoreCase = true) || mimeType.contains("m4a", ignoreCase = true) -> "AAC ${bitrateKbps}k"
+                bitrateKbps >= 320 -> "320k MP3"
+                bitrateKbps >= 192 -> "HQ MP3"
+                else -> "${bitrateKbps}k"
+            }
+            return if (sizeBytes > 0) "$codec • $sizeFormatted" else codec
         }
 }
 

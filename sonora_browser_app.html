@@ -297,7 +297,7 @@
                 <img id="mini-artwork" src="https://c.saavncdn.com/023/Dandelions-slowed-reverb-English-2021-20231119175842-500x500.jpg" class="w-10 h-10 rounded-xl object-cover flex-shrink-0">
                 <div class="overflow-hidden">
                   <div id="mini-title" class="text-xs font-bold text-white truncate">dandelions (slowed reverb + lyrics)</div>
-                  <div id="mini-artist" class="text-[10px] text-slate-400 truncate">Ruth B. / vebruary • OPUS 64k</div>
+                  <div id="mini-artist" class="text-[10px] text-slate-400 truncate">Ruth B. / vebruary • OPUS 64k • 2.1 MB</div>
                 </div>
               </div>
               <div class="flex items-center gap-1.5">
@@ -386,7 +386,7 @@
                 <h2 id="player-title" class="text-base font-black text-white truncate">dandelions (slowed reverb + lyrics)</h2>
                 <div class="flex items-center gap-2">
                   <span id="player-artist" class="text-xs text-slate-400 truncate">Ruth B. / vebruary</span>
-                  <span class="text-[9px] bg-purple-950/80 text-cyan-400 border border-purple-500/40 px-1.5 py-0.5 rounded font-mono font-bold">OPUS 64k (~1.2MB)</span>
+                  <span id="player-format-pill" class="text-[9px] bg-purple-950/80 text-cyan-400 border border-purple-500/40 px-1.5 py-0.5 rounded font-mono font-bold">OPUS 64k (2.1 MB)</span>
                 </div>
               </div>
               <button onclick="toggleFavorite()" class="p-2 text-pink-500">
@@ -711,7 +711,7 @@
               </div>
             </div>
             <div class="flex items-center gap-2">
-              <span class="text-[9px] bg-purple-950/80 text-cyan-400 border border-purple-500/40 px-1.5 py-0.5 rounded font-mono font-bold">${t.format}</span>
+              <span class="text-[9px] bg-purple-950/80 text-cyan-400 border border-purple-500/40 px-1.5 py-0.5 rounded font-mono font-bold">${t.format} • ${t.size}</span>
               <button onclick="downloadTrack(event, '${t.title}')" class="p-1.5 text-slate-400 hover:text-cyan-400">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
               </button>
@@ -731,7 +731,7 @@
       if (homeList) homeList.innerHTML = html;
       if (libList) libList.innerHTML = html;
       if (downList) downList.innerHTML = html.slice(0, 350);
-      if (searchList) searchList.innerHTML = html;
+      handleSearch(document.getElementById('search-input') ? document.getElementById('search-input').value : '');
 
       // Carousel items
       let carouselHtml = '';
@@ -755,19 +755,109 @@
       }
     }
 
+    let searchFilter = 'all';
+
+    function setSearchFilter(filter) {
+      searchFilter = filter;
+      document.querySelectorAll('.search-filter-pill').forEach(btn => {
+        btn.className = 'search-filter-pill px-3 py-1.5 rounded-full bg-slate-800 text-slate-300 font-medium transition';
+      });
+      if (window.event && window.event.currentTarget) {
+        window.event.currentTarget.className = 'search-filter-pill px-3 py-1.5 rounded-full bg-cyan-400 text-black font-bold transition';
+      }
+      const q = document.getElementById('search-input') ? document.getElementById('search-input').value : '';
+      handleSearch(q);
+    }
+
+    function handleSearch(query) {
+      const resultsContainer = document.getElementById('search-results');
+      if (!resultsContainer) return;
+      const q = (query || '').trim().toLowerCase();
+
+      let filtered = tracks.filter((t) => {
+        const titleMatch = t.title.toLowerCase().includes(q);
+        const artistMatch = t.artist.toLowerCase().includes(q);
+        const albumMatch = t.album && t.album.toLowerCase().includes(q);
+        const lrcMatch = (lyricsCache[t.title] && lyricsCache[t.title].toLowerCase().includes(q)) ||
+                         (lyricsCache[t.title.split(' ')[0]] && lyricsCache[t.title.split(' ')[0]].toLowerCase().includes(q));
+
+        const matchesQuery = !q || titleMatch || artistMatch || albumMatch || lrcMatch;
+        if (!matchesQuery) return false;
+
+        if (searchFilter === 'cloud') {
+          return t.album && t.album.toLowerCase().includes('google drive');
+        } else if (searchFilter === 'local') {
+          return t.format && t.format.includes('Local');
+        } else if (searchFilter === 'lyrics') {
+          return q && (lrcMatch || titleMatch);
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        resultsContainer.innerHTML = `
+          <div class="py-12 text-center space-y-2">
+            <svg class="w-9 h-9 text-slate-600 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <p class="text-xs text-slate-300 font-bold">No results found for "${escapeHtml(query)}"</p>
+            <p class="text-[10px] text-slate-500">Try searching "past lives", "dandelions", "lovely", or "royalty"</p>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '';
+      filtered.forEach((t) => {
+        const originalIndex = tracks.findIndex(x => x.title === t.title);
+        html += `
+          <div onclick="playTrackByIndex(${originalIndex >= 0 ? originalIndex : 0})" class="flex items-center justify-between p-2.5 bg-slate-900/80 hover:bg-slate-800/80 rounded-xl cursor-pointer border border-slate-800/60 transition group hover:border-cyan-500/50">
+            <div class="flex items-center gap-2.5 overflow-hidden">
+              <div class="relative w-9 h-9 rounded-lg overflow-hidden flex-shrink-0 bg-slate-800">
+                <img src="${t.art}" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition">
+                  <svg class="w-4 h-4 text-cyan-400 fill-current" viewBox="0 0 20 20"><path d="M6.3 2.841A1.5 1.5 0 004 4.11v11.78a1.5 1.5 0 002.3 1.269l9.344-5.89a1.5 1.5 0 000-2.538L6.3 2.84z"></path></svg>
+                </div>
+              </div>
+              <div class="overflow-hidden">
+                <div class="text-xs font-bold text-slate-100 truncate group-hover:text-cyan-400 transition">${t.title}</div>
+                <div class="text-[10px] text-slate-400 truncate">${t.artist} • ${t.duration}</div>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-[9px] bg-purple-950/80 text-cyan-400 border border-purple-500/40 px-1.5 py-0.5 rounded font-mono font-bold">${t.format} • ${t.size}</span>
+              <button onclick="downloadTrack(event, '${t.title}')" class="p-1.5 text-slate-400 hover:text-cyan-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      resultsContainer.innerHTML = html;
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str).replace(/[&<>"']/g, function(m) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
+      });
+    }
+
     function playTrackByIndex(i) {
       currentTrackIndex = i;
       const t = tracks[i];
-      playTrack(t.title, t.artist, t.format, t.art, t.album, t.duration, t.src);
+      playTrack(t.title, t.artist, t.format, t.art, t.album, t.duration, t.src, t.size);
     }
 
-    function playTrack(title, artist, format, art, album = 'Sonora Google Drive', duration = '3:00', src) {
+    function playTrack(title, artist, format, art, album = 'Sonora Google Drive', duration = '3:00', src, size = '') {
       initAudioContext();
       const mini = document.getElementById('mini-player');
       if (mini) mini.classList.remove('hidden');
 
+      const currentTrack = tracks[currentTrackIndex];
+      const actualSize = size || (currentTrack ? currentTrack.size : '');
+      const formatDisplay = actualSize ? `${format} (${actualSize})` : format;
+
       document.getElementById('mini-title').textContent = title;
-      document.getElementById('mini-artist').textContent = `${artist} • ${format}`;
+      document.getElementById('mini-artist').textContent = `${artist} • ${formatDisplay}`;
       document.getElementById('mini-artwork').src = art;
 
       document.getElementById('player-title').textContent = title;
@@ -775,6 +865,11 @@
       document.getElementById('player-album').textContent = album;
       document.getElementById('player-artwork').src = art;
       document.getElementById('time-total').textContent = duration;
+
+      const formatPill = document.getElementById('player-format-pill');
+      if (formatPill) {
+        formatPill.textContent = formatDisplay;
+      }
 
       document.getElementById('now-playing-file').textContent = `Track: ${title}`;
       loadLyricsForTrack(title, artist);
