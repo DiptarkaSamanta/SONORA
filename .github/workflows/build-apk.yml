@@ -37,7 +37,7 @@ jobs:
 
       - name: Build Debug APK
         run: |
-          ./gradlew :app:assembleDebug --stacktrace 2>&1 | tee build.log
+          ./gradlew assembleDebug --stacktrace 2>&1 | tee build.log
 
       - name: Save Log to Branch
         if: always()
@@ -52,20 +52,12 @@ jobs:
 
       - name: Prepare APK Release
         run: |
-          echo "=== GRADLE LOG ==="
-          tail -n 30 build.log
-          echo "=== LOCATING APK ==="
           mkdir -p release_apk
-          APK_PATH=$(find app/build -name "*.apk" | head -n 1)
+          find app/build/outputs/apk -name "*.apk" -ls
+          APK_PATH=$(find app/build/outputs/apk -name "*.apk" | head -n 1)
           echo "Found APK: $APK_PATH"
-          if [ -f "$APK_PATH" ]; then
-            cp "$APK_PATH" release_apk/Sonora-v1.0.0-Redmi12-5G.apk
-            ls -lh release_apk/
-          else
-            echo "ERROR: No APK found!"
-            find . -name "*.apk"
-            exit 1
-          fi
+          cp "$APK_PATH" release_apk/Sonora-v1.0.0-Redmi12-5G.apk
+          ls -lh release_apk/
 
       - name: Upload APK as Workflow Artifact
         uses: actions/upload-artifact@v4
