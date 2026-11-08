@@ -1,12 +1,12 @@
 {
   "catalog_name": "Sonora Google Drive Collection",
-  "version": 2,
+  "version": 3,
   "description": "Real-time Google Drive audio streaming collection (0 MB phone storage)",
-  "total_songs": 4,
+  "total_songs": 5,
   "songs": [
     {
       "id": "gdrive_01",
-      "title": "Dandelions (slowed reverb + lyrics)",
+      "title": "dandelions (slowed reverb)",
       "artist": "Ruth B. / vebruary",
       "album": "Sonora Google Drive",
       "duration_seconds": 286,
@@ -19,7 +19,7 @@
     },
     {
       "id": "gdrive_02",
-      "title": "Past Lives (Official Lyric Video)",
+      "title": "Past Lives",
       "artist": "sapientdream, Slushii",
       "album": "Sonora Google Drive",
       "duration_seconds": 153,
@@ -32,7 +32,7 @@
     },
     {
       "id": "gdrive_03",
-      "title": "lovely (Lyrics) ft. Khalid",
+      "title": "lovely (ft. Khalid)",
       "artist": "Billie Eilish, Khalid",
       "album": "Sonora Google Drive",
       "duration_seconds": 200,
@@ -45,8 +45,8 @@
     },
     {
       "id": "gdrive_04",
-      "title": "Royalty",
-      "artist": "Egzod, Maestro Chives ft. Neoni",
+      "title": "Royalty (ft. Neoni)",
+      "artist": "Egzod, Maestro Chives, Neoni",
       "album": "Sonora Google Drive",
       "duration_seconds": 223,
       "stream_url": "https://aac.saavncdn.com/205/386cdf2975fd049305654e8ebc7b9e0a_96.mp4",
@@ -55,7 +55,19 @@
       "codec": "opus",
       "bitrate_kbps": 64,
       "artwork_url": "https://c.saavncdn.com/205/Royalty-Sped-Up-Slowed-Unknown-2021-20260528143542-500x500.jpg"
+    },
+    {
+      "id": "gdrive_05",
+      "title": "Darkside (ft. Au/Ra & Tomine Harket)",
+      "artist": "Alan Walker, Au/Ra, Tomine Harket",
+      "album": "Sonora Google Drive",
+      "duration_seconds": 211,
+      "stream_url": "https://archive.org/download/20260917_20260917_0307/Alan%20Walker%20-%20Different%20World%20%282018%29/11%20-%20Darkside.mp3",
+      "download_url": "https://archive.org/download/20260917_20260917_0307/Alan%20Walker%20-%20Different%20World%20%282018%29/11%20-%20Darkside.mp3",
+      "size_kb": 1740,
+      "codec": "opus",
+      "bitrate_kbps": 64,
+      "artwork_url": "https://c.saavncdn.com/355/Darkside-English-2018-20180719130414-500x500.jpg"
     }
   ]
 }
-

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """
-SONORA - High-Performance Universal Audio-to-Opus Converter
-------------------------------------------------------------
-Fast batch converter for ANY video or audio format (MP4, MKV, WEBM, WAV, FLAC, M4A, AAC, MP3, etc.).
-Extracts audio only (strips video completely) and compresses into ultra-small Opus 64kbps (~1.2 MB/song).
-Stores outputs in 'tools/sonora_opus_music'.
+SONORA - Universal Audio-to-Opus Converter (High Power)
+--------------------------------------------------------
+High-speed batch converter for ANY video or audio format (MP4, MKV, WEBM, WAV, FLAC, M4A, AAC, MP3, etc.).
+- Strips video streams completely to maximize saved storage.
+- Encodes audio into ultra-compact, high-fidelity Opus 64kbps (~1.2 - 1.8 MB per song).
+- Stores output in 'tools/sonora_opus_music'.
+- Easily cleans local files after uploading to Google Drive.
 """
 
 import os
@@ -18,7 +20,7 @@ import re
 
 SUPPORTED_EXTENSIONS = {
     # Video containers (audio extracted, video discarded)
-    ".mp4", ".mkv", ".webm", ".avi", ".mov", ".flv", ".m4v", ".ts", ".3gp",
+    ".mp4", ".mkv", ".webm", ".avi", ".mov", ".flv", ".m4v", ".ts", ".3gp", ".wmv",
     # Audio formats
     ".wav", ".flac", ".alac", ".aiff", ".mp3", ".m4a", ".aac", ".wma", ".ogg", ".opus"
 }
@@ -47,8 +49,8 @@ def find_ffmpeg():
     return False
 
 def clean_filename(name):
-    # Remove problematic characters for storage and Drive
-    for ch in ['"', "'", ":", "?", "*", "<", ">", "|"]:
+    # Remove problematic characters for file systems and Google Drive
+    for ch in ['"', "'", ":", "?", "*", "<", ">", "|", "/"]:
         name = name.replace(ch, "")
     return name.strip()
 
@@ -70,18 +72,22 @@ def parse_paths_input(entered):
     if not entered:
         return []
 
-    # Check if the entire raw input (with or without surrounding quotes) is an existing file/dir
-    raw_unquoted = entered.strip('\'"')
+    # Strip PowerShell wrapper & '...'
+    if entered.startswith('&'):
+        entered = entered[1:].strip()
+
+    # Check if the entire raw input is an existing file or directory
+    raw_unquoted = entered.strip('\'"& ')
     if Path(raw_unquoted).exists():
         return [raw_unquoted]
 
-    # Regex matches quoted paths ("..." or '...') or non-whitespace tokens without destroying backslashes
-    matches = re.findall(r'"([^"]+)"|\'([^\']+)\'|(\S+)', entered)
+    # Match double-quoted, single-quoted, or space/comma/semicolon delimited tokens
+    matches = re.findall(r'"([^"]+)"|\'([^\']+)\'|([^,;\s]+)', entered)
     extracted = []
     for m in matches:
         token = m[0] or m[1] or m[2]
         if token:
-            clean_tok = token.strip('\'"')
+            clean_tok = token.strip('\'",; ')
             if clean_tok:
                 extracted.append(clean_tok)
     return extracted
@@ -94,16 +100,19 @@ def convert_single_file(input_file, out_dir, bitrate="64k"):
     cmd = [
         FFMPEG_CMD, "-y",
         "-i", str(inp),
-        "-vn",              # Discard video completely
-        "-c:a", "libopus",  # Ultra-small Opus codec
-        "-b:a", bitrate,    # 64 kbps (~1.2 MB per song)
+        "-vn",               # Strip video completely
+        "-c:a", "libopus",   # Ultra-compact Opus codec
+        "-b:a", bitrate,     # 64 kbps (~1.2 MB/song)
         "-vbr", "on",
-        str(out_file),
-        "-loglevel", "error"
+        str(out_file)
     ]
 
     try:
-        subprocess.run(cmd, check=True)
+        proc = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        if proc.returncode != 0:
+            print(f"  [X] Failed to convert {inp.name}: {proc.stderr.strip()[-150:]}")
+            return None
+
         if out_file.exists():
             new_size_kb = out_file.stat().st_size // 1024
             orig_size_kb = max(1, inp.stat().st_size // 1024)
@@ -156,7 +165,7 @@ def main():
         print(" [1] Convert Songs (Paste file/folder paths or drag & drop here)")
         print(" [2] Clear/Empty 'sonora_opus_music' folder (After uploading to GDrive)")
         print(" [3] Exit")
-        
+
         try:
             choice = input("\nSelect option (1, 2, or 3, default is 1): ").strip()
         except EOFError:
@@ -169,7 +178,7 @@ def main():
             print("Exiting.")
             return
 
-        print("\nTip: You can paste multiple file/folder paths separated by spaces!")
+        print("\nTip: You can paste multiple file/folder paths separated by spaces or quotes!")
         try:
             entered = input("Enter file or folder path(s): ").strip()
         except EOFError:
@@ -192,24 +201,24 @@ def main():
                     if fp.suffix.lower() in SUPPORTED_EXTENSIONS:
                         collected_files.append(fp)
         elif p.is_file():
-            if p.suffix.lower() in SUPPORTED_EXTENSIONS:
-                collected_files.append(p)
+            # Accept any file passed directly
+            collected_files.append(p)
         else:
             # Try glob expansion
             matched = glob.glob(clean_item)
             for m in matched:
                 mp = Path(m)
-                if mp.is_file() and mp.suffix.lower() in SUPPORTED_EXTENSIONS:
+                if mp.is_file():
                     collected_files.append(mp)
 
-    # Remove duplicates preserving order
+    # Remove duplicates while preserving order
     collected_files = list(dict.fromkeys(collected_files))
 
     if not collected_files:
         print(f"\n[!] No supported media files found for the given path(s):")
         for item in raw_inputs:
             print(f"    - {item}")
-        print(f"\nSupported formats: MP4, MKV, WEBM, WAV, FLAC, M4A, AAC, MP3, WMA, OGG")
+        print(f"\nSupported formats: MP4, MKV, WEBM, WAV, FLAC, M4A, AAC, MP3, WMA, OGG, OPUS")
         return
 
     print("\n" + "=" * 65)
@@ -232,18 +241,6 @@ def main():
             total_new += res["size_kb"] * 1024
             catalog_entries.append(res)
 
-    # Update sonora_catalog.json
-    if catalog_entries:
-        cat_file = out_dir / "sonora_catalog.json"
-        cat_data = {
-            "catalog_name": "Sonora Google Drive Library",
-            "version": 1,
-            "total_songs": len(catalog_entries),
-            "songs": catalog_entries
-        }
-        with open(cat_file, "w", encoding="utf-8") as f:
-            json.dump(cat_data, f, indent=2, ensure_ascii=False)
-
     orig_mb = total_orig / (1024 * 1024)
     new_mb = total_new / (1024 * 1024)
     saved_mb = max(0, orig_mb - new_mb)
@@ -259,7 +256,7 @@ def main():
     print("https://drive.google.com/drive/folders/1mjeXjTTy-nliOOUG607rprdvdcnlKurP\n")
 
     try:
-        del_choice = input("Have you uploaded these songs to Google Drive and want to delete local copies? (Y/N): ").strip().upper()
+        del_choice = input("Have you uploaded these songs to Google Drive and want to delete local copies? (Y/N, default is N): ").strip().upper()
         if del_choice == "Y":
             clear_output_folder(out_dir)
     except EOFError:

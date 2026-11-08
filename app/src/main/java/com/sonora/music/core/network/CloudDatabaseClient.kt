@@ -68,13 +68,13 @@ class CloudDatabaseClient(
     fun getBuiltinCompactCatalog(): List<Song> = getInitialDriveCatalog()
 
     /**
-     * Active cloud library matching user's Google Drive Opus collection
+     * Active cloud library strictly matching user's Google Drive Opus collection (5 Songs)
      */
     fun getInitialDriveCatalog(): List<Song> {
         val items = listOf(
             CloudSongItem(
                 id = "gdrive_01",
-                title = "Dandelions (slowed reverb + lyrics)",
+                title = "dandelions (slowed reverb)",
                 artist = "Ruth B. / vebruary",
                 album = "Sonora Google Drive",
                 durationSeconds = 286,
@@ -87,7 +87,7 @@ class CloudDatabaseClient(
             ),
             CloudSongItem(
                 id = "gdrive_02",
-                title = "Past Lives (Official Lyric Video)",
+                title = "Past Lives",
                 artist = "sapientdream, Slushii",
                 album = "Sonora Google Drive",
                 durationSeconds = 153,
@@ -100,7 +100,7 @@ class CloudDatabaseClient(
             ),
             CloudSongItem(
                 id = "gdrive_03",
-                title = "lovely (Lyrics) ft. Khalid",
+                title = "lovely (ft. Khalid)",
                 artist = "Billie Eilish, Khalid",
                 album = "Sonora Google Drive",
                 durationSeconds = 200,
@@ -113,8 +113,8 @@ class CloudDatabaseClient(
             ),
             CloudSongItem(
                 id = "gdrive_04",
-                title = "Royalty",
-                artist = "Egzod, Maestro Chives ft. Neoni",
+                title = "Royalty (ft. Neoni)",
+                artist = "Egzod, Maestro Chives, Neoni",
                 album = "Sonora Google Drive",
                 durationSeconds = 223,
                 streamUrl = "https://aac.saavncdn.com/205/386cdf2975fd049305654e8ebc7b9e0a_96.mp4",
@@ -123,6 +123,19 @@ class CloudDatabaseClient(
                 codec = "opus",
                 bitrateKbps = 64,
                 artworkUrl = "https://c.saavncdn.com/205/Royalty-Sped-Up-Slowed-Unknown-2021-20260528143542-500x500.jpg"
+            ),
+            CloudSongItem(
+                id = "gdrive_05",
+                title = "Darkside (ft. Au/Ra & Tomine Harket)",
+                artist = "Alan Walker, Au/Ra, Tomine Harket",
+                album = "Sonora Google Drive",
+                durationSeconds = 211,
+                streamUrl = "https://archive.org/download/20260917_20260917_0307/Alan%20Walker%20-%20Different%20World%20%282018%29/11%20-%20Darkside.mp3",
+                downloadUrl = "https://archive.org/download/20260917_20260917_0307/Alan%20Walker%20-%20Different%20World%20%282018%29/11%20-%20Darkside.mp3",
+                sizeKb = 1740, // ~1.7 MB
+                codec = "opus",
+                bitrateKbps = 64,
+                artworkUrl = "https://c.saavncdn.com/355/Darkside-English-2018-20180719130414-500x500.jpg"
             )
         )
         return items.map { it.toDomainSong() }

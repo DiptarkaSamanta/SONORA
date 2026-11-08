@@ -1,5 +1,5 @@
 @echo off
-title SONORA - Universal Audio to Opus Converter
+title SONORA - Universal Audio to Opus Converter (High Power)
 
 :: 1. Locate Python executable
 set "PYTHON_CMD="
@@ -21,7 +21,7 @@ if not defined PYTHON_CMD (
     exit /b 1
 )
 
-:: 2. Locate FFmpeg (WinGet Gyan.FFmpeg)
+:: 2. Locate FFmpeg (WinGet Gyan.FFmpeg or system PATH)
 where ffmpeg >nul 2>nul
 if %ERRORLEVEL% NEQ 0 (
     if exist "%LOCALAPPDATA%\Microsoft\WinGet\Packages" (
@@ -43,3 +43,4 @@ if %ERRORLEVEL% NEQ 0 (
 
 echo.
 pause
+
