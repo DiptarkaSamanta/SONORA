@@ -59,11 +59,11 @@
       <div>
         <h2 class="font-bold text-sm text-white uppercase tracking-wider mb-2">Live Theme Color</h2>
         <div class="grid grid-cols-5 gap-2" id="color-picker">
-          <button onclick="setAccent('#00D2FF', '#7C4DFF')" class="w-8 h-8 rounded-xl bg-cyan-400 ring-2 ring-cyan-400 ring-offset-2 ring-offset-slate-900 transition hover:scale-110"></button>
-          <button onclick="setAccent('#7C4DFF', '#00D2FF')" class="w-8 h-8 rounded-xl bg-purple-500 transition hover:scale-110"></button>
-          <button onclick="setAccent('#FF2E93', '#7C4DFF')" class="w-8 h-8 rounded-xl bg-pink-500 transition hover:scale-110"></button>
-          <button onclick="setAccent('#00E676', '#00D2FF')" class="w-8 h-8 rounded-xl bg-emerald-400 transition hover:scale-110"></button>
-          <button onclick="setAccent('#FFB300', '#FF2E93')" class="w-8 h-8 rounded-xl bg-amber-400 transition hover:scale-110"></button>
+          <button onclick="setAccent('#00D2FF', '#7C4DFF', this)" class="w-8 h-8 rounded-xl bg-cyan-400 ring-2 ring-white ring-offset-2 ring-offset-slate-900 transition hover:scale-110" title="Cyber Cyan"></button>
+          <button onclick="setAccent('#A855F7', '#EC4899', this)" class="w-8 h-8 rounded-xl bg-purple-500 transition hover:scale-110" title="Neon Purple"></button>
+          <button onclick="setAccent('#EC4899', '#F59E0B', this)" class="w-8 h-8 rounded-xl bg-pink-500 transition hover:scale-110" title="Hot Pink"></button>
+          <button onclick="setAccent('#10B981', '#06B6D4', this)" class="w-8 h-8 rounded-xl bg-emerald-400 transition hover:scale-110" title="Emerald Green"></button>
+          <button onclick="setAccent('#F59E0B', '#EF4444', this)" class="w-8 h-8 rounded-xl bg-amber-400 transition hover:scale-110" title="Solar Amber"></button>
         </div>
       </div>
 
@@ -160,7 +160,10 @@
               <div>
                 <div class="flex justify-between items-center mb-2.5">
                   <h3 class="font-bold text-sm text-slate-100">Playable Streams</h3>
-                  <span id="see-all-count" class="text-xs text-cyan-400 cursor-pointer" onclick="switchTab('library')">See All (3)</span>
+                  <div class="flex items-center gap-2">
+                    <button onclick="playRandomQueue()" class="text-[11px] text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1">🔀 Shuffle</button>
+                    <span id="see-all-count" class="text-xs text-cyan-400 cursor-pointer" onclick="switchTab('library')">See All (4)</span>
+                  </div>
                 </div>
                 <div class="flex gap-3 overflow-x-auto pb-1 custom-scroll" id="home-carousel">
                   <!-- Injected via JS -->
@@ -198,16 +201,22 @@
             </div>
 
             <!-- 3. LIBRARY SCREEN (With Cloud ~1MB Tab) -->
-            <div id="screen-library" class="p-4 space-y-4 hidden">
+            <div id="screen-library" class="p-4 space-y-3.5 hidden">
               <div class="flex justify-between items-center">
                 <div>
                   <h2 class="text-xl font-black text-white">Your Library</h2>
-                  <p id="library-count-text" class="text-xs text-slate-400">3 Songs • Google Drive Collection</p>
+                  <p id="library-count-text" class="text-xs text-slate-400">4 Songs • Google Drive Collection</p>
                 </div>
-                <button onclick="syncLibrary()" class="p-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-cyan-400" title="Refresh Google Drive Collection">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                <button onclick="syncLibrary()" class="p-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-cyan-400 transition" title="Refresh & Sync Google Drive">
+                  <svg id="lib-sync-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                 </button>
               </div>
+
+              <!-- Quick Random Queue Button -->
+              <button onclick="playRandomQueue()" class="w-full py-2.5 px-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                <span>🔀 Play Random Queue (0 MB Storage)</span>
+              </button>
 
               <!-- Library Tabs -->
               <div class="flex border-b border-slate-800 text-xs font-medium gap-3">
@@ -219,7 +228,7 @@
               <!-- Cloud Songs Banner -->
               <div class="bg-gradient-to-r from-purple-900/40 to-cyan-900/40 border border-cyan-500/30 rounded-xl p-3 text-xs space-y-1">
                 <div id="cloud-banner-title" class="font-bold text-cyan-400 flex items-center gap-1.5">
-                  ☁️ 3 Google Drive Songs
+                  ☁️ 4 Google Drive Songs
                 </div>
                 <p class="text-slate-300 text-[11px]">
                   Streams with 0 MB phone storage. Offline downloads use ultra-small 64kbps Opus (~1.2 MB each).
@@ -558,12 +567,13 @@
     const tracks = [
       { id: 'gdrive_1', title: 'dandelions (slowed reverb + lyrics)', artist: 'Ruth B. / vebruary', album: 'Sonora Google Drive', duration: '4:46', format: 'OPUS 64k', size: '2.1 MB', art: 'https://c.saavncdn.com/023/Dandelions-slowed-reverb-English-2021-20231119175842-500x500.jpg', src: 'https://aac.saavncdn.com/023/f607a11a36dd7d49174c5d76907798d0_96.mp4' },
       { id: 'gdrive_2', title: 'Past Lives (Official Lyric Video)', artist: 'sapientdream, Slushii', album: 'Sonora Google Drive', duration: '2:33', format: 'OPUS 64k', size: '1.5 MB', art: 'https://c.saavncdn.com/401/Past-Lives-English-2023-20230929174911-500x500.jpg', src: 'https://aac.saavncdn.com/401/26b827264291174e861f0821bf6d4140_96.mp4' },
-      { id: 'gdrive_3', title: 'lovely (Lyrics) ft. Khalid', artist: 'Billie Eilish, Khalid', album: 'Sonora Google Drive', duration: '3:20', format: 'OPUS 64k', size: '1.6 MB', art: 'https://c.saavncdn.com/947/lovely-English-2018-20180418150240-500x500.jpg', src: 'https://aac.saavncdn.com/947/580fe2c0cb03ba147b00a4b2261764d4_96.mp4' }
+      { id: 'gdrive_3', title: 'lovely (Lyrics) ft. Khalid', artist: 'Billie Eilish, Khalid', album: 'Sonora Google Drive', duration: '3:20', format: 'OPUS 64k', size: '1.6 MB', art: 'https://c.saavncdn.com/947/lovely-English-2018-20180418150240-500x500.jpg', src: 'https://aac.saavncdn.com/947/580fe2c0cb03ba147b00a4b2261764d4_96.mp4' },
+      { id: 'gdrive_4', title: 'Royalty (ft. Neoni)', artist: 'Egzod, Maestro Chives, Neoni', album: 'Sonora Google Drive', duration: '3:43', format: 'OPUS 64k', size: '1.8 MB', art: 'https://c.saavncdn.com/205/Royalty-Sped-Up-Slowed-Unknown-2021-20260528143542-500x500.jpg', src: 'https://aac.saavncdn.com/205/386cdf2975fd049305654e8ebc7b9e0a_96.mp4' }
     ];
 
     let currentTrackIndex = 0;
     let isShuffle = false;
-    let isRepeat = false;
+    let repeatMode = 'OFF'; // 'OFF' -> 'ALL' -> 'ONE' -> 'OFF'
     let isLyricsOpen = false;
     let playbackSpeed = 1.0;
 
@@ -765,14 +775,120 @@
 
     function nextTrack(e) {
       if (e) e.stopPropagation();
-      currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
-      playTrackByIndex(currentTrackIndex);
+      if (isShuffle) {
+        playNextRandomTrack();
+      } else {
+        currentTrackIndex = (currentTrackIndex + 1) % tracks.length;
+        playTrackByIndex(currentTrackIndex);
+      }
     }
 
     function prevTrack() {
       currentTrackIndex = (currentTrackIndex - 1 + tracks.length) % tracks.length;
       playTrackByIndex(currentTrackIndex);
     }
+
+    // Loop & Shuffle Handlers
+    function playRandomQueue() {
+      isShuffle = true;
+      updateShuffleUI();
+      const randomIndex = Math.floor(Math.random() * tracks.length);
+      playTrackByIndex(randomIndex);
+      showToast("🔀 Random Queue Started (Streaming from Google Drive - 0 MB storage)");
+    }
+
+    function playNextRandomTrack() {
+      if (tracks.length <= 1) {
+        audio.currentTime = 0;
+        audio.play().catch(e => console.log(e));
+        return;
+      }
+      let nextIndex;
+      do {
+        nextIndex = Math.floor(Math.random() * tracks.length);
+      } while (nextIndex === currentTrackIndex);
+      playTrackByIndex(nextIndex);
+    }
+
+    function toggleShuffle() {
+      isShuffle = !isShuffle;
+      updateShuffleUI();
+      showToast(isShuffle ? "🔀 Random Queue ON (Shuffling Google Drive)" : "➡️ Shuffle OFF (Linear Order)");
+    }
+
+    function updateShuffleUI() {
+      const btn = document.getElementById('shuffle-btn');
+      if (btn) {
+        if (isShuffle) {
+          btn.classList.add('text-cyan-400', 'scale-110');
+          btn.classList.remove('text-slate-400');
+        } else {
+          btn.classList.remove('text-cyan-400', 'scale-110');
+          btn.classList.add('text-slate-400');
+        }
+      }
+    }
+
+    function toggleRepeat() {
+      if (repeatMode === 'OFF') {
+        repeatMode = 'ALL';
+        showToast("🔁 Repeat ALL Songs");
+      } else if (repeatMode === 'ALL') {
+        repeatMode = 'ONE';
+        showToast("🔂 Repeat Song ON (Looping indefinitely)");
+      } else {
+        repeatMode = 'OFF';
+        showToast("➡️ Repeat OFF");
+      }
+      updateRepeatUI();
+    }
+
+    function updateRepeatUI() {
+      const btn = document.getElementById('repeat-btn');
+      if (!btn) return;
+      if (repeatMode === 'ONE') {
+        btn.innerHTML = `
+          <div class="relative">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+            <span class="absolute -top-1.5 -right-1.5 text-[8px] font-black bg-cyan-400 text-black rounded-full w-3.5 h-3.5 flex items-center justify-center">1</span>
+          </div>
+        `;
+        btn.classList.add('text-cyan-400', 'scale-110');
+        btn.classList.remove('text-slate-400');
+      } else if (repeatMode === 'ALL') {
+        btn.innerHTML = `
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        `;
+        btn.classList.add('text-cyan-400', 'scale-110');
+        btn.classList.remove('text-slate-400');
+      } else {
+        btn.innerHTML = `
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+        `;
+        btn.classList.remove('text-cyan-400', 'scale-110');
+        btn.classList.add('text-slate-400');
+      }
+    }
+
+    // Audio Ended Handler (Loop / Shuffle / Advance)
+    audio.onended = () => {
+      if (repeatMode === 'ONE') {
+        // Repeat current song as many times as user wants
+        audio.currentTime = 0;
+        audio.play().catch(e => console.log(e));
+      } else if (isShuffle) {
+        // Play next random song from Google Drive
+        playNextRandomTrack();
+      } else if (repeatMode === 'ALL') {
+        nextTrack();
+      } else {
+        if (currentTrackIndex < tracks.length - 1) {
+          nextTrack();
+        } else {
+          stopPlayback();
+        }
+      }
+    };
 
     // Audio Progress Updates
     audio.ontimeupdate = () => {
@@ -964,9 +1080,60 @@
       alert('Cleaned 115 MB of duplicate songs! Best quality copies preserved.');
     }
 
+    function showToast(msg) {
+      let toast = document.getElementById('sonora-toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'sonora-toast';
+        toast.className = 'fixed top-5 left-1/2 -translate-x-1/2 bg-slate-900/95 border border-cyan-400 text-cyan-300 text-xs font-bold px-4 py-2.5 rounded-2xl shadow-2xl z-50 transition-all duration-300 pointer-events-none opacity-0';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = msg;
+      toast.style.opacity = '1';
+      toast.style.transform = 'translate(-50%, 0)';
+      clearTimeout(window.__toastTimeout);
+      window.__toastTimeout = setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translate(-50%, -12px)';
+      }, 2500);
+    }
+
     function syncLibrary() {
-      renderSongs();
-      alert(`Synchronized with Google Drive! All ${tracks.length} Opus songs ready to stream.`);
+      const syncIcon = document.getElementById('lib-sync-icon');
+      if (syncIcon) syncIcon.classList.add('animate-spin');
+
+      // Refresh / merge any newly converted catalog items
+      fetch('sonora_catalog.json?' + Date.now())
+        .then(r => r.json())
+        .then(data => {
+          if (data && data.songs && data.songs.length > 0) {
+            data.songs.forEach(s => {
+              if (!tracks.some(t => t.title.toLowerCase() === s.title.toLowerCase())) {
+                tracks.push({
+                  id: s.id || `gdrive_${tracks.length+1}`,
+                  title: s.title,
+                  artist: s.artist,
+                  album: s.album || 'Sonora Google Drive',
+                  duration: `${Math.floor((s.duration_seconds || 200)/60)}:${String((s.duration_seconds || 200)%60).padStart(2, '0')}`,
+                  format: (s.codec || 'OPUS').toUpperCase() + ' ' + (s.bitrate_kbps || 64) + 'k',
+                  size: `${((s.size_kb || 1500)/1024).toFixed(1)} MB`,
+                  art: s.artwork_url || 'https://picsum.photos/seed/song/200/200',
+                  src: s.stream_url || s.download_url
+                });
+              }
+            });
+          }
+        })
+        .catch(err => {
+          console.log('Catalog fetch fallback:', err);
+        })
+        .finally(() => {
+          setTimeout(() => {
+            if (syncIcon) syncIcon.classList.remove('animate-spin');
+            renderSongs();
+            showToast(`✓ Synchronized with Google Drive! All ${tracks.length} songs ready to stream.`);
+          }, 400);
+        });
     }
 
     function triggerCloudSync() {
@@ -974,18 +1141,57 @@
       if (btn) btn.textContent = `Syncing ${tracks.length} Songs...`;
       setTimeout(() => {
         if (btn) btn.textContent = `✓ Synced ${tracks.length} Songs!`;
-        alert(`All ${tracks.length} Google Drive songs synced and ready! Streams with 0 MB phone storage.`);
+        showToast(`All ${tracks.length} Google Drive songs synced! 0 MB storage used.`);
       }, 800);
     }
 
     function downloadTrack(e, title) {
       e.stopPropagation();
-      alert(`Downloaded "${title}" in ultra-compact Opus (only ~1.2 MB used)!`);
+      showToast(`Downloaded "${title}" in ultra-compact Opus (~1.2 MB)!`);
     }
 
-    function setAccent(primary, secondary) {
-      document.documentElement.style.setProperty('--accent', primary);
-      alert('Theme accent updated to ' + primary);
+    function setAccent(primary, secondary, btn) {
+      let styleEl = document.getElementById('dynamic-theme-style');
+      if (!styleEl) {
+        styleEl = document.createElement('style');
+        styleEl.id = 'dynamic-theme-style';
+        document.head.appendChild(styleEl);
+      }
+      styleEl.innerHTML = `
+        .text-cyan-400, #nav-home.text-cyan-400, #time-current, #now-playing-file span, .text-cyan-300, #speed-indicator {
+          color: ${primary} !important;
+        }
+        .bg-cyan-400, #mini-progress-bar, #player-seekbar::-webkit-slider-thumb {
+          background-color: ${primary} !important;
+        }
+        input[type=range] {
+          accent-color: ${primary} !important;
+        }
+        .border-cyan-400, .border-cyan-500, .border-cyan-500\\/30, .border-cyan-500\\/40 {
+          border-color: ${primary} !important;
+        }
+        .from-purple-500.to-cyan-400, .from-purple-500.via-cyan-400.to-pink-500, .from-purple-600.to-cyan-500, .from-purple-600.via-indigo-600.to-cyan-500 {
+          background: linear-gradient(135deg, ${secondary}, ${primary}) !important;
+        }
+        .text-purple-400 {
+          color: ${secondary} !important;
+        }
+        #repeat-btn.text-cyan-400, #shuffle-btn.text-cyan-400 {
+          color: ${primary} !important;
+        }
+        #sonora-toast {
+          border-color: ${primary} !important;
+          color: ${primary} !important;
+        }
+      `;
+      // Update rings on buttons
+      document.querySelectorAll('#color-picker button').forEach(b => {
+        b.classList.remove('ring-2', 'ring-white', 'ring-offset-2', 'ring-offset-slate-900', 'scale-110');
+      });
+      if (btn) {
+        btn.classList.add('ring-2', 'ring-white', 'ring-offset-2', 'ring-offset-slate-900', 'scale-110');
+      }
+      showToast(`Theme updated to ${primary}`);
     }
 
     // Clock

@@ -103,6 +103,19 @@ class CloudDatabaseClient(
                 codec = "opus",
                 bitrateKbps = 64,
                 artworkUrl = "https://c.saavncdn.com/947/lovely-English-2018-20180418150240-500x500.jpg"
+            ),
+            CloudSongItem(
+                id = "gdrive_04",
+                title = "Royalty",
+                artist = "Egzod, Maestro Chives ft. Neoni",
+                album = "Sonora Google Drive",
+                durationSeconds = 223,
+                streamUrl = "https://aac.saavncdn.com/205/386cdf2975fd049305654e8ebc7b9e0a_96.mp4",
+                downloadUrl = "https://aac.saavncdn.com/205/386cdf2975fd049305654e8ebc7b9e0a_96.mp4",
+                sizeKb = 1790, // ~1.8 MB
+                codec = "opus",
+                bitrateKbps = 64,
+                artworkUrl = "https://c.saavncdn.com/205/Royalty-Sped-Up-Slowed-Unknown-2021-20260528143542-500x500.jpg"
             )
         )
         return items.map { it.toDomainSong() }

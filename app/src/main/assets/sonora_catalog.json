@@ -1,0 +1,60 @@
+{
+  "catalog_name": "Sonora Google Drive Collection",
+  "version": 2,
+  "description": "Real-time Google Drive audio streaming collection (0 MB phone storage)",
+  "total_songs": 4,
+  "songs": [
+    {
+      "id": "gdrive_01",
+      "title": "Dandelions (slowed reverb + lyrics)",
+      "artist": "Ruth B. / vebruary",
+      "album": "Sonora Google Drive",
+      "duration_seconds": 286,
+      "stream_url": "https://aac.saavncdn.com/023/f607a11a36dd7d49174c5d76907798d0_96.mp4",
+      "download_url": "https://aac.saavncdn.com/023/f607a11a36dd7d49174c5d76907798d0_96.mp4",
+      "size_kb": 2175,
+      "codec": "opus",
+      "bitrate_kbps": 64,
+      "artwork_url": "https://c.saavncdn.com/023/Dandelions-slowed-reverb-English-2021-20231119175842-500x500.jpg"
+    },
+    {
+      "id": "gdrive_02",
+      "title": "Past Lives (Official Lyric Video)",
+      "artist": "sapientdream, Slushii",
+      "album": "Sonora Google Drive",
+      "duration_seconds": 153,
+      "stream_url": "https://aac.saavncdn.com/401/26b827264291174e861f0821bf6d4140_96.mp4",
+      "download_url": "https://aac.saavncdn.com/401/26b827264291174e861f0821bf6d4140_96.mp4",
+      "size_kb": 1521,
+      "codec": "opus",
+      "bitrate_kbps": 64,
+      "artwork_url": "https://c.saavncdn.com/401/Past-Lives-English-2023-20230929174911-500x500.jpg"
+    },
+    {
+      "id": "gdrive_03",
+      "title": "lovely (Lyrics) ft. Khalid",
+      "artist": "Billie Eilish, Khalid",
+      "album": "Sonora Google Drive",
+      "duration_seconds": 200,
+      "stream_url": "https://aac.saavncdn.com/947/580fe2c0cb03ba147b00a4b2261764d4_96.mp4",
+      "download_url": "https://aac.saavncdn.com/947/580fe2c0cb03ba147b00a4b2261764d4_96.mp4",
+      "size_kb": 1631,
+      "codec": "opus",
+      "bitrate_kbps": 64,
+      "artwork_url": "https://c.saavncdn.com/947/lovely-English-2018-20180418150240-500x500.jpg"
+    },
+    {
+      "id": "gdrive_04",
+      "title": "Royalty",
+      "artist": "Egzod, Maestro Chives ft. Neoni",
+      "album": "Sonora Google Drive",
+      "duration_seconds": 223,
+      "stream_url": "https://aac.saavncdn.com/205/386cdf2975fd049305654e8ebc7b9e0a_96.mp4",
+      "download_url": "https://aac.saavncdn.com/205/386cdf2975fd049305654e8ebc7b9e0a_96.mp4",
+      "size_kb": 1790,
+      "codec": "opus",
+      "bitrate_kbps": 64,
+      "artwork_url": "https://c.saavncdn.com/205/Royalty-Sped-Up-Slowed-Unknown-2021-20260528143542-500x500.jpg"
+    }
+  ]
+}
