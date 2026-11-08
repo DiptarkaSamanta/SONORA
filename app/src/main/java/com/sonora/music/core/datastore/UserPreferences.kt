@@ -36,7 +36,9 @@ class UserPreferences(private val context: Context) {
         val KEY_CLOUD_CATALOG_URL = stringPreferencesKey("cloud_catalog_url")
     }
 
-    val cloudCatalogUrlFlow: Flow<String?> = dataStore.data.map { it[KEY_CLOUD_CATALOG_URL] }
+    val cloudCatalogUrlFlow: Flow<String> = dataStore.data.map { 
+        it[KEY_CLOUD_CATALOG_URL] ?: "https://drive.google.com/drive/folders/1mjeXjTTy-nliOOUG607rprdvdcnlKurP?usp=sharing" 
+    }
 
     suspend fun setCloudCatalogUrl(url: String) {
         dataStore.edit { it[KEY_CLOUD_CATALOG_URL] = url }

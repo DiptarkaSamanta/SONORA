@@ -49,6 +49,12 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     private val _isScanning = MutableStateFlow(false)
     val isScanning: StateFlow<Boolean> = _isScanning.asStateFlow()
 
+    init {
+        viewModelScope.launch {
+            musicRepository.syncCloudMusicCatalog()
+        }
+    }
+
     fun setTab(tab: LibraryTab) {
         _selectedTab.value = tab
     }

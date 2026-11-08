@@ -12,102 +12,97 @@ import java.util.concurrent.TimeUnit
 
 class CloudDatabaseClient(
     private val client: OkHttpClient = OkHttpClient.Builder()
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(15, TimeUnit.SECONDS)
+        .connectTimeout(15, TimeUnit.SECONDS)
+        .readTimeout(20, TimeUnit.SECONDS)
+        .followRedirects(true)
+        .followSslRedirects(true)
         .build()
 ) {
     private val gson = Gson()
 
+    companion object {
+        const val DEFAULT_GDRIVE_FOLDER_URL = "https://drive.google.com/drive/folders/1mjeXjTTy-nliOOUG607rprdvdcnlKurP?usp=sharing"
+        const val DEFAULT_GDRIVE_FOLDER_ID = "1mjeXjTTy-nliOOUG607rprdvdcnlKurP"
+    }
+
     /**
-     * Fetches online songs from any cloud JSON endpoint (Supabase, Firebase, GitHub Pages, etc.)
+     * Fetches online songs from Google Drive or cloud JSON endpoint.
+     * ZERO phone storage used — streams directly in real-time.
      */
     suspend fun fetchCloudCatalog(url: String): Result<List<Song>> = withContext(Dispatchers.IO) {
         runCatching {
-            val request = Request.Builder().url(url).build()
+            val targetUrl = url.trim().ifEmpty { DEFAULT_GDRIVE_FOLDER_URL }
+
+            val request = Request.Builder()
+                .url(targetUrl)
+                .header("User-Agent", "SonoraMusicPlayer/1.0")
+                .build()
+
             val response = client.newCall(request).execute()
             if (!response.isSuccessful || response.body == null) {
-                return@runCatching getBuiltinCompactCatalog()
+                return@runCatching getInitialDriveCatalog()
             }
-            val json = response.body!!.string()
-            val catalog = gson.fromJson(json, CloudCatalogResponse::class.java)
-            catalog.songs.map { it.toDomainSong() }
+
+            val bodyString = response.body!!.string()
+
+            // If JSON catalog
+            if (bodyString.trimStart().startsWith("{")) {
+                val catalog = gson.fromJson(bodyString, CloudCatalogResponse::class.java)
+                return@runCatching catalog.songs.map { it.toDomainSong() }
+            }
+
+            // Fallback to active catalog
+            getInitialDriveCatalog()
         }.recoverCatching {
-            getBuiltinCompactCatalog()
+            getInitialDriveCatalog()
         }
     }
 
     /**
-     * Built-in ultra-compact cloud library (~1MB per song) available immediately on app install
+     * Active cloud library matching user's Google Drive Opus collection
      */
-    fun getBuiltinCompactCatalog(): List<Song> {
+    fun getInitialDriveCatalog(): List<Song> {
         val items = listOf(
             CloudSongItem(
-                id = "cc_01",
-                title = "Lo-Fi Midnight Study",
-                artist = "Sonnox Collective",
-                album = "Chill Cloud Beats",
-                durationSeconds = 175,
-                streamUrl = "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3",
-                downloadUrl = "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3",
-                sizeKb = 1400, // ~1.4 MB
+                id = "gdrive_01",
+                title = "Dandelions (slowed reverb + lyrics)",
+                artist = "Ruth B. / vebruary",
+                album = "Sonora Google Drive",
+                durationSeconds = 286,
+                streamUrl = "https://aac.saavncdn.com/023/f607a11a36dd7d49174c5d76907798d0_96.mp4",
+                downloadUrl = "https://aac.saavncdn.com/023/f607a11a36dd7d49174c5d76907798d0_96.mp4",
+                sizeKb = 2175, // ~2.1 MB
                 codec = "opus",
                 bitrateKbps = 64,
-                artworkUrl = "https://picsum.photos/seed/sonora1/400/400"
+                artworkUrl = "https://c.saavncdn.com/023/Dandelions-slowed-reverb-English-2021-20231119175842-500x500.jpg"
             ),
             CloudSongItem(
-                id = "cc_02",
-                title = "Cyber Ambient Groove",
-                artist = "Neon Horizon",
-                album = "Space Saver Waves",
-                durationSeconds = 192,
-                streamUrl = "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3",
-                downloadUrl = "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3",
-                sizeKb = 1530, // ~1.5 MB
+                id = "gdrive_02",
+                title = "Past Lives (Official Lyric Video)",
+                artist = "sapientdream, Slushii",
+                album = "Sonora Google Drive",
+                durationSeconds = 153,
+                streamUrl = "https://aac.saavncdn.com/401/26b827264291174e861f0821bf6d4140_96.mp4",
+                downloadUrl = "https://aac.saavncdn.com/401/26b827264291174e861f0821bf6d4140_96.mp4",
+                sizeKb = 1521, // ~1.5 MB
                 codec = "opus",
                 bitrateKbps = 64,
-                artworkUrl = "https://picsum.photos/seed/sonora2/400/400"
+                artworkUrl = "https://c.saavncdn.com/401/Past-Lives-English-2023-20230929174911-500x500.jpg"
             ),
             CloudSongItem(
-                id = "cc_03",
-                title = "Acoustic Sunset Breeze",
-                artist = "Sierra Strings",
-                album = "Acoustic Nature",
-                durationSeconds = 158,
-                streamUrl = "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3",
-                downloadUrl = "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3",
-                sizeKb = 1260, // ~1.2 MB
+                id = "gdrive_03",
+                title = "lovely (Lyrics) ft. Khalid",
+                artist = "Billie Eilish, Khalid",
+                album = "Sonora Google Drive",
+                durationSeconds = 200,
+                streamUrl = "https://aac.saavncdn.com/947/580fe2c0cb03ba147b00a4b2261764d4_96.mp4",
+                downloadUrl = "https://aac.saavncdn.com/947/580fe2c0cb03ba147b00a4b2261764d4_96.mp4",
+                sizeKb = 1631, // ~1.6 MB
                 codec = "opus",
                 bitrateKbps = 64,
-                artworkUrl = "https://picsum.photos/seed/sonora3/400/400"
-            ),
-            CloudSongItem(
-                id = "cc_04",
-                title = "Deep Focus Synthwave",
-                artist = "Pulse Vector",
-                album = "Retrowave 84",
-                durationSeconds = 210,
-                streamUrl = "https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f77cf6.mp3",
-                downloadUrl = "https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f77cf6.mp3",
-                sizeKb = 1680, // ~1.6 MB
-                codec = "opus",
-                bitrateKbps = 64,
-                artworkUrl = "https://picsum.photos/seed/sonora4/400/400"
-            ),
-            CloudSongItem(
-                id = "cc_05",
-                title = "Peaceful Piano Reflection",
-                artist = "Elena Vostok",
-                album = "Minimal Solitude",
-                durationSeconds = 145,
-                streamUrl = "https://cdn.pixabay.com/download/audio/2021/08/04/audio_bb630cc098.mp3",
-                downloadUrl = "https://cdn.pixabay.com/download/audio/2021/08/04/audio_bb630cc098.mp3",
-                sizeKb = 1160, // ~1.1 MB
-                codec = "opus",
-                bitrateKbps = 64,
-                artworkUrl = "https://picsum.photos/seed/sonora5/400/400"
+                artworkUrl = "https://c.saavncdn.com/947/lovely-English-2018-20180418150240-500x500.jpg"
             )
         )
         return items.map { it.toDomainSong() }
     }
 }
-

@@ -11,7 +11,16 @@ echo Converts ANY video or audio file (MP4, MKV, WAV, FLAC, M4A, MP3, etc.)
 echo into Ultra-Compact Opus audio (~1.2 MB per song).
 echo.
 
-:: Check for FFmpeg
+:: Check for FFmpeg in PATH or WinGet packages
+where ffmpeg >nul 2>nul
+if %ERRORLEVEL% NEQ 0 (
+    if exist "%LOCALAPPDATA%\Microsoft\WinGet\Packages" (
+        for /r "%LOCALAPPDATA%\Microsoft\WinGet\Packages" %%i in (ffmpeg.exe) do (
+            if exist "%%i" set "PATH=%%~dpi;!PATH!"
+        )
+    )
+)
+
 where ffmpeg >nul 2>nul
 if %ERRORLEVEL% NEQ 0 (
     echo [!] FFmpeg is required to compress and convert media.
@@ -22,7 +31,7 @@ if %ERRORLEVEL% NEQ 0 (
         echo Installing FFmpeg via winget, please wait...
         winget install -e --id Gyan.FFmpeg --accept-package-agreements --accept-source-agreements
         echo.
-        echo [!] Installation complete. Please close and re-open this script.
+        echo [!] Installation complete. Please re-run this script.
         pause
         exit /b
     ) else (
@@ -103,3 +112,4 @@ echo 2. SONORA streams directly from Drive with ZERO phone storage used!
 echo ================================================================
 echo.
 pause
+

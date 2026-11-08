@@ -21,25 +21,52 @@ SUPPORTED_EXTENSIONS = {
     ".wav", ".flac", ".alac", ".aiff", ".mp3", ".m4a", ".aac", ".wma", ".ogg", ".opus"
 }
 
-def check_ffmpeg():
+FFMPEG_CMD = "ffmpeg"
+FFPROBE_CMD = "ffprobe"
+
+def find_ffmpeg_binary():
+    global FFMPEG_CMD, FFPROBE_CMD
+    # 1. Check if directly available in PATH
     try:
         subprocess.run(["ffmpeg", "-version"], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=True)
         return True
     except Exception:
-        print("\n" + "=" * 65)
-        print("  [!] FFmpeg was not detected on your system.")
-        print("=" * 65)
-        print("  To install FFmpeg in 10 seconds on Windows:")
-        print("  1. Open PowerShell or Command Prompt.")
-        print("  2. Run: winget install Gyan.FFmpeg")
-        print("  (Or download directly from https://ffmpeg.org)")
-        print("=" * 65 + "\n")
-        return False
+        pass
+
+    # 2. Check WinGet Packages directory on Windows
+    local_app_data = os.environ.get("LOCALAPPDATA", "")
+    if local_app_data:
+        winget_dir = Path(local_app_data) / "Microsoft" / "WinGet" / "Packages"
+        if winget_dir.exists():
+            for p in winget_dir.glob("**/ffmpeg.exe"):
+                if p.is_file():
+                    FFMPEG_CMD = str(p)
+                    probe = p.parent / "ffprobe.exe"
+                    if probe.exists():
+                        FFPROBE_CMD = str(probe)
+                    # Add to current process PATH so child calls work
+                    os.environ["PATH"] = str(p.parent) + os.pathsep + os.environ.get("PATH", "")
+                    return True
+
+    return False
+
+def check_ffmpeg():
+    if find_ffmpeg_binary():
+        return True
+    print("\n" + "=" * 65)
+    print("  [!] FFmpeg was not detected on your system.")
+    print("=" * 65)
+    print("  To install FFmpeg in 10 seconds on Windows:")
+    print("  1. Open PowerShell or Command Prompt.")
+    print("  2. Run: winget install Gyan.FFmpeg")
+    print("  (Or download directly from https://ffmpeg.org)")
+    print("=" * 65 + "\n")
+    return False
 
 def extract_metadata(file_path):
     """Attempt to extract title and artist using ffprobe, fallback to filename."""
     cmd = [
-        "ffprobe", "-v", "quiet",
+        FFPROBE_CMD, "-v", "quiet",
         "-print_format", "json",
         "-show_format",
         str(file_path)
@@ -76,7 +103,7 @@ def convert_file(input_path, output_dir, target_format="opus", bitrate="64k"):
 
     # FFmpeg command: strips video (-vn), converts audio stream to target codec and bitrate
     cmd = [
-        "ffmpeg", "-y",
+        FFMPEG_CMD, "-y",
         "-i", str(input_file),
         "-vn",                    # Discard video streams (from MP4, MKV, etc.)
         "-c:a", codec,            # Target audio codec

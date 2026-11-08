@@ -87,8 +87,8 @@ fun StorageDashboardScreen(
     var cloudUrlInput by remember { mutableStateOf("") }
 
     LaunchedEffect(savedCloudUrl) {
-        if (!savedCloudUrl.isNullOrEmpty() && cloudUrlInput.isEmpty()) {
-            cloudUrlInput = savedCloudUrl ?: ""
+        if (savedCloudUrl.isNotEmpty() && cloudUrlInput.isEmpty()) {
+            cloudUrlInput = savedCloudUrl
         }
     }
 
@@ -204,7 +204,7 @@ fun StorageDashboardScreen(
                         }
 
                         Text(
-                            text = "Keep all 1,000 Spotify songs stored in the cloud (~1.2 MB each). Streams with 0 MB phone storage. Songs never get lost or deleted on app updates!",
+                            text = "Keep all your songs stored in Google Drive in ultra-compact Opus format (~1.2 MB each). Streams in real-time with 0 MB phone storage! Songs never get lost or deleted on app updates.",
                             style = MaterialTheme.typography.bodyMedium,
                             color = SonoraTextSecondary,
                             modifier = Modifier.padding(vertical = 8.dp)
@@ -213,7 +213,7 @@ fun StorageDashboardScreen(
                         OutlinedTextField(
                             value = cloudUrlInput,
                             onValueChange = { cloudUrlInput = it },
-                            placeholder = { Text("https://.../sonora_catalog.json", color = SonoraTextMuted, fontSize = 12.sp) },
+                            placeholder = { Text("https://drive.google.com/drive/folders/...", color = SonoraTextMuted, fontSize = 12.sp) },
                             singleLine = true,
                             modifier = Modifier.fillMaxWidth(),
                             colors = OutlinedTextFieldDefaults.colors(

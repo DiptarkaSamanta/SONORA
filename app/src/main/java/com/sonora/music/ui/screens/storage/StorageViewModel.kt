@@ -32,8 +32,8 @@ class StorageViewModel(application: Application) : AndroidViewModel(application)
     private val _isSyncingCloud = MutableStateFlow(false)
     val isSyncingCloud: StateFlow<Boolean> = _isSyncingCloud.asStateFlow()
 
-    val cloudCatalogUrl: StateFlow<String?> = userPreferences.cloudCatalogUrlFlow
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+    val cloudCatalogUrl: StateFlow<String> = userPreferences.cloudCatalogUrlFlow
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), "https://drive.google.com/drive/folders/1mjeXjTTy-nliOOUG607rprdvdcnlKurP?usp=sharing")
 
     private val _statusMessage = MutableStateFlow<String?>(null)
     val statusMessage: StateFlow<String?> = _statusMessage.asStateFlow()
