@@ -226,12 +226,17 @@
               </div>
 
               <!-- Cloud Songs Banner -->
-              <div class="bg-gradient-to-r from-purple-900/40 to-cyan-900/40 border border-cyan-500/30 rounded-xl p-3 text-xs space-y-1">
-                <div id="cloud-banner-title" class="font-bold text-cyan-400 flex items-center gap-1.5">
-                  ☁️ 5 Google Drive Songs
+              <div class="bg-gradient-to-r from-purple-900/40 to-cyan-900/40 border border-cyan-500/30 rounded-xl p-3 text-xs space-y-2">
+                <div class="flex items-center justify-between">
+                  <div id="cloud-banner-title" class="font-bold text-cyan-400 flex items-center gap-1.5">
+                    ☁️ 5 Google Drive Songs
+                  </div>
+                  <button onclick="configureLiveDriveSync()" class="text-[10px] text-purple-300 hover:text-white bg-purple-950/80 border border-purple-500/40 px-2 py-0.5 rounded-lg flex items-center gap-1 font-semibold transition">
+                    ⚡ Live GDrive API
+                  </button>
                 </div>
                 <p class="text-slate-300 text-[11px]">
-                  Streams with 0 MB phone storage. Offline downloads use ultra-small 64kbps Opus (~1.2 MB each).
+                  Streams with 0 MB phone storage. Real-time dynamic sync enabled for 1,000+ Google Drive songs.
                 </p>
               </div>
 
@@ -386,7 +391,7 @@
                 <h2 id="player-title" class="text-base font-black text-white truncate">dandelions (slowed reverb + lyrics)</h2>
                 <div class="flex items-center gap-2">
                   <span id="player-artist" class="text-xs text-slate-400 truncate">Ruth B. / vebruary</span>
-                  <span id="player-format-pill" class="text-[9px] bg-purple-950/80 text-cyan-400 border border-purple-500/40 px-1.5 py-0.5 rounded font-mono font-bold">OPUS 64k (2.1 MB)</span>
+                  <span id="player-format-pill" class="text-[10px] bg-purple-950/90 text-cyan-300 border border-purple-500/40 px-2 py-0.5 rounded-md font-mono font-bold whitespace-nowrap flex-shrink-0">2.1 MB • 4:46</span>
                 </div>
               </div>
               <button onclick="toggleFavorite()" class="p-2 text-pink-500">
@@ -709,11 +714,11 @@
               <img src="${t.art}" class="w-9 h-9 rounded-lg object-cover flex-shrink-0">
               <div class="overflow-hidden">
                 <div class="text-xs font-bold text-slate-100 truncate">${t.title}</div>
-                <div class="text-[10px] text-slate-400 truncate">${t.artist} • ${t.duration}</div>
+                <div class="text-[10px] text-slate-400 truncate">${t.artist}</div>
               </div>
             </div>
             <div class="flex items-center gap-2">
-              <span class="text-[9px] bg-purple-950/80 text-cyan-400 border border-purple-500/40 px-1.5 py-0.5 rounded font-mono font-bold">${t.format} • ${t.size}</span>
+              <span class="text-[10px] bg-purple-950/90 text-cyan-300 border border-purple-500/40 px-2 py-0.5 rounded-md font-mono font-bold whitespace-nowrap flex-shrink-0">${t.size} • ${t.duration}</span>
               <button onclick="downloadTrack(event, '${t.title}')" class="p-1.5 text-slate-400 hover:text-cyan-400">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
               </button>
@@ -821,11 +826,11 @@
               </div>
               <div class="overflow-hidden">
                 <div class="text-xs font-bold text-slate-100 truncate group-hover:text-cyan-400 transition">${t.title}</div>
-                <div class="text-[10px] text-slate-400 truncate">${t.artist} • ${t.duration}</div>
+                <div class="text-[10px] text-slate-400 truncate">${t.artist}</div>
               </div>
             </div>
             <div class="flex items-center gap-2">
-              <span class="text-[9px] bg-purple-950/80 text-cyan-400 border border-purple-500/40 px-1.5 py-0.5 rounded font-mono font-bold">${t.format} • ${t.size}</span>
+              <span class="text-[10px] bg-purple-950/90 text-cyan-300 border border-purple-500/40 px-2 py-0.5 rounded-md font-mono font-bold whitespace-nowrap flex-shrink-0">${t.size} • ${t.duration}</span>
               <button onclick="downloadTrack(event, '${t.title}')" class="p-1.5 text-slate-400 hover:text-cyan-400">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
               </button>
@@ -856,7 +861,7 @@
 
       const currentTrack = tracks[currentTrackIndex];
       const actualSize = size || (currentTrack ? currentTrack.size : '');
-      const formatDisplay = actualSize ? `${format} (${actualSize})` : format;
+      const formatDisplay = actualSize ? `${actualSize} • ${duration}` : duration;
 
       document.getElementById('mini-title').textContent = title;
       document.getElementById('mini-artist').textContent = `${artist} • ${formatDisplay}`;
@@ -1308,15 +1313,40 @@
       }, 2500);
     }
 
+        function configureLiveDriveSync() {
+      const current = localStorage.getItem('sonora_gdrive_api_url') || '';
+      const entered = prompt(
+        "⚡ Connect Real-Time Dynamic Google Drive API (For 1,000+ Songs)\n\nPaste your Google Apps Script Web App URL here (from tools/gdrive_sync_service.gs):\n(Leave blank to use default cloud streaming)",
+        current
+      );
+      if (entered !== null) {
+        if (entered.trim()) {
+          localStorage.setItem('sonora_gdrive_api_url', entered.trim());
+          showToast("✓ Real-time Google Drive API connected! Syncing...");
+          syncLibrary();
+        } else {
+          localStorage.removeItem('sonora_gdrive_api_url');
+          showToast("Reverted to default cloud catalog.");
+        }
+      }
+    }
+
     function syncLibrary() {
       const syncIcon = document.getElementById('lib-sync-icon');
       if (syncIcon) syncIcon.classList.add('animate-spin');
 
-      // Refresh / merge any newly converted catalog items from local or live GitHub
-      const fetchLocalOrRemote = () =>
-        fetch('sonora_catalog.json?' + Date.now())
+      // Real-Time Dynamic Google Drive Sync (Supports 1,000+ Songs without manual JSON)
+      const liveGdriveApi = localStorage.getItem('sonora_gdrive_api_url');
+      const fetchDynamicDrive = () => {
+        if (liveGdriveApi && liveGdriveApi.startsWith('http')) {
+          return fetch(liveGdriveApi).then(r => r.json());
+        }
+        return fetch('sonora_catalog.json?' + Date.now())
           .then(r => { if (!r.ok) throw new Error(r.statusText); return r.json(); })
           .catch(() => fetch('https://raw.githubusercontent.com/DiptarkaSamanta/SONORA/main/sonora_catalog.json?' + Date.now()).then(r => r.json()));
+      };
+
+      const fetchLocalOrRemote = fetchDynamicDrive;
 
       fetchLocalOrRemote()
         .then(data => {
