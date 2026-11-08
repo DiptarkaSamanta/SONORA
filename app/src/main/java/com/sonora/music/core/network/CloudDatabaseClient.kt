@@ -58,6 +58,8 @@ class CloudDatabaseClient(
         }
     }
 
+    fun getBuiltinCompactCatalog(): List<Song> = getInitialDriveCatalog()
+
     /**
      * Active cloud library matching user's Google Drive Opus collection
      */
