@@ -112,12 +112,29 @@ class MusicRepositoryImpl(
     override suspend fun fetchLyrics(title: String, artist: String): LyricsData? = withContext(Dispatchers.IO) {
         runCatching {
             val cleanTitle = title.replace(Regex("\\(.*?\\)|\\[.*?\\]"), "").trim()
-            val cleanArtist = if (artist.contains("unknown", ignoreCase = true)) "" else artist.trim()
-            val response = NetworkClient.lrclibApi.getLyrics(trackName = cleanTitle, artistName = cleanArtist)
-            val lyricsData = response.toDomainLyrics()
-            // Cache in DB if found
-            lyricsData.plainLyrics?.let { songDao.updateLyrics(title, it) }
-            lyricsData
+            val primaryArtist = artist.split("/", ",", "ft.", "feat.", "-")[0].trim()
+
+            // 1. Try exact lookup
+            val exact = try {
+                NetworkClient.lrclibApi.getLyrics(trackName = cleanTitle, artistName = primaryArtist)
+            } catch (e: Exception) {
+                null
+            }
+
+            if (exact != null && (!exact.syncedLyrics.isNullOrBlank() || !exact.plainLyrics.isNullOrBlank())) {
+                val data = exact.toDomainLyrics()
+                data.plainLyrics?.let { songDao.updateLyrics(title, it) }
+                return@runCatching data
+            }
+
+            // 2. Robust fallback to search query
+            val searchResults = NetworkClient.lrclibApi.searchLyrics("$cleanTitle $primaryArtist")
+            val best = searchResults.firstOrNull { !it.syncedLyrics.isNullOrBlank() }
+                ?: searchResults.firstOrNull { !it.plainLyrics.isNullOrBlank() }
+
+            val data = best?.toDomainLyrics()
+            data?.plainLyrics?.let { songDao.updateLyrics(title, it) }
+            data
         }.getOrNull()
     }
 

@@ -376,11 +376,7 @@
 
               <!-- Synced Karaoke Lyrics -->
               <div id="synced-lyrics-view" class="hidden absolute inset-0 overflow-y-auto custom-scroll text-center py-6 px-3 space-y-4 text-xs font-medium">
-                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(10)">[00:10] Maybe it's the way you say my name</p>
-                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(25)">[00:25] Maybe it's the way you play your game</p>
-                <p class="text-cyan-400 font-extrabold text-base scale-105 transition-transform cursor-pointer" onclick="seekAudio(45)">[00:45] 'Cause I'm in a field of dandelions</p>
-                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(70)">[01:10] Wishing on every one that you'll be mine</p>
-                <p class="text-slate-500 cursor-pointer" onclick="seekAudio(100)">[01:40] And I see forever in your eyes</p>
+                <!-- Dynamically populated per track -->
               </div>
             </div>
 
@@ -577,6 +573,110 @@
     let isLyricsOpen = false;
     let playbackSpeed = 1.0;
 
+    const lyricsCache = {"dandelions": "[00:12.68] Maybe it's the way you say my name\n[00:18.74] Maybe it's the way you play your game\n[00:23.44] But it's so good, I've never known anybody like you\n[00:29.89] But it's so good, I've never dreamed of nobody like you\n[00:36.29] And I've heard of a love that comes once in a lifetime\n[00:43.35] And I'm pretty sure that you are that love of mine\n[00:48.74] 'Cause I'm in a field of dandelions\n[00:52.41] Wishing on every one that you'd be mine, mine\n[01:01.03] And I see forever in your eyes\n[01:04.86] I feel okay when I see you smile, smile\n[01:13.25] Wishing on dandelions all of the time\n[01:16.45] Praying to God that one day you'll be mine\n[01:19.50] Wishing on dandelions all of the time, all of the time\n[01:26.46] I think that you are the one for me\n[01:32.40] 'Cause it gets so hard to breathe\n[01:37.49] When you're looking at me, I've never felt so alive and free\n[01:43.76] When you're looking at me, I've never felt so happy\n[01:50.18] And I've heard of a love that comes once in a lifetime\n[01:57.07] And I'm pretty sure that you are that love of mine\n[02:02.62] 'Cause I'm in a field of dandelions\n[02:06.32] Wishing on every one that you'd be mine, mine\n[02:14.98] And I see forever in your eyes\n[02:18.86] I feel okay when I see you smile, smile\n[02:27.04] Wishing on dandelions all of the time\n[02:30.26] Praying to God that one day you'll be mine\n[02:33.32] Wishing on dandelions all of the time\n[02:36.16] All of the time\n[02:40.08] Dandelion, into the wind you go\n[02:43.37] Won't you let my darling know?\n[02:46.55] Dandelion, into the wind you go\n[02:49.53] Won't you let my darling know that?\n[02:54.74] I'm in a field of dandelions\n[02:57.00] Wishing on every one that you'd be mine, mine\n[03:05.68] And I see forever in your eyes\n[03:09.44] I feel okay when I see you smile, smile\n[03:17.89] Wishing on dandelions all of the time\n[03:21.03] Praying to God that one day you'll be mine\n[03:24.18] Wishing on dandelions all of the time, all of the time\n[03:31.11] I'm in a field of dandelions\n[03:33.96] Wishing on every one that you'd be mine, mine\n[03:39.95] ", "Past Lives": "[00:17.35] Past lives couldn't ever hold me down\n[00:21.96] Lost love is sweeter when it's finally found\n[00:25.01] I've got the strangest feeling\n[00:30.18] This isn't our first time around\n[00:34.28] Past lives couldn't ever come between us\n[00:38.39] Some time the dreamers finally wake up\n[00:41.92] Don't wake me I'm not dreaming\n[00:42.71] Don't wake me I'm not dreaming\n[00:50.33] All my past lives\n[00:50.99] They've got nothing on me\n[00:51.56] Golden eagle, you're the one and only flying high\n[00:52.62] Through the cities in the sky\n[00:53.34] I'll take you way back\n[00:53.86] Countless centuries\n[00:54.31] Don't you remember?\n[00:54.81] That you were meant to be my Queen of Hearts\n[00:55.45] Meant to be my love\n[00:55.90] Through all of my lives\n[00:56.54] I never thought I'd wait so long for you\n[00:57.02] The timing is right\n[00:57.67] The stars are aligned\n[00:58.12] So save that heart for me\n[00:58.74] Cause girl you know that you're my destiny\n[00:59.23] Swear to the moon, the stars\n[01:00.24] The sons, and the daughters\n[01:00.82] Our love is deeper than the oceans of water\n[01:01.55] Hey, I need you now\n[01:02.19] I've waited oh so long yeah\n[01:02.60] Baby love, I need you now\n[01:03.39] I've waited oh so long\n[01:03.99] Passing seasons\n[01:04.46] Empty bottles of wine\n[01:04.94] My ancient kingdom came crashing down without you\n[01:05.99] Baby child, I'm lost without your love\n[01:06.45] Diamond sparrow, my moonlight majesty\n[01:07.02] You know I need you, come flying back to me\n[01:07.59] Through all of my lives\n[01:08.06] I never thought I'd wait so long for you\n[01:08.62] The timing is right\n[01:09.12] The stars are aligned\n[01:09.75] So save that heart for me\n[01:10.29] Cause girl you know that you're my destiny\n[01:10.75] Swear to the moon, the stars\n[01:11.59] The sons, and the daughters\n[01:12.05] Our love is deeper than the oceans of water\n[01:12.54] Save that heart for me\n[01:13.79] And girl I'll give you everything you need\n[01:14.30] Here's to our past lives\n[01:14.85] Our mothers and fathers\n[01:15.34] Our love is deeper than the oceans of water\n[01:16.52] Hey I need you now\n[01:17.13] I've waited oh so long yeah\n[01:17.67] Baby love, I need you now\n[01:18.25] I've waited oh so long\n[01:18.75] Hey I need you now\n[01:19.21] I've waited oh so long yeah\n[01:19.77] Baby love, I need you now\n[01:20.30] I've waited oh so long\n[01:20.90] So save that heart for me\n[01:22.17] Cause girl you know that you're my destiny\n[01:22.69] Swear to the moon, the stars\n[01:23.17] The sons, and the daughters\n[01:23.82] Our love is deeper than the oceans of water\n[01:24.42] Save that heart for me\n[01:24.97] And girl I'll give you everything you need\n[01:25.47] Here's to our past lives\n[01:26.04] Our mothers and fathers\n[01:26.57] Our love is deeper than the oceans of water\n[01:27.11] Hey I need you now\n[01:27.67] I've waited oh so long\n[01:28.19] ", "lovely": "[00:21.23] Thought I found a way\n[00:24.73] Thought I found a way out (found)\n[00:28.18] But you never go away (never go away)\n[00:33.25] So I guess I gotta stay now\n[00:35.89] Oh, I hope some day I'll make it out of here\n[00:44.54] Even if it takes all night or a hundred years\n[00:53.19] Need a place to hide, but I can't find one near\n[01:01.47] Wanna feel alive, outside I can't fight my fear\n[01:11.38] Isn't it lovely? All alone\n[01:14.98] Heart made of glass, my mind of stone\n[01:19.10] Tear me to pieces, skin to bone\n[01:23.83] Hello, welcome home\n[01:29.54] \n[01:32.27] Walking out of town\n[01:36.26] Looking for a better place (looking for a better place)\n[01:40.46] Something's on my mind\n[01:44.31] Always in my head space\n[01:47.04] But I know someday I'll make it out of here\n[01:55.72] Even if it takes all night or a hundred years\n[02:04.27] Need a place to hide, but I can't find one near\n[02:12.31] Wanna feel alive, outside I can't fight my fear\n[02:21.85] Isn't it lovely? All alone\n[02:25.88] Heart made of glass, my mind of stone\n[02:30.13] Tear me to pieces, skin to bone\n[02:34.99] Hello, welcome home\n[02:41.05] Woah, yeah\n[02:47.66] Yeah, ah\n[02:53.71] Woah, woah\n[02:57.31] \n[03:08.58] Hello, welcome home\n[03:12.27] ", "Royalty": "[00:11.43] Say I'm cold-hearted\n[00:14.50] But I'm just getting started\n[00:17.52] Got my eyes on the target\n[00:20.73] Now, now\n[00:24.68] (Oh, oh, oh)\n[00:33.27] 'Til the battle's won\n[00:34.75] 'Til kingdom come\n[00:36.69] (Oh, oh, oh)\n[00:45.23] I'll never run\n[00:48.57] Best to give me your loyalty\n[00:51.66] 'Cause I'm taking the world, you'll see\n[00:55.05] They'll be calling me, calling me\n[00:57.93] They'll be calling me royalty\n[01:00.55] Best to give me your loyalty\n[01:03.64] 'Cause I'm taking the world, you'll see\n[01:07.00] They'll be calling me, calling me\n[01:10.06] They'll be calling me royalty\n[01:14.42] \n[01:21.97] They'll be calling me royalty\n[01:26.03] \n[01:36.41] They say I'm dangerous\n[01:38.48] 'Cause I broke all their cages\n[01:41.55] No, I won't sit and take it\n[01:44.81] Now, now\n[01:48.53] They left me for dead, I guess they'll never learn\n[01:51.61] Every time I break, there's just more pain to burn\n[01:55.17] They'll never, never, never learn\n[02:00.69] (Oh, oh, oh)\n[02:09.29] 'Til the battle's won\n[02:10.70] 'Til kingdom come\n[02:12.63] (Oh, oh, oh)\n[02:21.14] I'll never run\n[02:24.69] Best to give me your loyalty\n[02:27.65] 'Cause I'm taking the world, you'll see\n[02:30.95] They'll be calling me, calling me\n[02:34.00] They'll be calling me royalty\n[02:36.59] Best to give me your loyalty\n[02:39.62] 'Cause I'm taking the world, you'll see\n[02:43.08] They'll be calling me, calling me\n[02:45.95] They'll be calling me royalty\n[02:50.96] \n[02:57.92] They'll be calling me royalty\n[03:02.86] \n[03:09.91] They'll be calling me royalty\n[03:11.92] (Calling me royalty)\n[03:17.79] (Calling me)\n[03:21.97] They'll be calling me royalty\n[03:23.95] (Calling me royalty)\n[03:29.84] (Calling me)\n[03:32.52] "};
+
+    let currentLyricsLines = [];
+    let activeLyricIndex = -1;
+
+    function parseLrc(lrcText) {
+      if (!lrcText) return [];
+      const lines = lrcText.split('\n');
+      const result = [];
+      const timeRegex = /\[(\d{2}):(\d{2}(?:\.\d+)?)\](.*)/;
+      for (let line of lines) {
+        const match = line.match(timeRegex);
+        if (match) {
+          const mins = parseFloat(match[1]);
+          const secs = parseFloat(match[2]);
+          const text = match[3].trim();
+          if (text) {
+            result.push({ time: mins * 60 + secs, text });
+          }
+        }
+      }
+      return result;
+    }
+
+    function loadLyricsForTrack(title, artist) {
+      const container = document.getElementById('synced-lyrics-view');
+      if (!container) return;
+      
+      const titleLower = title.toLowerCase();
+      let lrc = '';
+      if (titleLower.includes('dandelion')) lrc = lyricsCache.dandelions;
+      else if (titleLower.includes('past live')) lrc = lyricsCache['Past Lives'];
+      else if (titleLower.includes('lovely')) lrc = lyricsCache.lovely;
+      else if (titleLower.includes('royalty')) lrc = lyricsCache.Royalty;
+
+      if (lrc) {
+        currentLyricsLines = parseLrc(lrc);
+        renderLyricsHTML();
+      } else {
+        container.innerHTML = '<div class="py-16 text-slate-500 animate-pulse text-xs">Fetching synced lyrics...</div>';
+        const cleanTitle = title.replace(/\(.*?\)|\[.*?\]/g, '').trim();
+        const cleanArtist = artist.split(/[,/&]/)[0].trim();
+        fetch(`https://lrclib.net/api/search?q=${encodeURIComponent(cleanTitle + ' ' + cleanArtist)}`)
+          .then(r => r.json())
+          .then(res => {
+            let found = res.find(s => s.syncedLyrics) || res.find(s => s.plainLyrics);
+            if (found && found.syncedLyrics) {
+              currentLyricsLines = parseLrc(found.syncedLyrics);
+              renderLyricsHTML();
+            } else if (found && found.plainLyrics) {
+              container.innerHTML = `<div class="p-6 text-slate-300 text-xs whitespace-pre-line leading-relaxed">${found.plainLyrics}</div>`;
+            } else {
+              container.innerHTML = `<div class="py-16 text-slate-500 text-xs">No synced lyrics found for "${title}"</div>`;
+            }
+          })
+          .catch(() => {
+            container.innerHTML = '<div class="py-16 text-slate-500 text-xs">Lyrics unavailable offline for this track.</div>';
+          });
+      }
+    }
+
+    function renderLyricsHTML() {
+      const container = document.getElementById('synced-lyrics-view');
+      if (!container) return;
+      if (!currentLyricsLines.length) {
+        container.innerHTML = '<div class="py-16 text-slate-500 text-xs">No synced lyrics available</div>';
+        return;
+      }
+      let html = '<div class="py-14 space-y-3.5">';
+      currentLyricsLines.forEach((line, idx) => {
+        html += `<p id="lyric-${idx}" class="lyric-line text-slate-400 hover:text-white cursor-pointer transition-all duration-300 px-3 py-1 rounded-lg text-xs leading-relaxed" onclick="seekAudio(${line.time})">${line.text}</p>`;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+      activeLyricIndex = -1;
+    }
+
+    function updateActiveLyric(currentTime) {
+      if (!currentLyricsLines.length) return;
+      let newIdx = -1;
+      for (let i = 0; i < currentLyricsLines.length; i++) {
+        if (currentTime >= currentLyricsLines[i].time - 0.25) {
+          newIdx = i;
+        } else {
+          break;
+        }
+      }
+      if (newIdx !== activeLyricIndex && newIdx >= 0) {
+        if (activeLyricIndex >= 0) {
+          const prevEl = document.getElementById(`lyric-${activeLyricIndex}`);
+          if (prevEl) {
+            prevEl.className = 'lyric-line text-slate-400 hover:text-white cursor-pointer transition-all duration-300 px-3 py-1 rounded-lg text-xs leading-relaxed';
+          }
+        }
+        activeLyricIndex = newIdx;
+        const curEl = document.getElementById(`lyric-${activeLyricIndex}`);
+        if (curEl) {
+          curEl.className = 'lyric-line text-cyan-400 font-extrabold text-sm scale-105 transition-all duration-300 px-3 py-1.5 rounded-xl bg-white/10 shadow-lg';
+          curEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    }
+
+
     function initAudioContext() {
       if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -650,6 +750,9 @@
         `;
       });
       if (carousel) carousel.innerHTML = carouselHtml;
+      if (tracks.length > 0) {
+        loadLyricsForTrack(tracks[currentTrackIndex].title, tracks[currentTrackIndex].artist);
+      }
     }
 
     function playTrackByIndex(i) {
@@ -674,6 +777,7 @@
       document.getElementById('time-total').textContent = duration;
 
       document.getElementById('now-playing-file').textContent = `Track: ${title}`;
+      loadLyricsForTrack(title, artist);
 
       if (src && audio.src !== src) {
         audio.src = src;
@@ -900,6 +1004,7 @@
         const curMin = Math.floor(audio.currentTime / 60);
         const curSec = String(Math.floor(audio.currentTime % 60)).padStart(2, '0');
         document.getElementById('time-current').textContent = `${curMin}:${curSec}`;
+        updateActiveLyric(audio.currentTime);
       }
     };
 
@@ -1010,11 +1115,16 @@
       if (isLyricsOpen) {
         vinyl.classList.add('hidden');
         lyrics.classList.remove('hidden');
-        btn.classList.add('text-cyan-400');
+        btn.classList.add('text-cyan-400', 'font-bold');
+        btn.classList.remove('text-slate-400');
+        if (tracks[currentTrackIndex]) {
+          loadLyricsForTrack(tracks[currentTrackIndex].title, tracks[currentTrackIndex].artist);
+        }
       } else {
         vinyl.classList.remove('hidden');
         lyrics.classList.add('hidden');
-        btn.classList.remove('text-cyan-400');
+        btn.classList.remove('text-cyan-400', 'font-bold');
+        btn.classList.add('text-slate-400');
       }
     }
 
