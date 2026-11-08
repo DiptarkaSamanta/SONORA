@@ -39,27 +39,31 @@ jobs:
         run: |
           ./gradlew assembleDebug --stacktrace 2>&1 | tee build.log
 
-      - name: Save Log to Branch on Failure
-        if: failure()
+      - name: Save Log to Branch
+        if: always()
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -B ci-debug-log
           cp build.log ci_build.log
           git add ci_build.log
-          git commit -m "ci: capture build failure log" || true
+          git commit -m "ci: capture build log" || true
           git push -f origin ci-debug-log || true
 
       - name: Prepare APK Release
         run: |
           mkdir -p release_apk
-          find app/build/outputs/apk -type f -name "*.apk" -ls
-          APK_PATH=$(find app/build/outputs/apk -type f -name "*.apk" | head -n 1)
-          echo "Found APK: $APK_PATH"
-          cp "$APK_PATH" release_apk/Sonora-v1.0.0-Redmi12-5G.apk
-          ls -lh release_apk/
-          cp "$APK_PATH" release_apk/Sonora-v1.0.0-Redmi12-5G.apk
-          ls -lh release_apk/
+          find . -name "*.apk" -ls || true
+          APK_PATH=$(find . -name "*.apk" | head -n 1)
+          echo "Found APK at: '$APK_PATH'"
+          if [ -n "$APK_PATH" ] && [ -f "$APK_PATH" ]; then
+            cp "$APK_PATH" release_apk/Sonora-v1.0.0-Redmi12-5G.apk
+            ls -lh release_apk/
+          else
+            echo "Searching for all built files:"
+            find . -path '*/build/*' | head -n 50
+            exit 1
+          fi
 
       - name: Upload APK as Workflow Artifact
         uses: actions/upload-artifact@v4
