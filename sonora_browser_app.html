@@ -230,7 +230,7 @@
                       class="text-[11px] text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1">🔀
                       Shuffle</button>
                     <span id="see-all-count" class="text-xs text-cyan-400 cursor-pointer"
-                      onclick="switchTab('library')">See All (5)</span>
+                      onclick="switchTab('library')">See All</span>
                   </div>
                 </div>
                 <div class="flex gap-3 overflow-x-auto pb-1 custom-scroll" id="home-carousel">
@@ -283,7 +283,7 @@
               <div class="flex justify-between items-center">
                 <div>
                   <h2 class="text-xl font-black text-white">Your Library</h2>
-                  <p id="library-count-text" class="text-xs text-slate-400">5 Songs • Google Drive Collection</p>
+                  <p id="library-count-text" class="text-xs text-slate-400"><span id="library-count-val">Loading</span> • Google Drive Collection</p>
                 </div>
                 <button onclick="syncLibrary()"
                   class="p-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-cyan-400 transition"
@@ -321,7 +321,7 @@
                 class="bg-gradient-to-r from-purple-900/40 to-cyan-900/40 border border-cyan-500/30 rounded-xl p-3 text-xs space-y-2">
                 <div class="flex items-center justify-between">
                   <div id="cloud-banner-title" class="font-bold text-cyan-400 flex items-center gap-1.5">
-                    ☁️ 5 Google Drive Songs
+                    ☁️ <span id="cloud-count-val">Google Drive Music</span>
                   </div>
                   <button onclick="configureLiveDriveSync()"
                     class="text-[10px] text-purple-300 hover:text-white bg-purple-950/80 border border-purple-500/40 px-2 py-0.5 rounded-lg flex items-center gap-1 font-semibold transition">
@@ -947,13 +947,18 @@
         `;
       });
 
-      // Dynamic header counts
+      // 100% Dynamic header counts derived directly from Google Drive song list
+      const count = tracks.length;
+      const countText = `${count.toLocaleString()} Song${count === 1 ? '' : 's'}`;
+
       const seeAll = document.getElementById('see-all-count');
-      if (seeAll) seeAll.textContent = `See All (${tracks.length})`;
+      if (seeAll) seeAll.textContent = `See All (${count.toLocaleString()})`;
+
       const libCount = document.getElementById('library-count-text');
-      if (libCount) libCount.textContent = `${tracks.length} Songs • Google Drive Collection`;
+      if (libCount) libCount.textContent = `${countText} • Google Drive Collection`;
+
       const bannerTitle = document.getElementById('cloud-banner-title');
-      if (bannerTitle) bannerTitle.textContent = `☁️ ${tracks.length} Google Drive Songs`;
+      if (bannerTitle) bannerTitle.textContent = `☁️ ${count.toLocaleString()} Google Drive Songs`;
 
       if (homeList) homeList.innerHTML = html;
       if (libList) libList.innerHTML = html;
