@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,23 +8,33 @@
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
     @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
     }
+
     .vinyl-spinning {
       animation: spin 14s linear infinite;
     }
+
     .vinyl-paused {
       animation-play-state: paused;
     }
+
     .custom-scroll::-webkit-scrollbar {
       width: 4px;
       height: 4px;
     }
+
     .custom-scroll::-webkit-scrollbar-thumb {
       background: rgba(124, 77, 255, 0.4);
       border-radius: 4px;
     }
+
     :root {
       --accent: #00D2FF;
       --accent-purple: #7C4DFF;
@@ -31,21 +42,32 @@
     }
   </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-3 md:p-6 font-sans select-none overflow-x-hidden">
+
+<body
+  class="bg-slate-950 text-slate-100 min-h-screen flex flex-col items-center justify-center p-3 md:p-6 font-sans select-none overflow-x-hidden">
 
   <!-- Desktop Header -->
   <header class="w-full max-w-6xl flex justify-between items-center mb-4 px-2">
     <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 via-cyan-400 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
-        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>
+      <div
+        class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-purple-600 via-cyan-400 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3">
+          </path>
+        </svg>
       </div>
       <div>
-        <h1 class="text-xl md:text-2xl font-black tracking-wider bg-gradient-to-r from-purple-400 via-cyan-400 to-pink-500 bg-clip-text text-transparent">SONORA INTERACTIVE BROWSER APP</h1>
-        <p class="text-xs text-slate-400">Play real audio, test the Redmi 12 5G UI, adjust Equalizer, or drop your own songs</p>
+        <h1
+          class="text-xl md:text-2xl font-black tracking-wider bg-gradient-to-r from-purple-400 via-cyan-400 to-pink-500 bg-clip-text text-transparent">
+          SONORA INTERACTIVE BROWSER APP</h1>
+        <p class="text-xs text-slate-400">Play real audio, test the Redmi 12 5G UI, adjust Equalizer, or drop your own
+          songs</p>
       </div>
     </div>
     <div class="hidden md:flex items-center gap-2">
-      <span class="text-xs bg-purple-950/80 text-cyan-400 border border-purple-500/40 px-3 py-1.5 rounded-full font-mono font-semibold">
+      <span
+        class="text-xs bg-purple-950/80 text-cyan-400 border border-purple-500/40 px-3 py-1.5 rounded-full font-mono font-semibold">
         Real Audio Engine: Active
       </span>
     </div>
@@ -55,36 +77,60 @@
   <main class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-6 items-start justify-center">
 
     <!-- Left Panel: UI Tweaks & Theme Selector (Col 1-3) -->
-    <div class="lg:col-span-3 bg-slate-900/90 border border-slate-800 rounded-3xl p-5 shadow-2xl backdrop-blur-md space-y-4">
+    <div
+      class="lg:col-span-3 bg-slate-900/90 border border-slate-800 rounded-3xl p-5 shadow-2xl backdrop-blur-md space-y-4">
       <div>
         <h2 class="font-bold text-sm text-white uppercase tracking-wider mb-2">Live Theme Color</h2>
         <div class="grid grid-cols-5 gap-2" id="color-picker">
-          <button onclick="setAccent('#00D2FF', '#7C4DFF', this)" class="w-8 h-8 rounded-xl bg-cyan-400 ring-2 ring-white ring-offset-2 ring-offset-slate-900 transition hover:scale-110" title="Cyber Cyan"></button>
-          <button onclick="setAccent('#A855F7', '#EC4899', this)" class="w-8 h-8 rounded-xl bg-purple-500 transition hover:scale-110" title="Neon Purple"></button>
-          <button onclick="setAccent('#EC4899', '#F59E0B', this)" class="w-8 h-8 rounded-xl bg-pink-500 transition hover:scale-110" title="Hot Pink"></button>
-          <button onclick="setAccent('#10B981', '#06B6D4', this)" class="w-8 h-8 rounded-xl bg-emerald-400 transition hover:scale-110" title="Emerald Green"></button>
-          <button onclick="setAccent('#F59E0B', '#EF4444', this)" class="w-8 h-8 rounded-xl bg-amber-400 transition hover:scale-110" title="Solar Amber"></button>
+          <button onclick="setAccent('#00D2FF', '#7C4DFF', this)"
+            class="w-8 h-8 rounded-xl bg-cyan-400 ring-2 ring-white ring-offset-2 ring-offset-slate-900 transition hover:scale-110"
+            title="Cyber Cyan"></button>
+          <button onclick="setAccent('#A855F7', '#EC4899', this)"
+            class="w-8 h-8 rounded-xl bg-purple-500 transition hover:scale-110" title="Neon Purple"></button>
+          <button onclick="setAccent('#EC4899', '#F59E0B', this)"
+            class="w-8 h-8 rounded-xl bg-pink-500 transition hover:scale-110" title="Hot Pink"></button>
+          <button onclick="setAccent('#10B981', '#06B6D4', this)"
+            class="w-8 h-8 rounded-xl bg-emerald-400 transition hover:scale-110" title="Emerald Green"></button>
+          <button onclick="setAccent('#F59E0B', '#EF4444', this)"
+            class="w-8 h-8 rounded-xl bg-amber-400 transition hover:scale-110" title="Solar Amber"></button>
         </div>
       </div>
 
       <div class="border-t border-slate-800/80 pt-3">
         <h2 class="font-bold text-sm text-white uppercase tracking-wider mb-2">Quick Navigation</h2>
         <div class="grid grid-cols-2 gap-2 text-xs">
-          <button onclick="switchTab('home')" class="p-2.5 bg-slate-800/80 hover:bg-slate-700 rounded-xl font-medium text-left flex items-center gap-1.5">🏠 Home</button>
-          <button onclick="switchTab('search')" class="p-2.5 bg-slate-800/80 hover:bg-slate-700 rounded-xl font-medium text-left flex items-center gap-1.5">🔍 Search</button>
-          <button onclick="switchTab('library')" class="p-2.5 bg-slate-800/80 hover:bg-slate-700 rounded-xl font-medium text-left flex items-center gap-1.5">📚 Cloud Library</button>
-          <button onclick="switchTab('storage')" class="p-2.5 bg-slate-800/80 hover:bg-slate-700 rounded-xl font-medium text-left flex items-center gap-1.5">⚡ Storage (1.2MB)</button>
-          <button onclick="switchTab('downloads')" class="p-2.5 bg-slate-800/80 hover:bg-slate-700 rounded-xl font-medium text-left flex items-center gap-1.5">📥 Downloads</button>
-          <button onclick="openFullPlayer()" class="p-2.5 bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-bold rounded-xl text-left flex items-center gap-1.5 shadow-md">🎵 Full Player</button>
+          <button onclick="switchTab('home')"
+            class="p-2.5 bg-slate-800/80 hover:bg-slate-700 rounded-xl font-medium text-left flex items-center gap-1.5">🏠
+            Home</button>
+          <button onclick="switchTab('search')"
+            class="p-2.5 bg-slate-800/80 hover:bg-slate-700 rounded-xl font-medium text-left flex items-center gap-1.5">🔍
+            Search</button>
+          <button onclick="switchTab('library')"
+            class="p-2.5 bg-slate-800/80 hover:bg-slate-700 rounded-xl font-medium text-left flex items-center gap-1.5">📚
+            Cloud Library</button>
+          <button onclick="switchTab('storage')"
+            class="p-2.5 bg-slate-800/80 hover:bg-slate-700 rounded-xl font-medium text-left flex items-center gap-1.5">⚡
+            Storage (1.2MB)</button>
+          <button onclick="switchTab('downloads')"
+            class="p-2.5 bg-slate-800/80 hover:bg-slate-700 rounded-xl font-medium text-left flex items-center gap-1.5">📥
+            Downloads</button>
+          <button onclick="openFullPlayer()"
+            class="p-2.5 bg-gradient-to-r from-purple-600 to-cyan-500 text-white font-bold rounded-xl text-left flex items-center gap-1.5 shadow-md">🎵
+            Full Player</button>
         </div>
       </div>
 
       <!-- Play Custom Local File Box -->
       <div class="border-t border-slate-800/80 pt-3">
         <h2 class="font-bold text-sm text-white uppercase tracking-wider mb-2">Play Your Own Music</h2>
-        <label class="block border-2 border-dashed border-slate-700 hover:border-cyan-400 rounded-2xl p-4 text-center cursor-pointer transition bg-slate-950/40">
-          <input type="file" id="local-audio-input" accept="audio/*,video/mp4" class="hidden" onchange="loadUserLocalAudio(this)">
-          <svg class="w-7 h-7 mx-auto text-cyan-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+        <label
+          class="block border-2 border-dashed border-slate-700 hover:border-cyan-400 rounded-2xl p-4 text-center cursor-pointer transition bg-slate-950/40">
+          <input type="file" id="local-audio-input" accept="audio/*,video/mp4" class="hidden"
+            onchange="loadUserLocalAudio(this)">
+          <svg class="w-7 h-7 mx-auto text-cyan-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+          </svg>
           <span class="text-xs font-semibold text-slate-300 block">Click or Drop Song Here</span>
           <span class="text-[10px] text-slate-500">Supports MP3, M4A, WAV, FLAC, MP4</span>
         </label>
@@ -96,25 +142,33 @@
           <span>Master Volume</span>
           <span id="volume-val">80%</span>
         </div>
-        <input type="range" min="0" max="100" value="80" oninput="setMasterVolume(this.value)" class="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer">
+        <input type="range" min="0" max="100" value="80" oninput="setMasterVolume(this.value)"
+          class="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer">
       </div>
     </div>
 
     <!-- Center: Authentic Redmi 12 5G Phone Frame Simulator (Col 4-9) -->
     <div class="lg:col-span-6 flex justify-center">
-      <div class="relative w-[370px] h-[750px] bg-black rounded-[48px] p-3 shadow-[0_0_60px_rgba(124,77,255,0.25)] border-[5px] border-slate-800 flex flex-col overflow-hidden">
-        
+      <div
+        class="relative w-[370px] h-[750px] bg-black rounded-[48px] p-3 shadow-[0_0_60px_rgba(124,77,255,0.25)] border-[5px] border-slate-800 flex flex-col overflow-hidden">
+
         <!-- Top Speaker & Punch Hole Camera -->
-        <div class="absolute top-4 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-slate-950 rounded-full border border-slate-800 z-50 flex items-center justify-center">
+        <div
+          class="absolute top-4 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-slate-950 rounded-full border border-slate-800 z-50 flex items-center justify-center">
           <div class="w-1.5 h-1.5 bg-blue-950 rounded-full"></div>
         </div>
 
         <!-- Android Status Bar -->
-        <div class="w-full h-7 pt-1 px-6 flex justify-between items-center text-[11px] text-slate-400 font-medium z-40 select-none">
+        <div
+          class="w-full h-7 pt-1 px-6 flex justify-between items-center text-[11px] text-slate-400 font-medium z-40 select-none">
           <span id="live-time">10:18</span>
           <div class="flex items-center gap-1.5">
             <span>5G</span>
-            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"></path></svg>
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+              <path
+                d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z">
+              </path>
+            </svg>
             <div class="w-4 h-2 border border-slate-400 rounded-sm p-0.5 flex items-center">
               <div class="h-full bg-cyan-400 rounded-[1px] w-3"></div>
             </div>
@@ -132,27 +186,38 @@
               <!-- Top Header -->
               <div class="flex justify-between items-center pt-2">
                 <div>
-                  <h1 class="text-2xl font-black tracking-wider bg-gradient-to-r from-purple-400 via-cyan-400 to-pink-500 bg-clip-text text-transparent">SONORA</h1>
+                  <h1
+                    class="text-2xl font-black tracking-wider bg-gradient-to-r from-purple-400 via-cyan-400 to-pink-500 bg-clip-text text-transparent">
+                    SONORA</h1>
                   <p class="text-xs text-slate-400">Smart Offline & Online Music</p>
                 </div>
-                <div onclick="switchTab('storage')" class="cursor-pointer bg-purple-950/60 border border-purple-500/30 px-2.5 py-1 rounded-full flex items-center gap-1.5">
+                <div onclick="switchTab('storage')"
+                  class="cursor-pointer bg-purple-950/60 border border-purple-500/30 px-2.5 py-1 rounded-full flex items-center gap-1.5">
                   <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
                   <span class="text-[11px] font-semibold text-cyan-300">Space Saver (1.2MB)</span>
                 </div>
               </div>
 
               <!-- Redmi 12 5G Battery Optimizer Card -->
-              <div class="bg-gradient-to-r from-purple-900/30 to-cyan-950/30 border border-cyan-500/40 rounded-2xl p-3.5 space-y-2">
+              <div
+                class="bg-gradient-to-r from-purple-900/30 to-cyan-950/30 border border-cyan-500/40 rounded-2xl p-3.5 space-y-2">
                 <div class="flex items-center gap-2 text-cyan-400 text-xs font-bold">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"></path></svg>
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                      d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"
+                      clip-rule="evenodd"></path>
+                  </svg>
                   Redmi 12 5G Optimization
                 </div>
                 <p class="text-[11px] text-slate-300 leading-relaxed">
                   Screen-off & background playback enabled for HyperOS. Tap below to test background execution:
                 </p>
                 <div class="flex gap-2 pt-1">
-                  <button onclick="alert('Battery optimization set to No restrictions!')" class="flex-1 py-1.5 bg-cyan-400 text-black font-bold text-xs rounded-lg hover:bg-cyan-300 transition">No Restrictions</button>
-                  <button onclick="alert('Autostart granted for Sonora!')" class="flex-1 py-1.5 border border-slate-700 text-slate-300 text-xs rounded-lg hover:bg-slate-800">Autostart</button>
+                  <button onclick="alert('Battery optimization set to No restrictions!')"
+                    class="flex-1 py-1.5 bg-cyan-400 text-black font-bold text-xs rounded-lg hover:bg-cyan-300 transition">No
+                    Restrictions</button>
+                  <button onclick="alert('Autostart granted for Sonora!')"
+                    class="flex-1 py-1.5 border border-slate-700 text-slate-300 text-xs rounded-lg hover:bg-slate-800">Autostart</button>
                 </div>
               </div>
 
@@ -161,8 +226,11 @@
                 <div class="flex justify-between items-center mb-2.5">
                   <h3 class="font-bold text-sm text-slate-100">Playable Streams</h3>
                   <div class="flex items-center gap-2">
-                    <button onclick="playRandomQueue()" class="text-[11px] text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1">🔀 Shuffle</button>
-                    <span id="see-all-count" class="text-xs text-cyan-400 cursor-pointer" onclick="switchTab('library')">See All (5)</span>
+                    <button onclick="playRandomQueue()"
+                      class="text-[11px] text-purple-400 hover:text-purple-300 font-bold flex items-center gap-1">🔀
+                      Shuffle</button>
+                    <span id="see-all-count" class="text-xs text-cyan-400 cursor-pointer"
+                      onclick="switchTab('library')">See All (5)</span>
                   </div>
                 </div>
                 <div class="flex gap-3 overflow-x-auto pb-1 custom-scroll" id="home-carousel">
@@ -183,16 +251,26 @@
             <div id="screen-search" class="p-4 space-y-4 hidden">
               <h2 class="text-xl font-black text-white">Search</h2>
               <div class="relative">
-                <input type="text" id="search-input" oninput="handleSearch(this.value)" placeholder="Search songs, artists, or lyrics..." class="w-full bg-slate-900 border border-slate-800 rounded-2xl px-4 py-3 pl-10 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400">
-                <svg class="w-4 h-4 text-cyan-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <input type="text" id="search-input" oninput="handleSearch(this.value)"
+                  placeholder="Search songs, artists, or lyrics..."
+                  class="w-full bg-slate-900 border border-slate-800 rounded-2xl px-4 py-3 pl-10 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400">
+                <svg class="w-4 h-4 text-cyan-400 absolute left-3.5 top-3.5" fill="none" stroke="currentColor"
+                  viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
               </div>
 
               <!-- Filter Pills -->
               <div class="flex gap-2 overflow-x-auto pb-1 text-xs font-medium">
-                <button onclick="setSearchFilter('all')" class="search-filter-pill px-3 py-1.5 rounded-full bg-cyan-400 text-black font-bold">All</button>
-                <button onclick="setSearchFilter('local')" class="search-filter-pill px-3 py-1.5 rounded-full bg-slate-800 text-slate-300">Local Files</button>
-                <button onclick="setSearchFilter('cloud')" class="search-filter-pill px-3 py-1.5 rounded-full bg-slate-800 text-slate-300">Online CC</button>
-                <button onclick="setSearchFilter('lyrics')" class="search-filter-pill px-3 py-1.5 rounded-full bg-slate-800 text-slate-300">By Lyrics</button>
+                <button onclick="setSearchFilter('all')"
+                  class="search-filter-pill px-3 py-1.5 rounded-full bg-cyan-400 text-black font-bold">All</button>
+                <button onclick="setSearchFilter('local')"
+                  class="search-filter-pill px-3 py-1.5 rounded-full bg-slate-800 text-slate-300">Local Files</button>
+                <button onclick="setSearchFilter('cloud')"
+                  class="search-filter-pill px-3 py-1.5 rounded-full bg-slate-800 text-slate-300">Online CC</button>
+                <button onclick="setSearchFilter('lyrics')"
+                  class="search-filter-pill px-3 py-1.5 rounded-full bg-slate-800 text-slate-300">By Lyrics</button>
               </div>
 
               <div id="search-results" class="space-y-2">
@@ -207,36 +285,51 @@
                   <h2 class="text-xl font-black text-white">Your Library</h2>
                   <p id="library-count-text" class="text-xs text-slate-400">5 Songs • Google Drive Collection</p>
                 </div>
-                <button onclick="syncLibrary()" class="p-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-cyan-400 transition" title="Refresh & Sync Google Drive">
-                  <svg id="lib-sync-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                <button onclick="syncLibrary()"
+                  class="p-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-cyan-400 transition"
+                  title="Refresh & Sync Google Drive">
+                  <svg id="lib-sync-icon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                    </path>
+                  </svg>
                 </button>
               </div>
 
               <!-- Quick Random Queue Button -->
-              <button onclick="playRandomQueue()" class="w-full py-2.5 px-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg transition">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+              <button onclick="playRandomQueue()"
+                class="w-full py-2.5 px-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-white font-bold text-xs rounded-xl flex items-center justify-center gap-2 shadow-lg transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+                  </path>
+                </svg>
                 <span>🔀 Play Random Queue (0 MB Storage)</span>
               </button>
 
               <!-- Library Tabs -->
               <div class="flex border-b border-slate-800 text-xs font-medium gap-3">
-                <button onclick="switchLibSubTab('cloud')" id="lib-tab-cloud" class="pb-2 text-cyan-400 border-b-2 border-cyan-400 font-bold">Cloud (~1MB)</button>
+                <button onclick="switchLibSubTab('cloud')" id="lib-tab-cloud"
+                  class="pb-2 text-cyan-400 border-b-2 border-cyan-400 font-bold">Cloud (~1MB)</button>
                 <button onclick="switchLibSubTab('all')" id="lib-tab-all" class="pb-2 text-slate-400">All Songs</button>
-                <button onclick="switchLibSubTab('playlists')" id="lib-tab-playlists" class="pb-2 text-slate-400">Playlists</button>
+                <button onclick="switchLibSubTab('playlists')" id="lib-tab-playlists"
+                  class="pb-2 text-slate-400">Playlists</button>
               </div>
 
               <!-- Cloud Songs Banner -->
-              <div class="bg-gradient-to-r from-purple-900/40 to-cyan-900/40 border border-cyan-500/30 rounded-xl p-3 text-xs space-y-2">
+              <div
+                class="bg-gradient-to-r from-purple-900/40 to-cyan-900/40 border border-cyan-500/30 rounded-xl p-3 text-xs space-y-2">
                 <div class="flex items-center justify-between">
                   <div id="cloud-banner-title" class="font-bold text-cyan-400 flex items-center gap-1.5">
                     ☁️ 5 Google Drive Songs
                   </div>
-                  <button onclick="configureLiveDriveSync()" class="text-[10px] text-purple-300 hover:text-white bg-purple-950/80 border border-purple-500/40 px-2 py-0.5 rounded-lg flex items-center gap-1 font-semibold transition">
+                  <button onclick="configureLiveDriveSync()"
+                    class="text-[10px] text-purple-300 hover:text-white bg-purple-950/80 border border-purple-500/40 px-2 py-0.5 rounded-lg flex items-center gap-1 font-semibold transition">
                     ⚡ Live GDrive API
                   </button>
                 </div>
                 <p class="text-slate-300 text-[11px]">
-                  Streams with 0 MB phone storage. Real-time dynamic sync enabled for 1,000+ Google Drive songs.
+                  Streams with 0 MB phone storage. Real-time dynamic sync enabled for Google Drive songs.
                 </p>
               </div>
 
@@ -255,7 +348,10 @@
               <!-- Quick Maintenance Card -->
               <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-4">
                 <div class="flex items-center gap-2 text-cyan-400 font-bold text-xs">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                  </svg>
                   <span>Memory & Playback Maintenance</span>
                 </div>
                 <p class="text-xs text-slate-300">
@@ -263,10 +359,12 @@
                 </p>
 
                 <div class="grid grid-cols-2 gap-2 pt-1">
-                  <button onclick="cleanCache()" class="py-3 px-3 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-xl text-slate-200 flex items-center justify-center gap-1.5 border border-slate-700">
+                  <button onclick="cleanCache()"
+                    class="py-3 px-3 bg-slate-800 hover:bg-slate-700 text-xs font-bold rounded-xl text-slate-200 flex items-center justify-center gap-1.5 border border-slate-700">
                     🧹 Clear Temp Cache
                   </button>
-                  <button onclick="cleanDuplicates()" class="py-3 px-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-black text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-md">
+                  <button onclick="cleanDuplicates()"
+                    class="py-3 px-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-black text-xs font-bold rounded-xl flex items-center justify-center gap-1.5 shadow-md">
                     🗑️ Clean Duplicates
                   </button>
                 </div>
@@ -286,7 +384,8 @@
               </div>
 
               <div>
-                <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-2">Offline Stored Tracks (Redmi 12 5G)</h3>
+                <h3 class="font-bold text-xs uppercase tracking-wider text-slate-400 mb-2">Offline Stored Tracks (Redmi
+                  12 5G)</h3>
                 <div id="downloads-list" class="space-y-1.5">
                   <!-- Injected via JS -->
                 </div>
@@ -296,24 +395,42 @@
           </div>
 
           <!-- Persistent Mini-Player (Above Bottom Navigation) -->
-          <div id="mini-player" onclick="openFullPlayer()" class="absolute bottom-16 left-3 right-3 bg-slate-900/95 backdrop-blur-md border border-purple-500/40 rounded-2xl p-2.5 cursor-pointer shadow-xl flex flex-col gap-1 z-30 transition hover:border-cyan-400/60 hidden">
+          <div id="mini-player" onclick="openFullPlayer()"
+            class="absolute bottom-16 left-3 right-3 bg-slate-900/95 backdrop-blur-md border border-purple-500/40 rounded-2xl p-2.5 cursor-pointer shadow-xl flex flex-col gap-1 z-30 transition hover:border-cyan-400/60 hidden">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-2.5 overflow-hidden">
-                <img id="mini-artwork" src="https://c.saavncdn.com/023/Dandelions-slowed-reverb-English-2021-20231119175842-500x500.jpg" class="w-10 h-10 rounded-xl object-cover flex-shrink-0">
+                <img id="mini-artwork"
+                  src="https://c.saavncdn.com/023/Dandelions-slowed-reverb-English-2021-20231119175842-500x500.jpg"
+                  class="w-10 h-10 rounded-xl object-cover flex-shrink-0">
                 <div class="overflow-hidden">
-                  <div id="mini-title" class="text-xs font-bold text-white truncate">dandelions (slowed reverb + lyrics)</div>
-                  <div id="mini-artist" class="text-[10px] text-slate-400 truncate">Ruth B. / vebruary • OPUS 64k • 2.1 MB</div>
+                  <div id="mini-title" class="text-xs font-bold text-white truncate">dandelions (slowed reverb + lyrics)
+                  </div>
+                  <div id="mini-artist" class="text-[10px] text-slate-400 truncate">Ruth B. / vebruary • OPUS 64k • 2.1
+                    MB</div>
                 </div>
               </div>
               <div class="flex items-center gap-1.5">
-                <button onclick="togglePlay(event)" title="Play / Pause" class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-cyan-400 flex items-center justify-center text-black shadow-md">
-                  <svg id="mini-play-icon" class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                <button onclick="togglePlay(event)" title="Play / Pause"
+                  class="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-cyan-400 flex items-center justify-center text-black shadow-md">
+                  <svg id="mini-play-icon" class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd"
+                      d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z"
+                      clip-rule="evenodd"></path>
+                  </svg>
                 </button>
                 <button onclick="nextTrack(event)" title="Next Song" class="p-1 text-slate-300 hover:text-white">
-                  <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M5.536 21.886a1 1 0 01-.536-.886V3a1 1 0 011.536-.857l11.5 9a1 1 0 010 1.714l-11.5 9a1 1 0 01-1-.029zM19 3a1 1 0 011 1v16a1 1 0 11-2 0V4a1 1 0 011-1z"></path></svg>
+                  <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                    <path
+                      d="M5.536 21.886a1 1 0 01-.536-.886V3a1 1 0 011.536-.857l11.5 9a1 1 0 010 1.714l-11.5 9a1 1 0 01-1-.029zM19 3a1 1 0 011 1v16a1 1 0 11-2 0V4a1 1 0 011-1z">
+                    </path>
+                  </svg>
                 </button>
-                <button onclick="stopPlayback(event)" title="Instant Stop & Close" class="w-7 h-7 rounded-full bg-slate-800 hover:bg-red-500/30 text-slate-400 hover:text-red-400 flex items-center justify-center transition border border-slate-700/60 ml-0.5">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <button onclick="stopPlayback(event)" title="Instant Stop & Close"
+                  class="w-7 h-7 rounded-full bg-slate-800 hover:bg-red-500/30 text-slate-400 hover:text-red-400 flex items-center justify-center transition border border-slate-700/60 ml-0.5">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                  </svg>
                 </button>
               </div>
             </div>
@@ -324,63 +441,102 @@
           </div>
 
           <!-- Bottom Navigation Bar -->
-          <div class="absolute bottom-0 left-0 right-0 h-16 bg-[#14161E] border-t border-slate-800/80 px-4 flex justify-between items-center text-[10px] font-medium z-20">
-            <button onclick="switchTab('home')" class="nav-btn flex flex-col items-center gap-1 text-cyan-400" id="nav-home">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+          <div
+            class="absolute bottom-0 left-0 right-0 h-16 bg-[#14161E] border-t border-slate-800/80 px-4 flex justify-between items-center text-[10px] font-medium z-20">
+            <button onclick="switchTab('home')" class="nav-btn flex flex-col items-center gap-1 text-cyan-400"
+              id="nav-home">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z">
+                </path>
+              </svg>
               <span>Home</span>
             </button>
-            <button onclick="switchTab('search')" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200" id="nav-search">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <button onclick="switchTab('search')"
+              class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200" id="nav-search">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
               <span>Search</span>
             </button>
-            <button onclick="switchTab('library')" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200" id="nav-library">
-              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"></path></svg>
+            <button onclick="switchTab('library')"
+              class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200" id="nav-library">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path
+                  d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z">
+                </path>
+              </svg>
               <span>Library</span>
             </button>
-            <button onclick="switchTab('storage')" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200" id="nav-storage">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path></svg>
+            <button onclick="switchTab('storage')"
+              class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200" id="nav-storage">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+              </svg>
               <span>Storage</span>
             </button>
-            <button onclick="switchTab('downloads')" class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200" id="nav-downloads">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            <button onclick="switchTab('downloads')"
+              class="nav-btn flex flex-col items-center gap-1 text-slate-400 hover:text-slate-200" id="nav-downloads">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+              </svg>
               <span>Downloads</span>
             </button>
           </div>
 
           <!-- 6. FULL SCREEN PLAYER OVERLAY -->
-          <div id="full-player" class="absolute inset-0 bg-[#0B0C10] z-50 flex flex-col p-5 translate-y-full transition-transform duration-300 ease-out">
+          <div id="full-player"
+            class="absolute inset-0 bg-[#0B0C10] z-50 flex flex-col p-5 translate-y-full transition-transform duration-300 ease-out">
             <!-- Top Bar -->
             <div class="flex justify-between items-center pt-1">
               <button onclick="closeFullPlayer()" class="p-1.5 text-slate-400 hover:text-white">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
               </button>
               <div class="text-center">
                 <div class="text-[10px] uppercase font-bold tracking-widest text-slate-500">NOW PLAYING</div>
-                <div class="text-xs font-semibold text-slate-300 truncate max-w-[180px]" id="player-album">Sonora Google Drive</div>
+                <div class="text-xs font-semibold text-slate-300 truncate max-w-[180px]" id="player-album">Sonora Google
+                  Drive</div>
               </div>
               <div class="flex items-center gap-1">
                 <button onclick="openEqualizerModal()" title="Sound Equalizer" class="p-1.5 text-cyan-400">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4">
+                    </path>
+                  </svg>
                 </button>
                 <button onclick="stopPlayback(event)" title="Stop Song" class="p-1.5 text-slate-400 hover:text-red-400">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                  </svg>
                 </button>
               </div>
             </div>
 
             <!-- Vinyl Disc or Lyrics View -->
-            <div id="player-main-view" class="flex-1 flex flex-col items-center justify-center my-3 overflow-hidden relative">
-              <div id="vinyl-disc-container" class="relative w-60 h-60 rounded-full bg-slate-900 border-4 border-slate-800 shadow-[0_0_50px_rgba(124,77,255,0.3)] flex items-center justify-center vinyl-spinning">
+            <div id="player-main-view"
+              class="flex-1 flex flex-col items-center justify-center my-3 overflow-hidden relative">
+              <div id="vinyl-disc-container"
+                class="relative w-60 h-60 rounded-full bg-slate-900 border-4 border-slate-800 shadow-[0_0_50px_rgba(124,77,255,0.3)] flex items-center justify-center vinyl-spinning">
                 <div class="absolute inset-4 rounded-full border border-slate-700/60"></div>
                 <div class="absolute inset-8 rounded-full border border-slate-700/40"></div>
                 <div class="w-24 h-24 rounded-full overflow-hidden border-2 border-slate-900 shadow-inner">
-                  <img id="player-artwork" src="https://c.saavncdn.com/023/Dandelions-slowed-reverb-English-2021-20231119175842-500x500.jpg" class="w-full h-full object-cover">
+                  <img id="player-artwork"
+                    src="https://c.saavncdn.com/023/Dandelions-slowed-reverb-English-2021-20231119175842-500x500.jpg"
+                    class="w-full h-full object-cover">
                 </div>
                 <div class="w-4 h-4 bg-slate-950 rounded-full border-2 border-slate-700 z-10 absolute"></div>
               </div>
 
               <!-- Synced Karaoke Lyrics -->
-              <div id="synced-lyrics-view" class="hidden absolute inset-0 overflow-y-auto custom-scroll text-center py-6 px-3 space-y-4 text-xs font-medium">
+              <div id="synced-lyrics-view"
+                class="hidden absolute inset-0 overflow-y-auto custom-scroll text-center py-6 px-3 space-y-4 text-xs font-medium">
                 <!-- Dynamically populated per track -->
               </div>
             </div>
@@ -388,20 +544,28 @@
             <!-- Track Info & Quality Pill -->
             <div class="flex justify-between items-center mb-3">
               <div>
-                <h2 id="player-title" class="text-base font-black text-white truncate">dandelions (slowed reverb + lyrics)</h2>
+                <h2 id="player-title" class="text-base font-black text-white truncate">dandelions (slowed reverb +
+                  lyrics)</h2>
                 <div class="flex items-center gap-2">
                   <span id="player-artist" class="text-xs text-slate-400 truncate">Ruth B. / vebruary</span>
-                  <span id="player-format-pill" class="text-[10px] bg-purple-950/90 text-cyan-300 border border-purple-500/40 px-2 py-0.5 rounded-md font-mono font-bold whitespace-nowrap flex-shrink-0">2.1 MB • 4:46</span>
+                  <span id="player-format-pill"
+                    class="text-[10px] bg-purple-950/90 text-cyan-300 border border-purple-500/40 px-2 py-0.5 rounded-md font-mono font-bold whitespace-nowrap flex-shrink-0">2.1
+                    MB • 4:46</span>
                 </div>
               </div>
               <button onclick="toggleFavorite()" class="p-2 text-pink-500">
-                <svg id="fav-icon" class="w-6 h-6 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path></svg>
+                <svg id="fav-icon" class="w-6 h-6 fill-current" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                    clip-rule="evenodd"></path>
+                </svg>
               </button>
             </div>
 
             <!-- Seekbar -->
             <div class="space-y-1 mb-3">
-              <input type="range" id="player-seekbar" min="0" max="100" value="0" oninput="handleSeek(this.value)" class="w-full accent-cyan-400 cursor-pointer h-1.5 bg-slate-800 rounded-lg">
+              <input type="range" id="player-seekbar" min="0" max="100" value="0" oninput="handleSeek(this.value)"
+                class="w-full accent-cyan-400 cursor-pointer h-1.5 bg-slate-800 rounded-lg">
               <div class="flex justify-between text-[11px] text-slate-400 font-mono">
                 <span id="time-current">0:00</span>
                 <span id="time-total">2:55</span>
@@ -411,81 +575,123 @@
             <!-- Playback Controls -->
             <div class="flex justify-between items-center mb-4">
               <button onclick="toggleShuffle()" id="shuffle-btn" class="p-2 text-slate-400 hover:text-white">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+                  </path>
+                </svg>
               </button>
               <button onclick="prevTrack()" class="p-2 text-slate-200 hover:text-white">
-                <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M18.464 2.114a1 1 0 01.536.886v18a1 1 0 01-1.536.857l-11.5-9a1 1 0 010-1.714l11.5-9a1 1 0 011 .029zM5 21a1 1 0 01-1-1V4a1 1 0 112 0v16a1 1 0 01-1 1z"></path></svg>
+                <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
+                  <path
+                    d="M18.464 2.114a1 1 0 01.536.886v18a1 1 0 01-1.536.857l-11.5-9a1 1 0 010-1.714l11.5-9a1 1 0 011 .029zM5 21a1 1 0 01-1-1V4a1 1 0 112 0v16a1 1 0 01-1 1z">
+                  </path>
+                </svg>
               </button>
               <!-- Large Gradient Play/Pause Button -->
-              <button onclick="togglePlay(event)" class="w-14 h-14 rounded-full bg-gradient-to-r from-purple-500 via-cyan-400 to-pink-500 flex items-center justify-center text-black shadow-lg shadow-purple-500/40 hover:scale-105 transition">
-                <svg id="player-play-icon" class="w-7 h-7 fill-current" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+              <button onclick="togglePlay(event)"
+                class="w-14 h-14 rounded-full bg-gradient-to-r from-purple-500 via-cyan-400 to-pink-500 flex items-center justify-center text-black shadow-lg shadow-purple-500/40 hover:scale-105 transition">
+                <svg id="player-play-icon" class="w-7 h-7 fill-current" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z"
+                    clip-rule="evenodd"></path>
+                </svg>
               </button>
               <button onclick="nextTrack(event)" class="p-2 text-slate-200 hover:text-white">
-                <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24"><path d="M5.536 21.886a1 1 0 01-.536-.886V3a1 1 0 011.536-.857l11.5 9a1 1 0 010 1.714l-11.5 9a1 1 0 01-1-.029zM19 3a1 1 0 011 1v16a1 1 0 11-2 0V4a1 1 0 011-1z"></path></svg>
+                <svg class="w-7 h-7 fill-current" viewBox="0 0 24 24">
+                  <path
+                    d="M5.536 21.886a1 1 0 01-.536-.886V3a1 1 0 011.536-.857l11.5 9a1 1 0 010 1.714l-11.5 9a1 1 0 01-1-.029zM19 3a1 1 0 011 1v16a1 1 0 11-2 0V4a1 1 0 011-1z">
+                  </path>
+                </svg>
               </button>
               <button onclick="toggleRepeat()" id="repeat-btn" class="p-2 text-slate-400 hover:text-white">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                  </path>
+                </svg>
               </button>
             </div>
 
             <!-- Bottom Action Row: Lyrics, Sleep Timer, Speed -->
             <div class="flex justify-around items-center border-t border-slate-800/80 pt-2.5">
-              <button onclick="toggleLyricsView()" id="btn-toggle-lyrics" class="flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+              <button onclick="toggleLyricsView()" id="btn-toggle-lyrics"
+                class="flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                  </path>
+                </svg>
                 <span>Lyrics</span>
               </button>
-              <button onclick="openSleepTimerModal()" class="flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+              <button onclick="openSleepTimerModal()"
+                class="flex items-center gap-1.5 text-xs text-slate-400 hover:text-cyan-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                </svg>
                 <span>Sleep Timer</span>
               </button>
-              <button onclick="cycleSpeed()" id="speed-indicator" class="px-2 py-0.5 bg-slate-900 border border-slate-800 rounded-lg text-xs font-bold text-cyan-400">
+              <button onclick="cycleSpeed()" id="speed-indicator"
+                class="px-2 py-0.5 bg-slate-900 border border-slate-800 rounded-lg text-xs font-bold text-cyan-400">
                 1.0x
               </button>
             </div>
           </div>
 
           <!-- EQUALIZER MODAL SHEET -->
-          <div id="equalizer-modal" class="hidden absolute inset-x-0 bottom-0 top-16 bg-[#14161E] z-50 rounded-t-3xl p-5 flex flex-col border-t border-cyan-500/40">
+          <div id="equalizer-modal"
+            class="hidden absolute inset-x-0 bottom-0 top-16 bg-[#14161E] z-50 rounded-t-3xl p-5 flex flex-col border-t border-cyan-500/40">
             <div class="flex justify-between items-center mb-3">
               <h3 class="font-black text-base text-white">Equalizer & Audio FX</h3>
               <button onclick="closeEqualizerModal()" class="text-slate-400 hover:text-white p-1">✕</button>
             </div>
             <p class="text-[11px] text-slate-400 mb-4">Hardware DSP Sound Optimization for Redmi 12 5G</p>
-            
+
             <!-- Presets -->
             <div class="flex gap-2 overflow-x-auto pb-2 text-xs font-semibold mb-4 custom-scroll">
-              <button onclick="applyEqPreset('Flat', [0,0,0,0,0])" class="eq-pill px-3 py-1 bg-cyan-400 text-black rounded-full font-bold">Flat</button>
-              <button onclick="applyEqPreset('Bass Boost', [7,5,1,0,0])" class="eq-pill px-3 py-1 bg-slate-800 text-slate-300 rounded-full">Bass Boost</button>
-              <button onclick="applyEqPreset('Rock', [5,3,-1,2,4])" class="eq-pill px-3 py-1 bg-slate-800 text-slate-300 rounded-full">Rock</button>
-              <button onclick="applyEqPreset('Pop', [-2,2,4,2,-1])" class="eq-pill px-3 py-1 bg-slate-800 text-slate-300 rounded-full">Pop</button>
-              <button onclick="applyEqPreset('EDM', [6,4,0,3,5])" class="eq-pill px-3 py-1 bg-slate-800 text-slate-300 rounded-full">EDM</button>
+              <button onclick="applyEqPreset('Flat', [0,0,0,0,0])"
+                class="eq-pill px-3 py-1 bg-cyan-400 text-black rounded-full font-bold">Flat</button>
+              <button onclick="applyEqPreset('Bass Boost', [7,5,1,0,0])"
+                class="eq-pill px-3 py-1 bg-slate-800 text-slate-300 rounded-full">Bass Boost</button>
+              <button onclick="applyEqPreset('Rock', [5,3,-1,2,4])"
+                class="eq-pill px-3 py-1 bg-slate-800 text-slate-300 rounded-full">Rock</button>
+              <button onclick="applyEqPreset('Pop', [-2,2,4,2,-1])"
+                class="eq-pill px-3 py-1 bg-slate-800 text-slate-300 rounded-full">Pop</button>
+              <button onclick="applyEqPreset('EDM', [6,4,0,3,5])"
+                class="eq-pill px-3 py-1 bg-slate-800 text-slate-300 rounded-full">EDM</button>
             </div>
 
             <!-- 5 Sliders -->
             <div class="space-y-3 flex-1 overflow-y-auto custom-scroll">
               <div class="flex items-center gap-3 text-xs">
                 <span class="w-12 text-slate-400">60Hz</span>
-                <input type="range" min="-12" max="12" value="0" oninput="changeEqBand(0, this.value)" class="flex-1 accent-cyan-400 h-1 bg-slate-800">
+                <input type="range" min="-12" max="12" value="0" oninput="changeEqBand(0, this.value)"
+                  class="flex-1 accent-cyan-400 h-1 bg-slate-800">
                 <span class="w-10 text-right text-cyan-400 font-mono" id="eq-val-0">0dB</span>
               </div>
               <div class="flex items-center gap-3 text-xs">
                 <span class="w-12 text-slate-400">230Hz</span>
-                <input type="range" min="-12" max="12" value="0" oninput="changeEqBand(1, this.value)" class="flex-1 accent-cyan-400 h-1 bg-slate-800">
+                <input type="range" min="-12" max="12" value="0" oninput="changeEqBand(1, this.value)"
+                  class="flex-1 accent-cyan-400 h-1 bg-slate-800">
                 <span class="w-10 text-right text-cyan-400 font-mono" id="eq-val-1">0dB</span>
               </div>
               <div class="flex items-center gap-3 text-xs">
                 <span class="w-12 text-slate-400">910Hz</span>
-                <input type="range" min="-12" max="12" value="0" oninput="changeEqBand(2, this.value)" class="flex-1 accent-cyan-400 h-1 bg-slate-800">
+                <input type="range" min="-12" max="12" value="0" oninput="changeEqBand(2, this.value)"
+                  class="flex-1 accent-cyan-400 h-1 bg-slate-800">
                 <span class="w-10 text-right text-cyan-400 font-mono" id="eq-val-2">0dB</span>
               </div>
               <div class="flex items-center gap-3 text-xs">
                 <span class="w-12 text-slate-400">3.6kHz</span>
-                <input type="range" min="-12" max="12" value="0" oninput="changeEqBand(3, this.value)" class="flex-1 accent-cyan-400 h-1 bg-slate-800">
+                <input type="range" min="-12" max="12" value="0" oninput="changeEqBand(3, this.value)"
+                  class="flex-1 accent-cyan-400 h-1 bg-slate-800">
                 <span class="w-10 text-right text-cyan-400 font-mono" id="eq-val-3">0dB</span>
               </div>
               <div class="flex items-center gap-3 text-xs">
                 <span class="w-12 text-slate-400">14kHz</span>
-                <input type="range" min="-12" max="12" value="0" oninput="changeEqBand(4, this.value)" class="flex-1 accent-cyan-400 h-1 bg-slate-800">
+                <input type="range" min="-12" max="12" value="0" oninput="changeEqBand(4, this.value)"
+                  class="flex-1 accent-cyan-400 h-1 bg-slate-800">
                 <span class="w-10 text-right text-cyan-400 font-mono" id="eq-val-4">0dB</span>
               </div>
 
@@ -495,23 +701,33 @@
                   <span class="text-slate-300 font-semibold">Sub-Bass Enhancer</span>
                   <span class="text-pink-400 font-mono" id="bass-val">20%</span>
                 </div>
-                <input type="range" min="0" max="100" value="20" oninput="changeBass(this.value)" class="w-full accent-pink-500 h-1 bg-slate-800">
+                <input type="range" min="0" max="100" value="20" oninput="changeBass(this.value)"
+                  class="w-full accent-pink-500 h-1 bg-slate-800">
               </div>
             </div>
           </div>
 
           <!-- SLEEP TIMER MODAL SHEET -->
-          <div id="sleeptimer-modal" class="hidden absolute inset-x-0 bottom-0 bg-[#14161E] z-50 rounded-t-3xl p-5 border-t border-purple-500/40 space-y-3">
+          <div id="sleeptimer-modal"
+            class="hidden absolute inset-x-0 bottom-0 bg-[#14161E] z-50 rounded-t-3xl p-5 border-t border-purple-500/40 space-y-3">
             <div class="flex justify-between items-center">
               <h3 class="font-black text-base text-white">Sleep Timer</h3>
               <button onclick="closeSleepTimerModal()" class="text-slate-400 hover:text-white">✕</button>
             </div>
             <p class="text-[11px] text-slate-400">Fades audio out smoothly over 15 seconds before pausing.</p>
             <div class="grid grid-cols-2 gap-2 text-xs">
-              <button onclick="setSleepTimer(15)" class="p-3 bg-slate-900 border border-slate-800 rounded-xl font-bold hover:border-cyan-400">15 Minutes</button>
-              <button onclick="setSleepTimer(30)" class="p-3 bg-slate-900 border border-slate-800 rounded-xl font-bold hover:border-cyan-400">30 Minutes</button>
-              <button onclick="setSleepTimer(45)" class="p-3 bg-slate-900 border border-slate-800 rounded-xl font-bold hover:border-cyan-400">45 Minutes</button>
-              <button onclick="setSleepTimer(60)" class="p-3 bg-slate-900 border border-slate-800 rounded-xl font-bold hover:border-cyan-400">60 Minutes</button>
+              <button onclick="setSleepTimer(15)"
+                class="p-3 bg-slate-900 border border-slate-800 rounded-xl font-bold hover:border-cyan-400">15
+                Minutes</button>
+              <button onclick="setSleepTimer(30)"
+                class="p-3 bg-slate-900 border border-slate-800 rounded-xl font-bold hover:border-cyan-400">30
+                Minutes</button>
+              <button onclick="setSleepTimer(45)"
+                class="p-3 bg-slate-900 border border-slate-800 rounded-xl font-bold hover:border-cyan-400">45
+                Minutes</button>
+              <button onclick="setSleepTimer(60)"
+                class="p-3 bg-slate-900 border border-slate-800 rounded-xl font-bold hover:border-cyan-400">60
+                Minutes</button>
             </div>
           </div>
 
@@ -523,7 +739,8 @@
     </div>
 
     <!-- Right Panel: Live Audio Engine & Information (Col 10-12) -->
-    <div class="lg:col-span-3 bg-slate-900/90 border border-slate-800 rounded-3xl p-5 shadow-2xl backdrop-blur-md space-y-4">
+    <div
+      class="lg:col-span-3 bg-slate-900/90 border border-slate-800 rounded-3xl p-5 shadow-2xl backdrop-blur-md space-y-4">
       <div>
         <h2 class="font-bold text-sm text-white uppercase tracking-wider mb-2">Live Audio Status</h2>
         <div class="bg-slate-950/70 border border-slate-800 rounded-2xl p-4 text-xs space-y-2">
@@ -532,15 +749,18 @@
             <span class="font-bold text-emerald-400" id="audio-status-text">Playing Sound</span>
           </div>
           <div class="text-slate-300 truncate" id="now-playing-file">Track: Ready to stream from Google Drive</div>
-          <div class="text-[11px] text-slate-400">Size in Sonora: <span class="text-cyan-400 font-bold">~1.2 MB (Opus 64k)</span></div>
-          <div class="text-[11px] text-slate-400">Size in normal MP3: <span class="text-slate-500 line-through">~9.5 MB</span></div>
+          <div class="text-[11px] text-slate-400">Size in Sonora: <span class="text-cyan-400 font-bold">~1.2 MB (Opus
+              64k)</span></div>
+          <div class="text-[11px] text-slate-400">Size in normal MP3: <span class="text-slate-500 line-through">~9.5
+              MB</span></div>
         </div>
       </div>
 
       <!-- Live Web Audio Waveform Canvas -->
       <div class="border-t border-slate-800/80 pt-3">
         <h2 class="font-bold text-sm text-white uppercase tracking-wider mb-2">DSP Frequency Visualizer</h2>
-        <canvas id="waveform-canvas" width="220" height="70" class="w-full bg-slate-950/90 rounded-2xl border border-slate-800"></canvas>
+        <canvas id="waveform-canvas" width="220" height="70"
+          class="w-full bg-slate-950/90 rounded-2xl border border-slate-800"></canvas>
       </div>
 
       <!-- Instructions & Tips -->
@@ -579,7 +799,7 @@
     let isLyricsOpen = false;
     let playbackSpeed = 1.0;
 
-    const lyricsCache = {"dandelions": "[00:12.68] Maybe it's the way you say my name\n[00:18.74] Maybe it's the way you play your game\n[00:23.44] But it's so good, I've never known anybody like you\n[00:29.89] But it's so good, I've never dreamed of nobody like you\n[00:36.29] And I've heard of a love that comes once in a lifetime\n[00:43.35] And I'm pretty sure that you are that love of mine\n[00:48.74] 'Cause I'm in a field of dandelions\n[00:52.41] Wishing on every one that you'd be mine, mine\n[01:01.03] And I see forever in your eyes\n[01:04.86] I feel okay when I see you smile, smile\n[01:13.25] Wishing on dandelions all of the time\n[01:16.45] Praying to God that one day you'll be mine\n[01:19.50] Wishing on dandelions all of the time, all of the time\n[01:26.46] I think that you are the one for me\n[01:32.40] 'Cause it gets so hard to breathe\n[01:37.49] When you're looking at me, I've never felt so alive and free\n[01:43.76] When you're looking at me, I've never felt so happy\n[01:50.18] And I've heard of a love that comes once in a lifetime\n[01:57.07] And I'm pretty sure that you are that love of mine\n[02:02.62] 'Cause I'm in a field of dandelions\n[02:06.32] Wishing on every one that you'd be mine, mine\n[02:14.98] And I see forever in your eyes\n[02:18.86] I feel okay when I see you smile, smile\n[02:27.04] Wishing on dandelions all of the time\n[02:30.26] Praying to God that one day you'll be mine\n[02:33.32] Wishing on dandelions all of the time\n[02:36.16] All of the time\n[02:40.08] Dandelion, into the wind you go\n[02:43.37] Won't you let my darling know?\n[02:46.55] Dandelion, into the wind you go\n[02:49.53] Won't you let my darling know that?\n[02:54.74] I'm in a field of dandelions\n[02:57.00] Wishing on every one that you'd be mine, mine\n[03:05.68] And I see forever in your eyes\n[03:09.44] I feel okay when I see you smile, smile\n[03:17.89] Wishing on dandelions all of the time\n[03:21.03] Praying to God that one day you'll be mine\n[03:24.18] Wishing on dandelions all of the time, all of the time\n[03:31.11] I'm in a field of dandelions\n[03:33.96] Wishing on every one that you'd be mine, mine\n[03:39.95] ", "Past Lives": "[00:17.35] Past lives couldn't ever hold me down\n[00:21.96] Lost love is sweeter when it's finally found\n[00:25.01] I've got the strangest feeling\n[00:30.18] This isn't our first time around\n[00:34.28] Past lives couldn't ever come between us\n[00:38.39] Some time the dreamers finally wake up\n[00:41.92] Don't wake me I'm not dreaming\n[00:42.71] Don't wake me I'm not dreaming\n[00:50.33] All my past lives\n[00:50.99] They've got nothing on me\n[00:51.56] Golden eagle, you're the one and only flying high\n[00:52.62] Through the cities in the sky\n[00:53.34] I'll take you way back\n[00:53.86] Countless centuries\n[00:54.31] Don't you remember?\n[00:54.81] That you were meant to be my Queen of Hearts\n[00:55.45] Meant to be my love\n[00:55.90] Through all of my lives\n[00:56.54] I never thought I'd wait so long for you\n[00:57.02] The timing is right\n[00:57.67] The stars are aligned\n[00:58.12] So save that heart for me\n[00:58.74] Cause girl you know that you're my destiny\n[00:59.23] Swear to the moon, the stars\n[01:00.24] The sons, and the daughters\n[01:00.82] Our love is deeper than the oceans of water\n[01:01.55] Hey, I need you now\n[01:02.19] I've waited oh so long yeah\n[01:02.60] Baby love, I need you now\n[01:03.39] I've waited oh so long\n[01:03.99] Passing seasons\n[01:04.46] Empty bottles of wine\n[01:04.94] My ancient kingdom came crashing down without you\n[01:05.99] Baby child, I'm lost without your love\n[01:06.45] Diamond sparrow, my moonlight majesty\n[01:07.02] You know I need you, come flying back to me\n[01:07.59] Through all of my lives\n[01:08.06] I never thought I'd wait so long for you\n[01:08.62] The timing is right\n[01:09.12] The stars are aligned\n[01:09.75] So save that heart for me\n[01:10.29] Cause girl you know that you're my destiny\n[01:10.75] Swear to the moon, the stars\n[01:11.59] The sons, and the daughters\n[01:12.05] Our love is deeper than the oceans of water\n[01:12.54] Save that heart for me\n[01:13.79] And girl I'll give you everything you need\n[01:14.30] Here's to our past lives\n[01:14.85] Our mothers and fathers\n[01:15.34] Our love is deeper than the oceans of water\n[01:16.52] Hey I need you now\n[01:17.13] I've waited oh so long yeah\n[01:17.67] Baby love, I need you now\n[01:18.25] I've waited oh so long\n[01:18.75] Hey I need you now\n[01:19.21] I've waited oh so long yeah\n[01:19.77] Baby love, I need you now\n[01:20.30] I've waited oh so long\n[01:20.90] So save that heart for me\n[01:22.17] Cause girl you know that you're my destiny\n[01:22.69] Swear to the moon, the stars\n[01:23.17] The sons, and the daughters\n[01:23.82] Our love is deeper than the oceans of water\n[01:24.42] Save that heart for me\n[01:24.97] And girl I'll give you everything you need\n[01:25.47] Here's to our past lives\n[01:26.04] Our mothers and fathers\n[01:26.57] Our love is deeper than the oceans of water\n[01:27.11] Hey I need you now\n[01:27.67] I've waited oh so long\n[01:28.19] ", "lovely": "[00:21.23] Thought I found a way\n[00:24.73] Thought I found a way out (found)\n[00:28.18] But you never go away (never go away)\n[00:33.25] So I guess I gotta stay now\n[00:35.89] Oh, I hope some day I'll make it out of here\n[00:44.54] Even if it takes all night or a hundred years\n[00:53.19] Need a place to hide, but I can't find one near\n[01:01.47] Wanna feel alive, outside I can't fight my fear\n[01:11.38] Isn't it lovely? All alone\n[01:14.98] Heart made of glass, my mind of stone\n[01:19.10] Tear me to pieces, skin to bone\n[01:23.83] Hello, welcome home\n[01:29.54] \n[01:32.27] Walking out of town\n[01:36.26] Looking for a better place (looking for a better place)\n[01:40.46] Something's on my mind\n[01:44.31] Always in my head space\n[01:47.04] But I know someday I'll make it out of here\n[01:55.72] Even if it takes all night or a hundred years\n[02:04.27] Need a place to hide, but I can't find one near\n[02:12.31] Wanna feel alive, outside I can't fight my fear\n[02:21.85] Isn't it lovely? All alone\n[02:25.88] Heart made of glass, my mind of stone\n[02:30.13] Tear me to pieces, skin to bone\n[02:34.99] Hello, welcome home\n[02:41.05] Woah, yeah\n[02:47.66] Yeah, ah\n[02:53.71] Woah, woah\n[02:57.31] \n[03:08.58] Hello, welcome home\n[03:12.27] ", "Darkside": "[00:13.77] We're not in love\n[00:16.42] We share no stories\n[00:19.41] Just something in your eyes\n[00:24.91] Don't be afraid\n[00:27.94] The shadows know me\n[00:30.76] Let's leave the world behind\n[00:36.23] Take me through the night\n[00:38.62] Fall into the darkside\n[00:42.43] We don't need the light\n[00:44.41] We'll live on the darkside\n[00:47.87] I see it, let's feel it\n[00:50.52] While we're still young and fearless\n[00:53.23] Let go of the light\n[00:55.53] Fall into the darkside\n[01:01.38] Fall into the darkside\n[01:06.35] Give into the darkside\n[01:11.73] \n[01:15.89] Let go off the light\n[01:18.04] Fall into the darkside\n[01:21.90] Beneath the sky\n[01:24.57] As black as diamonds\n[01:27.48] We're running out of time (time, time)\n[01:32.48] Don't wait for truth\n[01:35.80] To come and blind us\n[01:38.53] Let's just believe their lies\n[01:44.37] Believe it, I see it\n[01:47.16] I know that you can feel it\n[01:49.86] No secrets worth keeping\n[01:52.71] So fool me like I'm dreaming\n[01:55.54] Take me through the night\n[01:57.72] Fall into the darkside\n[02:01.57] We don't need the light\n[02:03.41] We'll live on the darkside\n[02:06.75] I see it, let's feel it\n[02:09.69] While we're still young and fearless\n[02:12.33] Let go of the light\n[02:14.69] Fall into the darkside\n[02:20.35] Fall into the darkside\n[02:25.56] Give into the darkside\n[02:30.01] \n[02:34.71] Let go of the light\n[02:37.49] Fall into the darkside\n[02:42.01] \n[03:03.07] Take me through the night\n[03:05.49] Fall into the darkside\n[03:09.41] We don't need the light\n[03:11.30] We'll live on the darkside\n[03:14.62] I see it, let's feel it\n[03:17.59] While we're still young and fearless\n[03:20.16] Let go off the light\n[03:22.42] Fall into the darkside\n[03:28.23] ", "Royalty": "[00:11.43] Say I'm cold-hearted\n[00:14.50] But I'm just getting started\n[00:17.52] Got my eyes on the target\n[00:20.73] Now, now\n[00:24.68] (Oh, oh, oh)\n[00:33.27] 'Til the battle's won\n[00:34.75] 'Til kingdom come\n[00:36.69] (Oh, oh, oh)\n[00:45.23] I'll never run\n[00:48.57] Best to give me your loyalty\n[00:51.66] 'Cause I'm taking the world, you'll see\n[00:55.05] They'll be calling me, calling me\n[00:57.93] They'll be calling me royalty\n[01:00.55] Best to give me your loyalty\n[01:03.64] 'Cause I'm taking the world, you'll see\n[01:07.00] They'll be calling me, calling me\n[01:10.06] They'll be calling me royalty\n[01:14.42] \n[01:21.97] They'll be calling me royalty\n[01:26.03] \n[01:36.41] They say I'm dangerous\n[01:38.48] 'Cause I broke all their cages\n[01:41.55] No, I won't sit and take it\n[01:44.81] Now, now\n[01:48.53] They left me for dead, I guess they'll never learn\n[01:51.61] Every time I break, there's just more pain to burn\n[01:55.17] They'll never, never, never learn\n[02:00.69] (Oh, oh, oh)\n[02:09.29] 'Til the battle's won\n[02:10.70] 'Til kingdom come\n[02:12.63] (Oh, oh, oh)\n[02:21.14] I'll never run\n[02:24.69] Best to give me your loyalty\n[02:27.65] 'Cause I'm taking the world, you'll see\n[02:30.95] They'll be calling me, calling me\n[02:34.00] They'll be calling me royalty\n[02:36.59] Best to give me your loyalty\n[02:39.62] 'Cause I'm taking the world, you'll see\n[02:43.08] They'll be calling me, calling me\n[02:45.95] They'll be calling me royalty\n[02:50.96] \n[02:57.92] They'll be calling me royalty\n[03:02.86] \n[03:09.91] They'll be calling me royalty\n[03:11.92] (Calling me royalty)\n[03:17.79] (Calling me)\n[03:21.97] They'll be calling me royalty\n[03:23.95] (Calling me royalty)\n[03:29.84] (Calling me)\n[03:32.52] "};
+    const lyricsCache = { "dandelions": "[00:12.68] Maybe it's the way you say my name\n[00:18.74] Maybe it's the way you play your game\n[00:23.44] But it's so good, I've never known anybody like you\n[00:29.89] But it's so good, I've never dreamed of nobody like you\n[00:36.29] And I've heard of a love that comes once in a lifetime\n[00:43.35] And I'm pretty sure that you are that love of mine\n[00:48.74] 'Cause I'm in a field of dandelions\n[00:52.41] Wishing on every one that you'd be mine, mine\n[01:01.03] And I see forever in your eyes\n[01:04.86] I feel okay when I see you smile, smile\n[01:13.25] Wishing on dandelions all of the time\n[01:16.45] Praying to God that one day you'll be mine\n[01:19.50] Wishing on dandelions all of the time, all of the time\n[01:26.46] I think that you are the one for me\n[01:32.40] 'Cause it gets so hard to breathe\n[01:37.49] When you're looking at me, I've never felt so alive and free\n[01:43.76] When you're looking at me, I've never felt so happy\n[01:50.18] And I've heard of a love that comes once in a lifetime\n[01:57.07] And I'm pretty sure that you are that love of mine\n[02:02.62] 'Cause I'm in a field of dandelions\n[02:06.32] Wishing on every one that you'd be mine, mine\n[02:14.98] And I see forever in your eyes\n[02:18.86] I feel okay when I see you smile, smile\n[02:27.04] Wishing on dandelions all of the time\n[02:30.26] Praying to God that one day you'll be mine\n[02:33.32] Wishing on dandelions all of the time\n[02:36.16] All of the time\n[02:40.08] Dandelion, into the wind you go\n[02:43.37] Won't you let my darling know?\n[02:46.55] Dandelion, into the wind you go\n[02:49.53] Won't you let my darling know that?\n[02:54.74] I'm in a field of dandelions\n[02:57.00] Wishing on every one that you'd be mine, mine\n[03:05.68] And I see forever in your eyes\n[03:09.44] I feel okay when I see you smile, smile\n[03:17.89] Wishing on dandelions all of the time\n[03:21.03] Praying to God that one day you'll be mine\n[03:24.18] Wishing on dandelions all of the time, all of the time\n[03:31.11] I'm in a field of dandelions\n[03:33.96] Wishing on every one that you'd be mine, mine\n[03:39.95] ", "Past Lives": "[00:17.35] Past lives couldn't ever hold me down\n[00:21.96] Lost love is sweeter when it's finally found\n[00:25.01] I've got the strangest feeling\n[00:30.18] This isn't our first time around\n[00:34.28] Past lives couldn't ever come between us\n[00:38.39] Some time the dreamers finally wake up\n[00:41.92] Don't wake me I'm not dreaming\n[00:42.71] Don't wake me I'm not dreaming\n[00:50.33] All my past lives\n[00:50.99] They've got nothing on me\n[00:51.56] Golden eagle, you're the one and only flying high\n[00:52.62] Through the cities in the sky\n[00:53.34] I'll take you way back\n[00:53.86] Countless centuries\n[00:54.31] Don't you remember?\n[00:54.81] That you were meant to be my Queen of Hearts\n[00:55.45] Meant to be my love\n[00:55.90] Through all of my lives\n[00:56.54] I never thought I'd wait so long for you\n[00:57.02] The timing is right\n[00:57.67] The stars are aligned\n[00:58.12] So save that heart for me\n[00:58.74] Cause girl you know that you're my destiny\n[00:59.23] Swear to the moon, the stars\n[01:00.24] The sons, and the daughters\n[01:00.82] Our love is deeper than the oceans of water\n[01:01.55] Hey, I need you now\n[01:02.19] I've waited oh so long yeah\n[01:02.60] Baby love, I need you now\n[01:03.39] I've waited oh so long\n[01:03.99] Passing seasons\n[01:04.46] Empty bottles of wine\n[01:04.94] My ancient kingdom came crashing down without you\n[01:05.99] Baby child, I'm lost without your love\n[01:06.45] Diamond sparrow, my moonlight majesty\n[01:07.02] You know I need you, come flying back to me\n[01:07.59] Through all of my lives\n[01:08.06] I never thought I'd wait so long for you\n[01:08.62] The timing is right\n[01:09.12] The stars are aligned\n[01:09.75] So save that heart for me\n[01:10.29] Cause girl you know that you're my destiny\n[01:10.75] Swear to the moon, the stars\n[01:11.59] The sons, and the daughters\n[01:12.05] Our love is deeper than the oceans of water\n[01:12.54] Save that heart for me\n[01:13.79] And girl I'll give you everything you need\n[01:14.30] Here's to our past lives\n[01:14.85] Our mothers and fathers\n[01:15.34] Our love is deeper than the oceans of water\n[01:16.52] Hey I need you now\n[01:17.13] I've waited oh so long yeah\n[01:17.67] Baby love, I need you now\n[01:18.25] I've waited oh so long\n[01:18.75] Hey I need you now\n[01:19.21] I've waited oh so long yeah\n[01:19.77] Baby love, I need you now\n[01:20.30] I've waited oh so long\n[01:20.90] So save that heart for me\n[01:22.17] Cause girl you know that you're my destiny\n[01:22.69] Swear to the moon, the stars\n[01:23.17] The sons, and the daughters\n[01:23.82] Our love is deeper than the oceans of water\n[01:24.42] Save that heart for me\n[01:24.97] And girl I'll give you everything you need\n[01:25.47] Here's to our past lives\n[01:26.04] Our mothers and fathers\n[01:26.57] Our love is deeper than the oceans of water\n[01:27.11] Hey I need you now\n[01:27.67] I've waited oh so long\n[01:28.19] ", "lovely": "[00:21.23] Thought I found a way\n[00:24.73] Thought I found a way out (found)\n[00:28.18] But you never go away (never go away)\n[00:33.25] So I guess I gotta stay now\n[00:35.89] Oh, I hope some day I'll make it out of here\n[00:44.54] Even if it takes all night or a hundred years\n[00:53.19] Need a place to hide, but I can't find one near\n[01:01.47] Wanna feel alive, outside I can't fight my fear\n[01:11.38] Isn't it lovely? All alone\n[01:14.98] Heart made of glass, my mind of stone\n[01:19.10] Tear me to pieces, skin to bone\n[01:23.83] Hello, welcome home\n[01:29.54] \n[01:32.27] Walking out of town\n[01:36.26] Looking for a better place (looking for a better place)\n[01:40.46] Something's on my mind\n[01:44.31] Always in my head space\n[01:47.04] But I know someday I'll make it out of here\n[01:55.72] Even if it takes all night or a hundred years\n[02:04.27] Need a place to hide, but I can't find one near\n[02:12.31] Wanna feel alive, outside I can't fight my fear\n[02:21.85] Isn't it lovely? All alone\n[02:25.88] Heart made of glass, my mind of stone\n[02:30.13] Tear me to pieces, skin to bone\n[02:34.99] Hello, welcome home\n[02:41.05] Woah, yeah\n[02:47.66] Yeah, ah\n[02:53.71] Woah, woah\n[02:57.31] \n[03:08.58] Hello, welcome home\n[03:12.27] ", "Darkside": "[00:13.77] We're not in love\n[00:16.42] We share no stories\n[00:19.41] Just something in your eyes\n[00:24.91] Don't be afraid\n[00:27.94] The shadows know me\n[00:30.76] Let's leave the world behind\n[00:36.23] Take me through the night\n[00:38.62] Fall into the darkside\n[00:42.43] We don't need the light\n[00:44.41] We'll live on the darkside\n[00:47.87] I see it, let's feel it\n[00:50.52] While we're still young and fearless\n[00:53.23] Let go of the light\n[00:55.53] Fall into the darkside\n[01:01.38] Fall into the darkside\n[01:06.35] Give into the darkside\n[01:11.73] \n[01:15.89] Let go off the light\n[01:18.04] Fall into the darkside\n[01:21.90] Beneath the sky\n[01:24.57] As black as diamonds\n[01:27.48] We're running out of time (time, time)\n[01:32.48] Don't wait for truth\n[01:35.80] To come and blind us\n[01:38.53] Let's just believe their lies\n[01:44.37] Believe it, I see it\n[01:47.16] I know that you can feel it\n[01:49.86] No secrets worth keeping\n[01:52.71] So fool me like I'm dreaming\n[01:55.54] Take me through the night\n[01:57.72] Fall into the darkside\n[02:01.57] We don't need the light\n[02:03.41] We'll live on the darkside\n[02:06.75] I see it, let's feel it\n[02:09.69] While we're still young and fearless\n[02:12.33] Let go of the light\n[02:14.69] Fall into the darkside\n[02:20.35] Fall into the darkside\n[02:25.56] Give into the darkside\n[02:30.01] \n[02:34.71] Let go of the light\n[02:37.49] Fall into the darkside\n[02:42.01] \n[03:03.07] Take me through the night\n[03:05.49] Fall into the darkside\n[03:09.41] We don't need the light\n[03:11.30] We'll live on the darkside\n[03:14.62] I see it, let's feel it\n[03:17.59] While we're still young and fearless\n[03:20.16] Let go off the light\n[03:22.42] Fall into the darkside\n[03:28.23] ", "Royalty": "[00:11.43] Say I'm cold-hearted\n[00:14.50] But I'm just getting started\n[00:17.52] Got my eyes on the target\n[00:20.73] Now, now\n[00:24.68] (Oh, oh, oh)\n[00:33.27] 'Til the battle's won\n[00:34.75] 'Til kingdom come\n[00:36.69] (Oh, oh, oh)\n[00:45.23] I'll never run\n[00:48.57] Best to give me your loyalty\n[00:51.66] 'Cause I'm taking the world, you'll see\n[00:55.05] They'll be calling me, calling me\n[00:57.93] They'll be calling me royalty\n[01:00.55] Best to give me your loyalty\n[01:03.64] 'Cause I'm taking the world, you'll see\n[01:07.00] They'll be calling me, calling me\n[01:10.06] They'll be calling me royalty\n[01:14.42] \n[01:21.97] They'll be calling me royalty\n[01:26.03] \n[01:36.41] They say I'm dangerous\n[01:38.48] 'Cause I broke all their cages\n[01:41.55] No, I won't sit and take it\n[01:44.81] Now, now\n[01:48.53] They left me for dead, I guess they'll never learn\n[01:51.61] Every time I break, there's just more pain to burn\n[01:55.17] They'll never, never, never learn\n[02:00.69] (Oh, oh, oh)\n[02:09.29] 'Til the battle's won\n[02:10.70] 'Til kingdom come\n[02:12.63] (Oh, oh, oh)\n[02:21.14] I'll never run\n[02:24.69] Best to give me your loyalty\n[02:27.65] 'Cause I'm taking the world, you'll see\n[02:30.95] They'll be calling me, calling me\n[02:34.00] They'll be calling me royalty\n[02:36.59] Best to give me your loyalty\n[02:39.62] 'Cause I'm taking the world, you'll see\n[02:43.08] They'll be calling me, calling me\n[02:45.95] They'll be calling me royalty\n[02:50.96] \n[02:57.92] They'll be calling me royalty\n[03:02.86] \n[03:09.91] They'll be calling me royalty\n[03:11.92] (Calling me royalty)\n[03:17.79] (Calling me)\n[03:21.97] They'll be calling me royalty\n[03:23.95] (Calling me royalty)\n[03:29.84] (Calling me)\n[03:32.52] " };
 
     let currentLyricsLines = [];
     let activeLyricIndex = -1;
@@ -606,7 +826,7 @@
     function loadLyricsForTrack(title, artist) {
       const container = document.getElementById('synced-lyrics-view');
       if (!container) return;
-      
+
       const titleLower = title.toLowerCase();
       let lrc = '';
       if (titleLower.includes('dandelion')) lrc = lyricsCache.dandelions;
@@ -786,7 +1006,7 @@
         const artistMatch = t.artist.toLowerCase().includes(q);
         const albumMatch = t.album && t.album.toLowerCase().includes(q);
         const lrcMatch = (lyricsCache[t.title] && lyricsCache[t.title].toLowerCase().includes(q)) ||
-                         (lyricsCache[t.title.split(' ')[0]] && lyricsCache[t.title.split(' ')[0]].toLowerCase().includes(q));
+          (lyricsCache[t.title.split(' ')[0]] && lyricsCache[t.title.split(' ')[0]].toLowerCase().includes(q));
 
         const matchesQuery = !q || titleMatch || artistMatch || albumMatch || lrcMatch;
         if (!matchesQuery) return false;
@@ -843,7 +1063,7 @@
 
     function escapeHtml(str) {
       if (!str) return '';
-      return String(str).replace(/[&<>"']/g, function(m) {
+      return String(str).replace(/[&<>"']/g, function (m) {
         return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[m];
       });
     }
@@ -1313,7 +1533,7 @@
       }, 2500);
     }
 
-        function configureLiveDriveSync() {
+    function configureLiveDriveSync() {
       const current = localStorage.getItem('sonora_gdrive_api_url') || '';
       const entered = prompt(
         "⚡ Connect Real-Time Dynamic Google Drive API (For 1,000+ Songs)\n\nPaste your Google Apps Script Web App URL here (from tools/gdrive_sync_service.gs):\n(Leave blank to use default cloud streaming)",
@@ -1341,9 +1561,7 @@
         if (liveGdriveApi && liveGdriveApi.startsWith('http')) {
           return fetch(liveGdriveApi).then(r => r.json());
         }
-        return fetch('sonora_catalog.json?' + Date.now())
-          .then(r => { if (!r.ok) throw new Error(r.statusText); return r.json(); })
-          .catch(() => fetch('https://raw.githubusercontent.com/DiptarkaSamanta/SONORA/main/sonora_catalog.json?' + Date.now()).then(r => r.json()));
+        return Promise.resolve({ songs: tracks });
       };
 
       const fetchLocalOrRemote = fetchDynamicDrive;
@@ -1354,13 +1572,13 @@
             tracks.length = 0; // Clean overwrite prevents duplicate songs!
             data.songs.forEach((s, idx) => {
               tracks.push({
-                id: s.id || `gdrive_${idx+1}`,
+                id: s.id || `gdrive_${idx + 1}`,
                 title: s.title,
                 artist: s.artist,
                 album: s.album || 'Sonora Google Drive',
-                duration: `${Math.floor((s.duration_seconds || 200)/60)}:${String((s.duration_seconds || 200)%60).padStart(2, '0')}`,
+                duration: `${Math.floor((s.duration_seconds || 200) / 60)}:${String((s.duration_seconds || 200) % 60).padStart(2, '0')}`,
                 format: (s.codec || 'OPUS').toUpperCase() + ' ' + (s.bitrate_kbps || 64) + 'k',
-                size: `${((s.size_kb || 1500)/1024).toFixed(1)} MB`,
+                size: `${((s.size_kb || 1500) / 1024).toFixed(1)} MB`,
                 art: s.artwork_url || 'https://picsum.photos/seed/song/200/200',
                 src: s.stream_url || s.download_url
               });
@@ -1450,5 +1668,5 @@
     syncLibrary();
   </script>
 </body>
-</html>
 
+</html>

@@ -25,7 +25,7 @@
 ## 🌟 Highlights
 
 * **☁️ Zero Phone Storage Footprint (0 MB)**: Streams high-fidelity Opus 64kbps audio (~1.2 - 1.8 MB per song) directly from Google Drive / Cloud through memory buffers. Never consumes phone storage space.
-* **🔄 Install Once, Auto-Sync Forever**: When you add new songs to Google Drive and update `sonora_catalog.json` on GitHub, your mobile app **automatically syncs and displays new songs on launch or refresh** — **no APK reinstallation needed!**
+* **🔄 Install Once, Auto-Sync Forever**: When you add new songs to Google Drive, your mobile app and web companion **automatically sync and stream all new songs in real time via the Live Google Drive API** — **no APK reinstallation or manual JSON editing needed!**
 * **🎤 Synchronized Karaoke Lyrics**: Live line-by-line synchronized LRC lyrics powered by LRCLIB. Auto-scrolls smoothly to center the active line, with real-time glowing highlights and click-to-seek timestamp jumping.
 * **⚡ High-Power Universal Converter**: Built-in 1-click batch converter (`tools/convert_to_opus.bat`) converts **any** video or audio format (`.mp4`, `.mkv`, `.webm`, `.flac`, `.wav`, `.mp3`, etc.) into ultra-compact Opus audio with video streams discarded.
 * **🚀 Redmi 12 5G & HyperOS/MIUI Optimized**: Screen-off background playback, battery optimization bypass, zero CPU throttling, and RAM-friendly partial file hashing designed for Snapdragon 4 Gen 2.
@@ -41,15 +41,14 @@ You **only install the Sonora APK once**. Content changes and new songs apply au
 flowchart TD
     A["🎵 Any Video or Audio Files\n(MP4, MKV, WAV, FLAC, MP3)"] -->|Run convert_to_opus.bat| B["⚡ Ultra-Small Opus Files\n(~1.2 - 1.8 MB each in tools/sonora_opus_music)"]
     B -->|Upload .opus files| C["☁️ Google Drive Folder\n(Song Collection)"]
-    B -->|Synced to| D["📄 sonora_catalog.json\n(Track metadata & URLs)"]
-    D -->|git push origin main| E["🐙 GitHub Repository\n(raw CDN endpoint)"]
-    E -->|Auto-fetched on launch & pull-to-refresh| F["📱 Sonora Android App\n(0 MB Storage • Auto-Updated!)"]
-    E -->|Live fetch on load| G["🌐 Sonora Web Companion\n(Instant PC Browser Playback)"]
+    C -->|Real-Time Query| D["⚡ Live Google Drive Service\n(tools/gdrive_sync_service.gs)"]
+    D -->|Real-Time Dynamic API| F["📱 Sonora Android App\n(0 MB Storage • Live Synced!)"]
+    D -->|Real-Time Dynamic API| G["🌐 Sonora Web Companion\n(Instant PC Browser Playback)"]
 ```
 
-### 1. Song & Catalog Changes (Zero APK Download)
-- The app checks `https://raw.githubusercontent.com/DiptarkaSamanta/SONORA/main/sonora_catalog.json` on startup and on refresh.
-- Any songs added, renamed, or deleted in the catalog immediately update inside the app via Room Database synchronization.
+### 1. 100% Dynamic Song & Catalog Sync (No JSON Files)
+- The app connects directly to the Live Google Drive Service (`tools/gdrive_sync_service.gs`) to query your folder in real time.
+- Any songs added, renamed, or deleted in Google Drive appear dynamically on launch or pull-to-refresh.
 
 ### 2. App Code Updates (1-Click Notification)
 - When native Kotlin/UI changes are pushed to GitHub, GitHub Actions compiles an updated release APK.
@@ -97,7 +96,7 @@ Located in [`tools/`](tools/):
 tools/
 ├── convert_to_opus.bat        # Single 1-Click Windows batch launcher
 ├── converter.py               # Universal batch conversion engine (FFmpeg)
-├── sonora_catalog.json        # 5-Song master Google Drive catalog
+├── gdrive_sync_service.gs     # Live real-time Google Drive sync service
 └── sonora_opus_music/         # Converted .opus files ready for GDrive
 ```
 
