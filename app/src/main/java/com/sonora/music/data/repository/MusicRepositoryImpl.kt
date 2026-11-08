@@ -142,13 +142,15 @@ class MusicRepositoryImpl(
 
     override suspend fun syncCloudMusicCatalog(customUrl: String?): Result<Int> = withContext(Dispatchers.IO) {
         runCatching {
-            val songs = if (customUrl.isNullOrBlank()) {
-                cloudClient.getBuiltinCompactCatalog()
-            } else {
-                cloudClient.fetchCloudCatalog(customUrl).getOrDefault(cloudClient.getBuiltinCompactCatalog())
-            }
+            val targetUrl = customUrl?.takeIf { it.isNotBlank() } ?: CloudDatabaseClient.DEFAULT_REMOTE_CATALOG_URL
+            val songs = cloudClient.fetchCloudCatalog(targetUrl).getOrDefault(cloudClient.getBuiltinCompactCatalog())
 
             val entities = songs.map { SongEntity.fromDomain(it) }
+            val activeIds = entities.map { it.id }
+
+            if (activeIds.isNotEmpty()) {
+                songDao.pruneDeletedCloudSongs(activeIds)
+            }
             songDao.insertSongs(entities)
             songs.size
         }

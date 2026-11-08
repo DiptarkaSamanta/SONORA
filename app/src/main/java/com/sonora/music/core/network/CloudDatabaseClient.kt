@@ -21,21 +21,26 @@ class CloudDatabaseClient(
     private val gson = Gson()
 
     companion object {
+        const val DEFAULT_REMOTE_CATALOG_URL = "https://raw.githubusercontent.com/DiptarkaSamanta/SONORA/main/sonora_catalog.json"
         const val DEFAULT_GDRIVE_FOLDER_URL = "https://drive.google.com/drive/folders/1mjeXjTTy-nliOOUG607rprdvdcnlKurP?usp=sharing"
         const val DEFAULT_GDRIVE_FOLDER_ID = "1mjeXjTTy-nliOOUG607rprdvdcnlKurP"
     }
 
     /**
-     * Fetches online songs from Google Drive or cloud JSON endpoint.
+     * Fetches online songs from GitHub raw JSON or cloud JSON endpoint.
      * ZERO phone storage used — streams directly in real-time.
      */
-    suspend fun fetchCloudCatalog(url: String): Result<List<Song>> = withContext(Dispatchers.IO) {
+    suspend fun fetchCloudCatalog(url: String = ""): Result<List<Song>> = withContext(Dispatchers.IO) {
         runCatching {
-            val targetUrl = url.trim().ifEmpty { DEFAULT_GDRIVE_FOLDER_URL }
+            val targetUrl = when {
+                url.isBlank() || url.contains("drive.google.com") -> DEFAULT_REMOTE_CATALOG_URL
+                else -> url.trim()
+            }
 
             val request = Request.Builder()
                 .url(targetUrl)
                 .header("User-Agent", "SonoraMusicPlayer/1.0")
+                .header("Cache-Control", "no-cache")
                 .build()
 
             val response = client.newCall(request).execute()
@@ -48,7 +53,9 @@ class CloudDatabaseClient(
             // If JSON catalog
             if (bodyString.trimStart().startsWith("{")) {
                 val catalog = gson.fromJson(bodyString, CloudCatalogResponse::class.java)
-                return@runCatching catalog.songs.map { it.toDomainSong() }
+                if (catalog?.songs != null && catalog.songs.isNotEmpty()) {
+                    return@runCatching catalog.songs.map { it.toDomainSong() }
+                }
             }
 
             // Fallback to active catalog

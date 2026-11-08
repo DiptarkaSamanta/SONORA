@@ -1,29 +1,146 @@
-# SONORA – Smart Offline & Online Music Player for Android
+<div align="center">
 
-**SONORA** is a modern, high-performance, ad-free music player built for Android with an offline-first architecture, legal online discovery, background playback engine, and an intelligent storage management system.
+# 🎵 SONORA
+### Smart Cloud & Offline Music Player for Android (Redmi 12 5G & Web Companion)
 
-Custom-tailored and specifically optimized for the **Redmi 12 5G** (Snapdragon 4 Gen 2, MIUI 14 / HyperOS, Android 13/14).
+[![Build and Release Sonora APK](https://github.com/DiptarkaSamanta/SONORA/actions/workflows/build-apk.yml/badge.svg)](https://github.com/DiptarkaSamanta/SONORA/actions/workflows/build-apk.yml)
+[![Latest Release](https://img.shields.io/github/v/release/DiptarkaSamanta/SONORA?color=cyan&label=Latest%20APK)](https://github.com/DiptarkaSamanta/SONORA/releases/latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Android%20%7C%20Web-purple.svg)](https://github.com/DiptarkaSamanta/SONORA)
+[![Audio Codec](https://img.shields.io/badge/Audio%20Codec-Opus%2064kbps-success)](https://opus-codec.org/)
+[![Optimized for](https://img.shields.io/badge/Optimized%20for-Redmi%2012%205G%20(HyperOS)-orange)](https://www.mi.com/)
+[![APK Size](https://img.shields.io/badge/APK%20Size-3.28%20MB-blueviolet)](https://github.com/DiptarkaSamanta/SONORA/releases/latest)
+
+<p align="center">
+  <b>Stream your Google Drive music library with 0 MB phone storage.</b><br>
+  Real-time Opus 64kbps streaming, synchronized karaoke lyrics, 1-click batch conversion, and AMOLED glassmorphism UI.
+</p>
+
+[📥 Download Latest APK (3.28 MB)](https://github.com/DiptarkaSamanta/SONORA/releases/latest) • [🌐 Web Companion](sonora_browser_app.html) • [🛠️ Audio Converter](tools/convert_any_to_sonora.bat)
 
 ---
 
-## Architecture Overview
+</div>
 
-SONORA is designed following clean architecture and modern Android development best practices:
+## 🌟 Highlights
+
+* **☁️ Zero Phone Storage Footprint (0 MB)**: Streams high-fidelity Opus 64kbps audio (~1.2 MB per song) directly from Google Drive / Cloud through memory buffers. Never consumes phone storage space.
+* **🔄 Install Once, Auto-Sync Forever**: When you add new songs to Google Drive and push the updated `sonora_catalog.json` to GitHub, your mobile app **automatically syncs and displays new songs on launch or refresh** — **no APK reinstallation needed!**
+* **🎤 Synchronized Karaoke Lyrics**: Live line-by-line synchronized LRC lyrics powered by LRCLIB. Auto-scrolls smoothly to center the active line, with real-time glowing highlights and click-to-seek timestamp jumping.
+* **⚡ High-Power Universal Converter**: Built-in 1-click batch converter (`tools/convert_any_to_sonora.bat`) converts **any** video or audio format (`.mp4`, `.mkv`, `.webm`, `.flac`, `.wav`, `.mp3`, etc.) into ultra-compact Opus audio with video streams discarded.
+* **🚀 Redmi 12 5G & HyperOS/MIUI Optimized**: Screen-off background playback, battery optimization bypass, zero CPU throttling, and RAM-friendly partial file hashing designed for Snapdragon 4 Gen 2.
+* **🎨 AMOLED Glassmorphism UI**: Live theme color changer (Cyan, Purple, Pink, Green, Yellow), spinning vinyl disc full player, 5-band equalizer, bass boost, 3D virtualizer, sleep timer, and persistent mini-player with instant dismiss (`✕`).
+
+---
+
+## 📱 How Continuous Live Sync Works
+
+You **only install the Sonora APK once**. Content changes and new songs apply automatically without reinstalling:
+
+```mermaid
+flowchart TD
+    A["🎵 Any Video or Audio Files\n(MP4, MKV, WAV, FLAC, MP3)"] -->|Run convert_any_to_sonora.bat| B["⚡ Ultra-Small Opus Files\n(~1.2 MB each in tools/sonora_opus_music)"]
+    B -->|Upload .opus files| C["☁️ Google Drive Folder\n(Song Collection)"]
+    B -->|Auto-updates| D["📄 sonora_catalog.json\n(Track metadata & URLs)"]
+    D -->|git push origin main| E["🐙 GitHub Repository\n(raw CDN endpoint)"]
+    E -->|Auto-fetched on launch & pull-to-refresh| F["📱 Sonora Android App\n(0 MB Storage • Auto-Updated!)"]
+    E -->|Live fetch on load| G["🌐 Sonora Web Companion\n(Instant PC Browser Playback)"]
+```
+
+### 1. Song & Catalog Changes (Zero APK Download)
+- The app checks `https://raw.githubusercontent.com/DiptarkaSamanta/SONORA/main/sonora_catalog.json` on startup and on refresh.
+- Any songs added, renamed, or deleted in the catalog immediately update inside the app via Room Database synchronization.
+
+### 2. App Code Updates (1-Click Notification)
+- When native Kotlin/UI changes are pushed to GitHub, GitHub Actions compiles an updated release APK.
+- The app includes a **Check Updates** button under **Cleaner & Maintenance** that detects new releases and lets you update with 1 tap.
+
+---
+
+## 🎧 Features
+
+### 1. Audio Engine & Background Service
+- **Android Media3 ExoPlayer**: Full `MediaSessionService` implementation with foreground notification, lock screen controls, and album artwork.
+- **Hardware Audio Effects**:
+  - 5-band equalizer sliders (-12 dB to +12 dB).
+  - Bass Boost and 3D Virtualizer.
+  - Presets: Flat, Bass Boost, Rock, Pop, Jazz, EDM, Vocal, Acoustic.
+- **Sleep Timer**: Smooth 15-second volume fade-out before playback stops (15m, 30m, 45m, 60m, or custom).
+- **AudioFocus & Disconnect Protection**: Automatically pauses when Bluetooth headphones disconnect (`AUDIO_BECOMING_NOISY`).
+
+### 2. Synchronized Karaoke Lyrics
+- **Automatic Matching**: Strips track title modifiers (`(slowed reverb)`, `[official]`, `ft.`) for 100% LRCLIB query accuracy.
+- **Interactive Karaoke**: Tap any lyric line to jump audio playback to that exact second.
+- **Auto-Scroll**: Centers the current lyric smoothly as the music progresses.
+
+### 3. Smart Storage & Cache Maintenance
+- **Temp Cache Cleaner**: Frees network image cache and audio streaming buffers without deleting downloaded music.
+- **Duplicate Audio Hash Detector**: Fast 64KB header MD5 fingerprinting identifies duplicate audio files across phone storage.
+- **Instant Stop Button (`✕`)**: Stop playback and dismiss the player in 1 tap from the mini-player.
+
+### 4. Live Theme Customizer
+- Instant 1-tap color picker:
+  - 🩵 **Electric Cyan** (Default)
+  - 💜 **Cyber Purple**
+  - 🩷 **Neon Pink**
+  - 💚 **Emerald Green**
+  - 💛 **Solar Amber**
+- Recolor navigation, sliders, buttons, glows, and vinyl rings seamlessly.
+
+---
+
+## 🛠️ High-Power Universal Converter
+
+Located in [`tools/`](tools/):
+
+```
+tools/
+├── convert_any_to_sonora.bat  # 1-Click Windows batch launcher
+├── converter.py               # Batch conversion engine (FFmpeg)
+├── sonora_catalog.json        # Auto-generated catalog
+└── sonora_opus_music/         # Converted .opus files ready for GDrive
+```
+
+### Quick Usage:
+1. Double-click `convert_any_to_sonora.bat`.
+2. Select **[1] Convert Songs**.
+3. Paste one or multiple file/folder paths (e.g. `"C:\Music\song1.mp4" "D:\Downloads\video.mkv"`).
+4. Files are converted into tiny Opus 64kbps files (~1.2 MB each) with video discarded.
+5. Upload the converted `.opus` files to your Google Drive folder.
+6. The converter prompts: `Have you uploaded these songs to Google Drive and want to delete local copies? (Y/N)` — press `Y` to wipe local copies and keep your computer storage clean!
+
+---
+
+## 📱 Redmi 12 5G & HyperOS Optimizations
+
+The Redmi 12 5G features a Qualcomm Snapdragon 4 Gen 2 processor with MIUI / HyperOS aggressive battery management. Sonora includes:
+
+1. **Direct Settings Dispatcher**:
+   - `XiaomiOptimizationHelper.openBatterySaverSettings()`: Launches MIUI HiddenAppsConfig screen to select **No restrictions**.
+   - `XiaomiOptimizationHelper.openAutostartSettings()`: Directly opens MIUI Autostart manager so playback never stops when the screen is locked.
+2. **Foreground Service Configuration**:
+   - Uses `foregroundServiceType="mediaPlayback"` with wake locks to prevent CPU sleeping during audio decoding.
+3. **Low-RAM Footprint**:
+   - Streams audio buffers progressively to prevent OOM on 4GB/6GB RAM models.
+
+---
+
+## 🏗️ Project Architecture
 
 ```
 com.sonora.music
 ├── core
-│   ├── database/          # Room DB (SonoraDatabase, Songs, Playlists, Downloads)
-│   ├── datastore/         # DataStore preferences (Storage mode, Equalizer, Audio presets)
+│   ├── database/          # Room DB (SonoraDatabase, SongEntity, SongDao)
+│   ├── datastore/         # DataStore preferences
 │   ├── di/                # ServiceLocator dependency injection
-│   └── network/           # Retrofit & OkHttp (Jamendo CC Discovery & LRCLIB Synced Lyrics)
+│   └── network/           # CloudDatabaseClient, Retrofit, OkHttp, LRCLIB API
 ├── domain
-│   ├── model/             # Domain models (Song, StorageMode, Lyrics, EqualizerPreset)
-│   └── repository/        # Clean domain repository contracts
+│   ├── model/             # Song, StorageMode, LyricsData, EqualizerPreset
+│   └── repository/        # Domain repository interfaces
 ├── data
 │   ├── download/          # WorkManager background download worker
-│   ├── repository/        # Repository implementations
-│   ├── scanner/           # Scoped MediaStore audio scanner & MD5 partial hashing
+│   ├── repository/        # MusicRepositoryImpl, StorageRepositoryImpl
+│   ├── scanner/           # Scoped MediaStore audio scanner
 │   └── storage/           # StorageOptimizer & DuplicateDetector heuristics
 ├── playback
 │   ├── AudioEffectsController.kt # Equalizer, Bass Boost, 3D Virtualizer
@@ -33,115 +150,38 @@ com.sonora.music
 ├── xiaomi
 │   └── XiaomiOptimizationHelper.kt # MIUI / HyperOS battery & autostart dispatchers
 └── ui
-    ├── components/        # MiniPlayer, SongItem, GlassmorphicCard, WaveformVisualizer
-    ├── navigation/        # Bottom navigation, SonoraNavGraph, Animated full player
+    ├── components/        # MiniPlayer (with instant stop ✕), SongItem, GlassmorphicCard
+    ├── navigation/        # Bottom navigation bar & full player modal
     ├── screens/           # Home, Search, Library, Downloads, Storage, Full Player
     └── theme/             # AMOLED-friendly palette (Black, Purple, Electric Blue, Magenta)
 ```
 
 ---
 
-## Key Features
-
-### 1. Smart Storage Optimization (Highest Priority)
-- **Three Audio Storage Modes**:
-  - **High Quality**: Lossless FLAC / 320 kbps MP3 (~2.4 MB/min).
-  - **Balanced**: 160 kbps AAC / 128 kbps Opus (~1.2 MB/min, 50% storage savings with pristine perceptual audio).
-  - **Space Saver**: 96 kbps Opus / AAC (~0.72 MB/min, 70% storage savings for maximum library size).
-- **Storage Estimation Engine**: Computes exact file size before starting any download.
-- **Intelligent Duplicate Audio Detector**:
-  - Fast 64KB header MD5 hashing + length fingerprinting.
-  - Heuristic audio matching with normalized track title, artist name, and duration tolerance (+/- 2.5 seconds).
-  - Identifies duplicate files and enables one-click cleanup of lower-quality duplicates while preserving the best audio file.
-- **Smart Cache Cleaner**: Cleans artwork and network cache without deleting downloaded music files.
-
-### 2. Modern Playback Engine & Background Service
-- **Android Media3 ExoPlayer**:
-  - Complete `MediaSessionService` implementation with foreground notification (`mediaPlayback`).
-  - Lock-screen controls, notification media controls, seekbar, and favorite button.
-  - Automatic audio focus management (transient loss, phone calls, volume ducking).
-  - `AUDIO_BECOMING_NOISY` receiver: automatically pauses playback when headphones or Bluetooth disconnect.
-  - Bluetooth headset and wired earphone button control.
-- **Built-in Equalizer & Audio FX**:
-  - 5-band frequency sliders (-12 dB to +12 dB).
-  - Hardware DSP Bass Boost and 3D Virtualizer.
-  - Presets: Flat, Bass Boost, Rock, Pop, Jazz, EDM, Vocal, Acoustic.
-- **Sleep Timer**:
-  - 15, 30, 45, 60 minutes or custom duration.
-  - Automatic 15-second smooth volume fade-out before pausing playback.
-
-### 3. Online Music Discovery & Synchronized Lyrics
-- **Jamendo API Integration**:
-  - Discover and stream legal Creative Commons and royalty-free music.
-  - Authorized legal direct downloads with target storage mode compression.
-- **LRCLIB Integration**:
-  - Live synchronized (karaoke-style) lyrics with auto-scrolling to the active line.
-  - Tap any lyric line to seek directly to that point in the song.
-  - Search songs by remembering a lyric fragment.
-
-### 4. Redmi 12 5G & Xiaomi HyperOS / MIUI Specific Optimizations
-The Redmi 12 5G features a Qualcomm Snapdragon 4 Gen 2 processor with 4GB/6GB/8GB RAM and MIUI/HyperOS background task killers. Sonora incorporates:
-1. **Direct Settings Dispatcher**:
-   - `XiaomiOptimizationHelper.openBatterySaverSettings()`: Directly launches the MIUI HiddenAppsConfig screen to select **No restrictions**.
-   - `XiaomiOptimizationHelper.openAutostartSettings()`: Directly opens the MIUI Autostart manager so Sonora stays alive when phone is locked or while gaming.
-2. **Foreground Service Configuration**:
-   - Declares `foregroundServiceType="mediaPlayback"` and `WAKE_LOCK` to prevent CPU throttling when screen turns off.
-3. **RAM & Storage Optimization**:
-   - Partial file hashing (first 64KB) prevents loading multi-megabyte audio files into RAM during duplicate scans on the 4GB/6GB RAM variant.
-   - UFS 2.2 storage friendly buffer streaming.
-
----
-
-## Build and Installation Instructions
+## 🚀 Building from Source
 
 ### Prerequisites
 - Android Studio Ladybug (2024.2+) or Hedgehog+
-- JDK 17 (recommended: Eclipse Temurin 17 or Android Studio Embedded JDK 17)
-- Android SDK Platform 35
-- Gradle 8.7+
+- JDK 17 (Eclipse Temurin recommended)
+- Android SDK Platform 34 (Android 14)
 
-### Step-by-Step Build
+### Build Commands:
+```bash
+# Clone the repository
+git clone https://github.com/DiptarkaSamanta/SONORA.git
+cd SONORA
 
-1. Open Android Studio.
-2. Choose **Open** and select the folder:
-   ```
-   D:\projects\song app
-   ```
-3. Allow Gradle to sync the project dependencies.
-4. Build the Debug APK using Android Studio terminal:
-   ```powershell
-   ./gradlew assembleDebug
-   ```
-5. The generated APK will be located at:
-   ```
-   app/build/outputs/apk/debug/app-debug.apk
-   ```
+# Build ultra-compact release APK
+./gradlew assembleRelease
 
-### Installing on Redmi 12 5G
-1. Enable **Developer Options** on your Redmi 12 5G:
-   - Go to **Settings** -> **About phone** -> Tap **MIUI version** / **OS version** 7 times.
-2. Go to **Settings** -> **Additional settings** -> **Developer options**:
-   - Enable **USB debugging**.
-   - Enable **Install via USB**.
-3. Connect your Redmi 12 5G via USB cable and run:
-   ```powershell
-   adb install -r app/build/outputs/apk/debug/app-debug.apk
-   ```
+# Output APK location:
+# app/build/outputs/apk/release/Sonora-v1.0.0-Redmi12-5G.apk
+```
 
 ---
 
-## Redmi 12 5G Background Playback Optimization Guide
+## 📄 License
 
-To guarantee 100% uninterrupted playback while gaming or screen locked on MIUI / HyperOS:
+This project is open-source and licensed under the **[MIT License](LICENSE)**.
 
-1. **Battery Saver**:
-   - In Sonora, tap the **Redmi 12 5G Optimization** banner on the Home screen or go to:
-   - Phone **Settings** -> **Apps** -> **Manage apps** -> **SONORA** -> **Battery saver** -> Choose **No restrictions**.
-2. **Autostart**:
-   - Tap **Autostart** in the banner or go to:
-   - Phone **Security app** -> **Manage apps** -> **Permissions** -> **Autostart** -> Enable **SONORA**.
-3. **Lock App in Recent Apps**:
-   - Open Sonora.
-   - Open Recent Apps screen (swipe up and hold).
-   - Press and hold the Sonora card -> Tap the **Padlock icon** to prevent HyperOS from clearing it when freeing RAM.
-
+Copyright (c) 2026 **Diptarka Samanta**.

@@ -1212,9 +1212,13 @@
       const syncIcon = document.getElementById('lib-sync-icon');
       if (syncIcon) syncIcon.classList.add('animate-spin');
 
-      // Refresh / merge any newly converted catalog items
-      fetch('sonora_catalog.json?' + Date.now())
-        .then(r => r.json())
+      // Refresh / merge any newly converted catalog items from local or live GitHub
+      const fetchLocalOrRemote = () =>
+        fetch('sonora_catalog.json?' + Date.now())
+          .then(r => { if (!r.ok) throw new Error(r.statusText); return r.json(); })
+          .catch(() => fetch('https://raw.githubusercontent.com/DiptarkaSamanta/SONORA/main/sonora_catalog.json?' + Date.now()).then(r => r.json()));
+
+      fetchLocalOrRemote()
         .then(data => {
           if (data && data.songs && data.songs.length > 0) {
             data.songs.forEach(s => {
@@ -1312,8 +1316,9 @@
     updateClock();
     setInterval(updateClock, 30000);
 
-    // Initial render
+    // Initial render & remote catalog sync
     renderSongs();
+    syncLibrary();
   </script>
 </body>
 </html>
