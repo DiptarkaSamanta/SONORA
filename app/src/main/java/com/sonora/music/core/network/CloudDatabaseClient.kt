@@ -21,20 +21,20 @@ class CloudDatabaseClient(
     private val gson = Gson()
 
     companion object {
-        const val DEFAULT_REMOTE_CATALOG_URL = "https://raw.githubusercontent.com/DiptarkaSamanta/SONORA/main/sonora_catalog.json"
+        const val DEFAULT_REMOTE_CATALOG_URL = ""
         const val DEFAULT_GDRIVE_FOLDER_URL = "https://drive.google.com/drive/folders/1mjeXjTTy-nliOOUG607rprdvdcnlKurP?usp=sharing"
         const val DEFAULT_GDRIVE_FOLDER_ID = "1mjeXjTTy-nliOOUG607rprdvdcnlKurP"
     }
 
     /**
-     * Fetches online songs from GitHub raw JSON or cloud JSON endpoint.
+     * Fetches online songs from live Google Drive Web App or remote endpoint.
      * ZERO phone storage used — streams directly in real-time.
      */
     suspend fun fetchCloudCatalog(url: String = ""): Result<List<Song>> = withContext(Dispatchers.IO) {
         runCatching {
             val targetUrl = when {
-                url.isBlank() || url.contains("drive.google.com") -> DEFAULT_REMOTE_CATALOG_URL
-                else -> url.trim()
+                url.isNotBlank() && url.startsWith("http") -> url.trim()
+                else -> return@runCatching getInitialDriveCatalog()
             }
 
             val request = Request.Builder()
@@ -50,7 +50,6 @@ class CloudDatabaseClient(
 
             val bodyString = response.body!!.string()
 
-            // If JSON catalog
             if (bodyString.trimStart().startsWith("{")) {
                 val catalog = gson.fromJson(bodyString, CloudCatalogResponse::class.java)
                 if (catalog?.songs != null && catalog.songs.isNotEmpty()) {
@@ -58,7 +57,6 @@ class CloudDatabaseClient(
                 }
             }
 
-            // Fallback to active catalog
             getInitialDriveCatalog()
         }.recoverCatching {
             getInitialDriveCatalog()
@@ -77,10 +75,10 @@ class CloudDatabaseClient(
                 title = "dandelions (slowed reverb)",
                 artist = "Ruth B. / vebruary",
                 album = "Sonora Google Drive",
-                durationSeconds = 286,
+                durationSeconds = 286L,
                 streamUrl = "https://aac.saavncdn.com/023/f607a11a36dd7d49174c5d76907798d0_96.mp4",
                 downloadUrl = "https://aac.saavncdn.com/023/f607a11a36dd7d49174c5d76907798d0_96.mp4",
-                sizeKb = 2175, // ~2.1 MB
+                sizeKb = 2175L,
                 codec = "opus",
                 bitrateKbps = 64,
                 artworkUrl = "https://c.saavncdn.com/023/Dandelions-slowed-reverb-English-2021-20231119175842-500x500.jpg"
@@ -90,10 +88,10 @@ class CloudDatabaseClient(
                 title = "Past Lives",
                 artist = "sapientdream, Slushii",
                 album = "Sonora Google Drive",
-                durationSeconds = 153,
+                durationSeconds = 153L,
                 streamUrl = "https://aac.saavncdn.com/401/26b827264291174e861f0821bf6d4140_96.mp4",
                 downloadUrl = "https://aac.saavncdn.com/401/26b827264291174e861f0821bf6d4140_96.mp4",
-                sizeKb = 1521, // ~1.5 MB
+                sizeKb = 1521L,
                 codec = "opus",
                 bitrateKbps = 64,
                 artworkUrl = "https://c.saavncdn.com/401/Past-Lives-English-2023-20230929174911-500x500.jpg"
@@ -103,10 +101,10 @@ class CloudDatabaseClient(
                 title = "lovely (ft. Khalid)",
                 artist = "Billie Eilish, Khalid",
                 album = "Sonora Google Drive",
-                durationSeconds = 200,
+                durationSeconds = 200L,
                 streamUrl = "https://aac.saavncdn.com/947/580fe2c0cb03ba147b00a4b2261764d4_96.mp4",
                 downloadUrl = "https://aac.saavncdn.com/947/580fe2c0cb03ba147b00a4b2261764d4_96.mp4",
-                sizeKb = 1631, // ~1.6 MB
+                sizeKb = 1631L,
                 codec = "opus",
                 bitrateKbps = 64,
                 artworkUrl = "https://c.saavncdn.com/947/lovely-English-2018-20180418150240-500x500.jpg"
@@ -116,10 +114,10 @@ class CloudDatabaseClient(
                 title = "Royalty (ft. Neoni)",
                 artist = "Egzod, Maestro Chives, Neoni",
                 album = "Sonora Google Drive",
-                durationSeconds = 223,
+                durationSeconds = 223L,
                 streamUrl = "https://aac.saavncdn.com/205/386cdf2975fd049305654e8ebc7b9e0a_96.mp4",
                 downloadUrl = "https://aac.saavncdn.com/205/386cdf2975fd049305654e8ebc7b9e0a_96.mp4",
-                sizeKb = 1790, // ~1.8 MB
+                sizeKb = 1790L,
                 codec = "opus",
                 bitrateKbps = 64,
                 artworkUrl = "https://c.saavncdn.com/205/Royalty-Sped-Up-Slowed-Unknown-2021-20260528143542-500x500.jpg"
@@ -129,10 +127,10 @@ class CloudDatabaseClient(
                 title = "Darkside (ft. Au/Ra & Tomine Harket)",
                 artist = "Alan Walker, Au/Ra, Tomine Harket",
                 album = "Sonora Google Drive",
-                durationSeconds = 211,
+                durationSeconds = 211L,
                 streamUrl = "https://archive.org/download/20260917_20260917_0307/Alan%20Walker%20-%20Different%20World%20%282018%29/11%20-%20Darkside.mp3",
                 downloadUrl = "https://archive.org/download/20260917_20260917_0307/Alan%20Walker%20-%20Different%20World%20%282018%29/11%20-%20Darkside.mp3",
-                sizeKb = 1740, // ~1.7 MB
+                sizeKb = 1740L,
                 codec = "opus",
                 bitrateKbps = 64,
                 artworkUrl = "https://c.saavncdn.com/355/Darkside-English-2018-20180719130414-500x500.jpg"
