@@ -14,6 +14,7 @@ import json
 import argparse
 import subprocess
 from pathlib import Path
+import re
 
 SUPPORTED_EXTENSIONS = {
     # Video containers (audio extracted, video discarded)
@@ -50,6 +51,40 @@ def clean_filename(name):
     for ch in ['"', "'", ":", "?", "*", "<", ">", "|"]:
         name = name.replace(ch, "")
     return name.strip()
+
+def clear_output_folder(out_dir):
+    p = Path(out_dir)
+    count = 0
+    if p.exists():
+        for f in p.iterdir():
+            if f.is_file():
+                try:
+                    f.unlink()
+                    count += 1
+                except Exception as e:
+                    print(f"  [!] Could not delete {f.name}: {e}")
+    print(f"\n[✓] Cleared {count} files from '{p.name}'!")
+
+def parse_paths_input(entered):
+    entered = entered.strip()
+    if not entered:
+        return []
+
+    # Check if the entire raw input (with or without surrounding quotes) is an existing file/dir
+    raw_unquoted = entered.strip('\'"')
+    if Path(raw_unquoted).exists():
+        return [raw_unquoted]
+
+    # Regex matches quoted paths ("..." or '...') or non-whitespace tokens without destroying backslashes
+    matches = re.findall(r'"([^"]+)"|\'([^\']+)\'|(\S+)', entered)
+    extracted = []
+    for m in matches:
+        token = m[0] or m[1] or m[2]
+        if token:
+            clean_tok = token.strip('\'"')
+            if clean_tok:
+                extracted.append(clean_tok)
+    return extracted
 
 def convert_single_file(input_file, out_dir, bitrate="64k"):
     inp = Path(input_file)
@@ -101,34 +136,53 @@ def main():
     out_dir.mkdir(parents=True, exist_ok=True)
 
     if args.clean:
-        for f in out_dir.iterdir():
-            if f.is_file():
-                f.unlink()
-        print(f"[✓] Cleared all files from {out_dir}")
+        clear_output_folder(out_dir)
         return
 
     if not find_ffmpeg():
         print("[!] FFmpeg not found. Please install via: winget install Gyan.FFmpeg")
         sys.exit(1)
 
-    # Gather all file paths from inputs
     raw_inputs = args.inputs
+    # If no CLI inputs provided, show interactive menu
     if not raw_inputs:
-        print("Tip: You can drag and drop multiple songs or folders directly onto convert_any_to_sonora.bat!")
-        entered = input("Enter file or folder paths (separated by space or quotes): ").strip()
-        if not entered:
-            print("[!] No paths provided.")
-            return
-        # Parse inputs respecting quotes
-        import shlex
+        print("================================================================")
+        print("  SONORA - Universal Audio to Opus Converter (High Power)")
+        print("================================================================")
+        print("Converts ANY audio or video files into ultra-small Opus (~1.2 MB).")
+        print("Strips video completely to save maximum storage.")
+        print(f"Output folder: {out_dir}\n")
+        print("Menu Options:")
+        print(" [1] Convert Songs (Paste file/folder paths or drag & drop here)")
+        print(" [2] Clear/Empty 'sonora_opus_music' folder (After uploading to GDrive)")
+        print(" [3] Exit")
+        
         try:
-            raw_inputs = shlex.split(entered)
-        except Exception:
-            raw_inputs = [entered]
+            choice = input("\nSelect option (1, 2, or 3, default is 1): ").strip()
+        except EOFError:
+            choice = "1"
+
+        if choice == "2":
+            clear_output_folder(out_dir)
+            return
+        elif choice == "3":
+            print("Exiting.")
+            return
+
+        print("\nTip: You can paste multiple file/folder paths separated by spaces!")
+        try:
+            entered = input("Enter file or folder path(s): ").strip()
+        except EOFError:
+            entered = ""
+
+        if not entered:
+            print("[!] No paths provided. Exiting.")
+            return
+
+        raw_inputs = parse_paths_input(entered)
 
     collected_files = []
     for item in raw_inputs:
-        # Clean quotes
         clean_item = item.strip('\'"')
         p = Path(clean_item)
         if p.is_dir():
@@ -141,22 +195,24 @@ def main():
             if p.suffix.lower() in SUPPORTED_EXTENSIONS:
                 collected_files.append(p)
         else:
-            # Try glob
+            # Try glob expansion
             matched = glob.glob(clean_item)
             for m in matched:
                 mp = Path(m)
                 if mp.is_file() and mp.suffix.lower() in SUPPORTED_EXTENSIONS:
                     collected_files.append(mp)
 
-    # Remove duplicates
+    # Remove duplicates preserving order
     collected_files = list(dict.fromkeys(collected_files))
 
     if not collected_files:
-        print("[!] No supported media files found in the provided paths.")
-        print(f"    Supported formats: MP4, MKV, WEBM, WAV, FLAC, M4A, AAC, MP3, WMA, OGG")
+        print(f"\n[!] No supported media files found for the given path(s):")
+        for item in raw_inputs:
+            print(f"    - {item}")
+        print(f"\nSupported formats: MP4, MKV, WEBM, WAV, FLAC, M4A, AAC, MP3, WMA, OGG")
         return
 
-    print("=" * 65)
+    print("\n" + "=" * 65)
     print("  SONORA - High-Performance Audio-to-Opus Converter")
     print("=" * 65)
     print(f"Files to convert: {len(collected_files)}")
@@ -200,8 +256,14 @@ def main():
     print(f"  Saved in      : {out_dir}")
     print("=" * 65)
     print("\nNext step: Upload these .opus files into your Google Drive folder:")
-    print("https://drive.google.com/drive/folders/1mjeXjTTy-nliOOUG607rprdvdcnlKurP")
-    print()
+    print("https://drive.google.com/drive/folders/1mjeXjTTy-nliOOUG607rprdvdcnlKurP\n")
+
+    try:
+        del_choice = input("Have you uploaded these songs to Google Drive and want to delete local copies? (Y/N): ").strip().upper()
+        if del_choice == "Y":
+            clear_output_folder(out_dir)
+    except EOFError:
+        pass
 
 if __name__ == "__main__":
     main()
